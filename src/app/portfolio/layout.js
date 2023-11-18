@@ -1,5 +1,4 @@
 import styles from '@/styles/Portfolio.module.css'
-import Navbar from '@/components/Navbar'
 
 export default function PortfolioLayout({ children }) {
     return (

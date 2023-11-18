@@ -1,5 +1,4 @@
 import styles from '@/styles/Archive.module.css'
-import Navbar from '@/components/Navbar'
 
 export default function ArchiveLayout({ children }) {
     return (
