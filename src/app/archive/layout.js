@@ -5,7 +5,7 @@ export default function ArchiveLayout({ children }) {
         <section>
             <div className={styles.archiveBody}>
                 <div className="layout">
-                <div className="layout-nav"><Navbar/></div>
+                {/* <div className="layout-nav"><Navbar/></div> */}
                     <div className="layout-content">
                         {children}
                     </div>

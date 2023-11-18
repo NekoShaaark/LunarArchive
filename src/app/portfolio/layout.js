@@ -5,7 +5,7 @@ export default function PortfolioLayout({ children }) {
         <section>
             <div className={styles.portfolioBody}>
                 <div className="layout">
-                <div className="layout-nav"><Navbar/></div>
+                {/* <div className="layout-nav"><Navbar/></div> */}
                     <div className="layout-content">
                         {children}
                     </div>
