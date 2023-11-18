@@ -8,16 +8,11 @@ export const metadata = {
 
 export default function Archive() {
   return (
-    <body className={styles.archiveBody}>
-      <div className="layout">
-        <div className="layout-content">
-
-          <h1 className={styles.title}>Archive</h1>
-          <div className={styles.text}>&quot;How did you get here?&quot;</div>
-          <Image src="/dedNiko.png" width={326} height={112} alt="dedNiko"/>
-        
-        </div>
-      </div>
-    </body>
+    <>
+      <h1 className={styles.title}>Arc██ve</h1>
+      <p className={styles.text}>&quot;Ho█ █id ██u get h██e?&quot;</p>
+      
+      <Image src="/dedNiko.png" width={326} height={112} alt="dedNiko"/>
+    </>
   )
 }

@@ -1,17 +1,25 @@
+.portfolioBody {
+  background-image: var(--portfolio-background-gradient);
+  background-blend-mode: overlay, overlay, overlay, normal;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+
 .title {
-    color: #333;
+    color: #ccc;
     padding-bottom: 10px;
     text-align: center;
-    text-shadow: 2px 3px rgba(119, 119, 119, 0.178);
+    text-shadow: 2px 3px rgba(205, 205, 205, 0.175);
     transform: translateY(35vh);
 }
 .text {
-  color: #777;
+  color: #00caca;
   text-align: center;
   transform: translateY(35vh);
 }
 
 
+/* #region <===floating===> */
 .floating1{
     display: flex;
     cursor: default;
@@ -71,3 +79,4 @@
   from{ transform: translateY(-10px); }
   to{ transform: translateY(8px); }
 }
+/* #endregion <======> */

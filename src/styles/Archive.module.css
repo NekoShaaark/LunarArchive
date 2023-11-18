@@ -1,3 +1,10 @@
+.archiveBody {
+  background-image: var(--archive-background-gradient);
+  background-blend-mode: overlay, overlay, overlay, normal;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+
 .title {
   color: #6201b1;
   padding-bottom: 10px;
@@ -9,12 +16,4 @@
   color: #850101;
   text-align: center;
   transform: translateY(35vh);
-}
-
-.archiveBody {
-  background-image: var(--archive-background-gradient);
-  background-color: #6201b1;
-  background-blend-mode: overlay, overlay, overlay, normal;
-  background-size: auto;
-  background-repeat: no-repeat;
 }

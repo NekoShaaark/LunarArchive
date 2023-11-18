@@ -8,15 +8,17 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <body className="not-found">
-      <div className="layout">
-        <div className="layout-content">
-          
-          <h1 className={styles.title}>That page does not exist...</h1>
-          <p className={styles.title}>Go back to the <Link href="/">Homepage</Link></p>
-        
+    <>
+      <div className="not-found">
+        <div className="layout">
+          <div className="layout-content">
+
+            <h1 className={styles.title}>That page does █ot exi██...</h1>
+            <p className={styles.text}>Go back to the <Link href="/">Home█age</Link></p>
+
+          </div>
         </div>
       </div>
-    </body>
+    </>
   )
 }
