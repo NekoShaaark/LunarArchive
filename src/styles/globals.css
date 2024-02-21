@@ -4,16 +4,25 @@
 @tailwind utilities;
 
 :root {
-  --text-color: #333;
-  --main-background-gradient: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); 
-  --archive-background-gradient: linear-gradient(67.5deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(90deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(135deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(0deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(90deg, rgb(8, 8, 8),rgb(221, 221, 221)); background-blend-mode:overlay,overlay,overlay,overlay,normal;
-  --portfolio-background-gradient: linear-gradient(183deg, #00102d 20%, #01be8b 95%);
+    --main-background-gradient: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); 
+    --archive-background-gradient: linear-gradient(67.5deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(90deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(135deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(0deg, rgb(6, 6, 6) 0%, rgb(6, 6, 6) 6%,rgb(29, 29, 29) 6%, rgb(29, 29, 29) 57%,rgb(52, 52, 52) 57%, rgb(52, 52, 52) 58%,rgb(75, 75, 75) 58%, rgb(75, 75, 75) 79%,rgb(97, 97, 97) 79%, rgb(97, 97, 97) 93%,rgb(120, 120, 120) 93%, rgb(120, 120, 120) 95%,rgb(143, 143, 143) 95%, rgb(143, 143, 143) 100%),linear-gradient(90deg, rgb(8, 8, 8),rgb(221, 221, 221)); background-blend-mode:overlay,overlay,overlay,overlay,normal;
+    --logs-background-gradient: linear-gradient(183deg, #007be0 20%, #000 95%);
+
+    --navbarHomeBackgroundColor: #9665ff;
+    --navbarHomeSelectedColor: #000;
+    
+    --navbarArchiveBackgroundColor: #000;
+    --navbarArchiveSelectedColor: #9665ff;
+    
+    --navbarLogsBackgroundColor: #000;
+    --navbarLogsSelectedColor: #9665ff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: 255, 255, 255;
-  }
+
+/* https://www.dafont.com/8-bit-fortress.font */
+@font-face {
+    font-family: eightBitFortress;
+    src: url('/8bitFortress.woff2') format('woff2');
 }
 
 
@@ -22,11 +31,7 @@ body {
     display: flex;
     margin: 0;
     min-height: 100vh;
-    color: var(--text-color);
-    background-image: var(--main-background-gradient);
-    background-blend-mode: overlay, overlay, overlay, normal;
-    background-size: auto;
-    background-repeat: no-repeat;
+    background: transparent;
     font-family: "Nunito";
     flex-direction: column;
 }
@@ -36,148 +41,274 @@ body {
 /* #region <===layout===> */
 .layout {
     display: grid;
-    grid-template-columns: /* leftbar content rightbar */ 
-        1fr 
-        min(80ch, calc(100% - 64px)) 
-        1fr;
     grid-template-rows: 
-        auto 
-        1fr 
+        1fr
         auto;
     grid-template-areas:
-        "navbar  navbar  navbar"
-        "leftbar content rightbar"
-        "footer  footer  footer";
-    grid-column-gap: 32px;
+        "content"
+        "navbar";
+    /* grid-column-gap: 32px; */
     min-height: 100vh;
 }
 
 
 /* #region ---navigation--- */
 .layout-nav {
+    display: flex;
     position: sticky;
-    top: 0;
+    height: auto;
+    width: 100%;
+    bottom: 0;
     z-index: 3;
-    grid-area: navbar;
+    background-color: #000;
     /* background-color: red; */
 }
 
 .navigation {
     display: flex;
-    margin: 0px auto;
-    padding: 10px 10px;
-    background-color: #ddf;
-    border-bottom: 2px solid #ddd;
+    margin: 0;
+    width: 100%;
+    padding: 5px 5px;
+    background-color: #000;
+    border-top: 4px solid #9665ff;
 }
 
 .navigation-primary {
     display: flex;
     position: relative;
-    margin-left: 5vh;
-    margin-top: auto;
-    transform: translateY(20px);
 }
-.navigation-primary ul {
+.navigation ul {
     display: flex;
-    margin: 10px;
-    padding: 0px;
+    margin: 0;
+    padding-left: 2px;
+    gap: 6px;
     list-style: none;
 }
-.navigation-primary li {
+.navigation li {
     display: flex;
-    padding: 8px;
-    text-shadow: 0px 2px rgba(119, 119, 119, 0.178);
+    padding: 12px;
+    width: 16vh;
+    background-color: #000;
+    border: 4px solid #9665ff;
 }
-.navigation-primary .background {
+.navigation a {
     display: flex;
-    will-change: transform;
-    transition: transform 450ms;
+    align-items: flex-end;
+    color: #9665ff;
+    text-decoration: none;
+    font-family: eightBitFortress;
+    font-size: 14px;
+    font-weight: 400;
 }
-.navigation-primary a:hover .background {
-    transition: transform 125ms;
-    transform: translateY(-8px);
-    color: #0860d3;
+.navigation span {
+    padding-left: 6px;
+    gap: 6px;
+}
+.navigation a:hover span {
+    color: #fff;
+}
+
+.navigation .home { background-color: var(--navbarHomeBackgroundColor); }
+.navigation .home a:hover { fill: #fff; }
+.navigation .home a { 
+    color: var(--navbarHomeSelectedColor); 
+    fill: var(--navbarHomeSelectedColor); 
+}
+
+.navigation .archive { background-color: var(--navbarArchiveBackgroundColor); }
+.navigation .archive a:hover { fill: #fff; }
+.navigation .archive a { 
+    color: var(--navbarArchiveSelectedColor); 
+    fill: var(--navbarArchiveSelectedColor);
+}
+
+.navigation .logs { background-color: var(--navbarLogsBackgroundColor); }
+.navigation .logs a:hover { fill: #fff; }
+.navigation .logs a { 
+    color: var(--navbarLogsSelectedColor);
+    fill: var(--navbarLogsSelectedColor);
 }
 
 .navigation-secondary {
     display: flex;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -12%);
-    cursor: pointer;
+    position: relative;
+    margin-left: auto;
+    color: #9665ff;
+    font-family: eightBitFortress;
+    font-size: 14px;
+    font-weight: 400;
+}
+.navigation-secondary li {
+    border: 0;
+    padding: 6px;
+    align-items: center;
+    width: auto;
+}
+.navigation-secondary ul {
+    margin-right: 2vh;
 }
 
-.navigation-settings {
-    display: flex;
-    margin-left: auto;
-    margin-top: auto;
+.navigation-secondary .time {
+    user-select: none;
+}
+.navigation-secondary .something {
+    fill: #9665ff;
+    cursor: pointer;
+    :hover{
+        fill: #007be0;
+    }
 }
 /* #endregion */
 
 
 /* #region ---content--- */
 .layout-content {
+    grid-area: content;
+    display: grid;
     position: relative;
     overflow: hidden;
     margin: 0 auto;
-    padding: 5px 10px;
-    width: auto;
-    max-width: 1100px;
-    z-index: 1;
-    grid-area: content;
-    /* background: yellow; */
-}
-/* #endregion ------ */
-
-
-/* #region ---sidebars--- */
-.leftbar {
-    position: relative;
-    overflow: hidden;
-    height: auto;
-    width: auto;
-    max-width: 100%;
-    z-index: 2;
-    grid-area: leftbar;
-    /* background-color: blue; */
-    /* background-image: url("../../public/sidebar9.png"); */
-}
-.rightbar {
-    position: relative;
-    overflow: hidden;
-    height: auto;
-    width: auto;
-    z-index: 2;
-    grid-area: rightbar;
-    /* background-color: blue; */
-    /* background-image: url("../../public/sidebar9_2.png"); */
-}
-/* #endregion ------ */
-
-
-/* #region ---footer--- */
-.layout-footer {
-    position: relative;
-    grid-area: footer;
-    /* background-color: lime; */
-}
-footer {
-    display: block;
-    overflow: hidden;
-    text-align: center;
-    padding: 20px 0;
     width: 100%;
-    color: #777;
-    z-index: 2;
-    span{
-        display: inline-block;
-    }
+    z-index: 1;
+    /* background: yellow; */
+    background: url("/starryBackground.webp");
+    background-blend-mode: overlay, overlay, overlay, normal;
+    background-size: auto;
+    background-repeat: no-repeat;
 }
 /* #endregion ------ */
+
+.backgroundVideo {
+    display: grid;
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    z-index: -1;
+}
 /* #endregion <======> */
 
 
 /* #region <===404===> */
-.not-found { text-align: center; }
-.not-found a { color: #0860d3; text-decoration: underline; }
+.not-found { 
+    display: flex;
+    background-image: var(--main-background-gradient);
+    background-blend-mode: overlay, overlay, overlay, normal;
+    background-size: auto;
+    background-repeat: no-repeat;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.not-found a { 
+    color: #0860d3; 
+    text-decoration: underline; 
+}
 /* #endregion <======> */
+
+
+/* #region <===Windows===> */
+#window-content{
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    z-index: 5;
+}
+#window-form{
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+}
+#window-form-content{
+    display: flex;
+    padding: 6px;
+    width: auto;
+    justify-content: center;
+    border: 2px solid #9665ff;
+}
+/* #endregion <===windows===> */
+
+
+/* #region <===desktop===> */
+/* #region ---desktop-layout--- */
+.desktop-layout{
+    display: grid; 
+    height: 100%;
+    padding: 15px;
+    grid-auto-columns: 1fr; 
+    grid-template-columns: 1fr 1fr 1fr 1fr 1.8fr; 
+    grid-template-rows: 0.4fr 0.4fr 2.2fr; 
+    gap: 20px 20px; 
+    grid-template-areas: 
+        "Icon1 Icon2 Icon3 Icon4 ."
+        "Icon5 Icon6 . . ."
+        ". . . . ."; 
+    font-family: eightBitFortress;
+    font-size: x-small;
+}
+
+#draggable {
+    position: absolute;
+    /* z-index: 9; */
+}
+#draggable-header {
+    cursor: grab;
+    /* z-index: 10; */
+}
+
+#icon{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    fill: #9665ff;
+    border: 6px solid rgba(0, 0, 0, 0);
+    /* pointer-events: none; */ /* TODO: RE;ENABLE THIS FOR HOVER EFFECT TO FULLY WORK */
+    h1{ 
+        padding: 4px;
+        margin: 6px;
+        color: #9665ff;
+        background: #000;
+        user-select: none;
+    }
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 6px;
+        text-decoration: none;
+        pointer-events: auto;
+    }
+}
+#icon:hover{
+    border: 6px solid rgba(106, 64, 197, 0.5);
+    background-color: rgba(44, 24, 87, 0.5);
+}
+
+.event-name{
+    display: flex;
+    position: absolute;
+    width: 50vh;
+    height: 50vh;
+    top: 300px;
+    left: 400px;
+    flex-direction: column;
+    background-color: yellow;
+}
+
+
+.Icon2 { grid-area: Icon2; }
+
+.Icon3 { grid-area: Icon3; }
+
+.Icon4 { grid-area: Icon4; }
+
+.Icon5 { grid-area: Icon5; }
+
+.Icon6 { grid-area: Icon6; }
+/* #region ---desktop-layout--- */
+/* #endregion <===Desktop===> */
