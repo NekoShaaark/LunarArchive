@@ -1,18 +1,20 @@
 import Image from 'next/image'
 import styles from '@/styles/Archive.module.css'
 
-export const metadata = {
-  title: '███hi██',
-}
+// export const metadata = {
+//   title: '███hi██',
+// }
 
 
 export default function Archive() {
   return (
     <>
-      <h1 className={styles.title}>Arc██ve</h1>
-      <p className={styles.text}>&quot;Ho█ █id ██u get h██e?&quot;</p>
+      {/* <Image className={styles.image} src="/dedNiko.webp" width={326} height={112} alt="dedNiko"/> */}
       
-      <Image src="/dedNiko.png" width={326} height={112} alt="dedNiko"/>
+      <h1 className={styles.title}>Arc██ve</h1>
+      <p className={styles.text}><b>&quot;Ho█ █id ██u get h██e?&quot;</b></p>
+      <br/>
+      <p className={styles.test}><b>!██!!!██!█MURDERER!███!!██!█</b></p>
     </>
   )
 }

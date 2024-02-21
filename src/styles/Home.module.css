@@ -1,19 +1,14 @@
 .homeBody {
-  background-image: var(--main-background-gradient);
-  background-blend-mode: overlay, overlay, overlay, normal;
-  background-size: auto;
-  background-repeat: no-repeat;
+  display: grid;
 }
 
 .title {
   color: #333;
-  padding-bottom: 10px;
-  text-align: center;
   text-shadow: 2px 3px rgba(119, 119, 119, 0.178);
-  transform: translateY(35vh);  
 }
 .text {
   color: #777;
-  text-align: center;
-  transform: translateY(35vh);
+}
+.altText {
+  color: white;
 }

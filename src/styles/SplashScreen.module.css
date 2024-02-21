@@ -1,0 +1,15 @@
+.splashDiv {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+.splashLogo {
+    margin: auto;
+    color: blueviolet;
+    text-shadow: 2px 3px rgba(119, 119, 119, 0.178);
+    opacity: 0;
+    user-select: none;
+}

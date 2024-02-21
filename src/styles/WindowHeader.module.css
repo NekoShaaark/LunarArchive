@@ -1,0 +1,38 @@
+#header {
+    display: flex;
+    /* justify-content: center; */
+    width: 100%;
+    border-bottom: 8px solid #9665ff;
+    font-family: eightbitFortress;
+}
+
+.name {
+    display: flex;
+    margin: 0;
+    padding: 4px 4px; /* top and bottom | left and right */
+    align-self: center;
+    justify-self: flex-start;
+    font-family: eightbitFortress;
+    font-size: 14px;
+    font-weight: 400;
+    user-select: none;
+    color: #9665ff;
+}
+.systemIcons {
+    display: inline-flex;
+    align-self: center;
+    margin: auto 4px auto auto; /* top | right | bottom | left */
+    gap: 4px;
+    user-select: none;
+}
+
+#systemIcon {
+    background-color: #9665ff;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
+}
+#displayIcon {
+    display: inline-flex;
+    margin: auto 4px; /* top and bottom | left and right */
+    user-select: none;
+}

@@ -1,24 +1,31 @@
-.portfolioBody {
-  background-image: var(--portfolio-background-gradient);
+.logsBody {
+  display: grid;
+  background-image: var(--logs-background-gradient);
   background-blend-mode: overlay, overlay, overlay, normal;
   background-size: auto;
   background-repeat: no-repeat;
+  justify-items: center;
 }
 
 .title {
-    color: #ccc;
-    padding-bottom: 10px;
-    text-align: center;
-    text-shadow: 2px 3px rgba(205, 205, 205, 0.175);
-    transform: translateY(35vh);
+  color: #fff;
+  text-shadow: 2px 3px rgba(205, 205, 205, 0.175);
 }
 .text {
-  color: #00caca;
-  text-align: center;
-  transform: translateY(35vh);
+  color: #fff;
+  margin: 0;
+}
+.altText {
+  color: #9665ff;
+  margin: 0;
+}
+.altText2 {
+  color: #000;
+  margin: 0;
 }
 
 
+/* TODO: decide what to do with this */
 /* #region <===floating===> */
 .floating1{
     display: flex;
@@ -27,6 +34,8 @@
       floating-animation1 1500ms 
       alternate infinite 
       ease-in-out;
+    color: #fff;
+    justify-self: flex-end;
 }
 .floating1:hover{
   animation-play-state: paused;
