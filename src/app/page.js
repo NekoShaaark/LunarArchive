@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import { ArchiveIcon, LogsIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import Archive from './archive/page'
-import Logs from './logs/page'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import WindowHeader from '@/components/WindowHeader'
 import archiveStyles from '@/styles/Archive.module.css'
 import logsStyles from '@/styles/Logs.module.css'
+import Archive from './archive/page'
+import Logs from './logs/page'
 
 
 
@@ -54,7 +55,7 @@ export default function Home() {
   })
 
 
-  //clock function
+  //--FUNCTIONS & STATE HANDLING--//
   function updateTime() {
     const date = new Date()
     const amORpm = date.getHours() >= 12 ? "PM" : "AM"
@@ -64,9 +65,56 @@ export default function Home() {
   }
   setInterval(updateTime, 1000)
 
+  //set currently active window
+  function setNoneWindowActive(archiveWindow, logsWindow, rootStyle){
+    archiveWindow ? archiveWindow.style.zIndex = 9 : null
+    logsWindow ? logsWindow.style.zIndex = 9 : null
+    setNoneNavbarColors(rootStyle)
+    setCurrentFocusedWindow("none")
+  }
 
-  //--ON SERVER INIT AGAIN??--//
-  //apparently this can be run twice? with different conditions?? WHAT???
+  function setArchiveWindowActive(archiveWindow, logsWindow, rootStyle){
+    archiveWindow ? archiveWindow.style.zIndex = 11 : null
+    logsWindow ? logsWindow.style.zIndex = 9 : null
+    setArchiveNavbarColors(rootStyle)
+    setCurrentFocusedWindow("archive")
+  }
+
+  function setLogsWindowActive(archiveWindow, logsWindow, rootStyle){
+    archiveWindow ? archiveWindow.style.zIndex = 9 : null
+    logsWindow ? logsWindow.style.zIndex = 11 : null
+    setLogsNavbarColors(rootStyle)
+    setCurrentFocusedWindow("logs")
+  }
+
+  //set navbar colors
+  function setNoneNavbarColors(rootStyle){
+    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+  
+    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+  }
+
+  function setArchiveNavbarColors(rootStyle){
+    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
+    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+  
+    rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
+    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+  }
+
+  function setLogsNavbarColors(rootStyle){
+    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
+  
+    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
+  }
+
+
+  //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
+  //runs on server init and when the [conditions] change or are updated
   useEffect(() => {
     var rootStyle = document.documentElement.style
     var archiveWindow = document.getElementById("window-archive")
@@ -74,9 +122,9 @@ export default function Home() {
     
     //if windows close, make the window that is still open the active window
     if(changeFocusedWindow){
-      if(!archiveWindowOpen && !logsWindowOpen){ setNoneWindowActive(); console.log("none here") }
-      if(archiveWindowOpen && !logsWindowOpen){ setArchiveWindowActive(); console.log("archive here") }
-      if(!archiveWindowOpen && logsWindowOpen){ setLogsWindowActive(); console.log("logs here") }
+      if(!archiveWindowOpen && !logsWindowOpen){ setNoneWindowActive(archiveWindow, logsWindow, rootStyle); console.log("none here") }
+      if(archiveWindowOpen && !logsWindowOpen){ setArchiveWindowActive(archiveWindow, logsWindow, rootStyle); console.log("archive here") }
+      if(!archiveWindowOpen && logsWindowOpen){ setLogsWindowActive(archiveWindow, logsWindow, rootStyle); console.log("logs here") }
       setChangeFocusedWindow(false)
       console.log("changed to: " + currentFocusedWindow)
     }
@@ -86,65 +134,16 @@ export default function Home() {
       switch(currentFocusedWindow){
         case "archive":
           console.log("current: archive "+ currentFocusedWindow)
-          setArchiveWindowActive()
+          setArchiveWindowActive(archiveWindow, logsWindow, rootStyle)
           break
 
         case "logs":
           console.log("current: logs " + currentFocusedWindow)
-          setLogsWindowActive()
+          setLogsWindowActive(archiveWindow, logsWindow, rootStyle)
           break
       }
     }
-
-
-    //set active window
-    function setNoneWindowActive(){
-      archiveWindow ? archiveWindow.style.zIndex = 9 : null
-      logsWindow ? logsWindow.style.zIndex = 9 : null
-      setNoneNavbarColors()
-      setCurrentFocusedWindow("none")
-    }
-
-    function setArchiveWindowActive(){
-      archiveWindow ? archiveWindow.style.zIndex = 11 : null
-      logsWindow ? logsWindow.style.zIndex = 9 : null
-      setArchiveNavbarColors()
-      setCurrentFocusedWindow("archive")
-    }
-
-    function setLogsWindowActive(){
-      archiveWindow ? archiveWindow.style.zIndex = 9 : null
-      logsWindow ? logsWindow.style.zIndex = 11 : null
-      setLogsNavbarColors()
-      setCurrentFocusedWindow("logs")
-    }
-
-    //set navbar colors
-    function setNoneNavbarColors(){
-      rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-      rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-
-      rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-      rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-    }
-
-    function setArchiveNavbarColors(){
-      rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
-      rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-
-      rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
-      rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-    }
-
-    function setLogsNavbarColors(){
-      rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-      rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
-
-      rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-      rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
-    }
   }, [archiveWindowOpen, logsWindowOpen, currentFocusedWindow])
-
 
 
   //--ON SERVER INIT--//
@@ -162,20 +161,25 @@ export default function Home() {
     
     function dragElement(elmnt) {
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
-      elmnt.onmousedown = dragMouseDown
+      if(document.getElementById("draggable-header")){
+        //specifically targetting the first child, of which - if the hierachy is correct - should be the "draggable-header"
+        elmnt.firstChild.onmousedown = dragMouseDown
+        // elmnt.onmousedown = dragMouseDown  //this also works, but instead targets the entire div instead of just "draggable-header"
+      }
     
       function dragMouseDown(e) {
         e.preventDefault()
 
+        //set navbar colors
         // console.log(e.target.parentElement.parentElement)
         if(e.target.parentElement.parentElement.id == "window-archive"){
-          setArchiveNavbarColors()
-          if(logsWindow){ setArchiveWindowActive() }
+          setArchiveNavbarColors(rootStyle)
+          if(logsWindow){ setArchiveWindowActive(archiveWindow, logsWindow, rootStyle) }
         }
 
         if(e.target.parentElement.parentElement.id == "window-logs"){
-          setLogsNavbarColors()
-          if(archiveWindow){ setLogsWindowActive() }
+          setLogsNavbarColors(rootStyle)
+          if(archiveWindow){ setLogsWindowActive(archiveWindow, logsWindow, rootStyle) }
         }
         
         //get cursor position at startup
@@ -199,20 +203,6 @@ export default function Home() {
         const offsetRight = document.documentElement.scrollWidth - elmnt.getBoundingClientRect().right
         const navbarOffsetBottom = document.getElementById("navbar").getBoundingClientRect().height
         const offsetBottom = document.documentElement.scrollHeight - elmnt.getBoundingClientRect().bottom - navbarOffsetBottom
-
-        //set current focused window
-        // setCurrentFocusedWindow(elmnt.id)
-
-        if(elmnt.id == "window-archive"){
-          setArchiveNavbarColors()
-          if(logsWindow){ setArchiveWindowActive() }
-        }
-
-        if(elmnt.id == "window-logs"){
-          setLogsNavbarColors()
-          if(archiveWindow){ setLogsWindowActive() }
-        }
-
        
         if(elmnt.offsetTop <= 0){
           elmnt.style.top = "1px"
@@ -245,42 +235,14 @@ export default function Home() {
         document.onmouseup = null
         document.onmousemove = null
       }
-
-      //set window active
-      function setArchiveWindowActive(){
-        // console.log("archive")
-        archiveWindow.style.zIndex = 11
-        logsWindow.style.zIndex = 9
-        setArchiveNavbarColors()
-      }
-
-      function setLogsWindowActive(){
-        // console.log("logs")
-        archiveWindow.style.zIndex = 9
-        logsWindow.style.zIndex = 11
-        setLogsNavbarColors()
-      }
-
-      //set navbar colors 
-      function setArchiveNavbarColors(){
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-      }
-
-      function setLogsNavbarColors(){
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
-
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
-      }
     }
   })
 
   
+  //STUB: maybe add a sorta "os-booting sqeuence" as a splashscreen
+  //STUB: maybe add functionality to the "minimize" button (closes the window, but it stays on the navbar)
+  //STUB: maybe add functionality for a "maximize" button (redirects the user to the window's webpage, and remembers what is currently open)
+
   return (
     <div className="layout">
       <div className="layout-content"> 
@@ -291,47 +253,65 @@ export default function Home() {
 
           {/* desktop/icons layout */}
           <div className="desktop-layout">
-          <div id="icon" className="icon-archive">
-            <Button disableRipple onClick={archiveHandleOpen}>
-              <ArchiveIcon width="8vh" height="8vh"/>
-              <h1>Archive</h1>
-            </Button>
-          </div>
+            <div id="icon" className="icon-archive">
+              <Button disableRipple onClick={archiveHandleOpen}>
+                <ArchiveIcon width="8vh" height="8vh"/>
+                <h1>Archive</h1>
+              </Button>
+            </div>
 
-          <div id="icon" className="icon-logs">
-            <Button disableRipple onClick={logsHandleOpen}>
-              <LogsIcon width="8vh" height="8vh"/>
-              <h1>Data Logs</h1>
-            </Button>
-          </div>
+            <div id="icon" className="icon-logs">
+              <Button disableRipple onClick={logsHandleOpen}>
+                <LogsIcon width="8vh" height="8vh"/>
+                <h1>Data Logs</h1>
+              </Button>
+            </div>
           </div>
 
 
           {/* archive window */}
-          {archiveWindowOpen &&
-            <div className="draggable" id="window-archive">
-              <div id="draggable-header">
-                <WindowHeader headerName="███hi██" selectedIcon="archiveIcon" setClose={archiveHandleClose}/> {/* false window header */}
-              </div>
-
-              <div className={archiveStyles.archiveBody}>
-                <Archive/>
-              </div>
-            </div>
-          }
+          <AnimatePresence>
+            {archiveWindowOpen &&
+              <motion.div 
+                id="window-archive"
+                className="draggable"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.35 }}
+              >
+                <div id="draggable-header">
+                  <WindowHeader headerName="███hi██" selectedIcon="archiveIcon" setClose={archiveHandleClose}/> {/* false window header */}
+                </div>
+                
+                <div className={archiveStyles.archiveBody}>
+                  <Archive/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
 
           {/* data logs window */}
-          {logsWindowOpen &&
-            <div className="draggable" id="window-logs">
-              <div id="draggable-header">
-                <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose}/> {/* false window header */}
-              </div>
+          <AnimatePresence>
+            {logsWindowOpen &&
+              <motion.div 
+                id="window-logs" 
+                className="draggable"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div id="draggable-header">
+                  <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose}/> {/* false window header */}
+                </div>
 
-              <div className={logsStyles.logsBody}>
-                <Logs/>
-              </div>
-            </div>
-          }
+                <div className={logsStyles.logsBody}>
+                  <Logs/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
         </ThemeProvider>
       </div>
 
@@ -342,27 +322,43 @@ export default function Home() {
           {/* primary */}
           <div className ="navigation-primary">
             <ul>
-              {archiveWindowOpen &&
-                <li className="archive">
-                      <ThemeProvider theme={theme}>
-                        <Button disableRipple onClick={archiveHandleOpen}>
-                          <ArchiveIcon width={24} height={24}/>
-                          <span>{"Archive"}</span>
-                        </Button>
-                      </ThemeProvider>
-                </li>
-              }
+              <AnimatePresence>
+                {archiveWindowOpen &&
+                  <motion.li 
+                    className="archive"
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={archiveHandleOpen}>
+                        <ArchiveIcon width={24} height={24}/>
+                        <span>{"Archive"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
               
-              {logsWindowOpen &&
-                <li className="logs">
-                  <ThemeProvider theme={theme}>
-                    <Button disableRipple onClick={logsHandleOpen}>
-                      <LogsIcon width={24} height={24}/>
-                      <span>{"Data Logs"}</span>
-                    </Button>
-                  </ThemeProvider>
-                </li>
-              }
+              <AnimatePresence>
+                {logsWindowOpen &&
+                  <motion.li 
+                    className="logs"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={logsHandleOpen}>
+                        <LogsIcon width={24} height={24}/>
+                        <span>{"Data Logs"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
 
               {/* this exists only to add empty space to the navbar to keep it from collapsing (or popping up when a new window is opened) */}
               <li className="null">

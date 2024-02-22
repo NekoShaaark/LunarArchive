@@ -31,4 +31,6 @@
 
 .image {
   display: flex;
+  user-select: none;
+  pointer-events: none;
 }
