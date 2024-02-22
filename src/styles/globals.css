@@ -91,7 +91,7 @@ body {
     background-color: #000;
     border: 4px solid #9665ff;
 }
-.navigation a {
+.navigation button {
     display: flex;
     align-items: flex-end;
     color: #9665ff;
@@ -104,29 +104,35 @@ body {
     padding-left: 6px;
     gap: 6px;
 }
-.navigation a:hover span {
+.navigation button:hover span {
     color: #fff;
 }
 
 .navigation .home { background-color: var(--navbarHomeBackgroundColor); }
-.navigation .home a:hover { fill: #fff; }
-.navigation .home a { 
+.navigation .home button:hover { fill: #fff; }
+.navigation .home button { 
     color: var(--navbarHomeSelectedColor); 
     fill: var(--navbarHomeSelectedColor); 
 }
 
 .navigation .archive { background-color: var(--navbarArchiveBackgroundColor); }
-.navigation .archive a:hover { fill: #fff; }
-.navigation .archive a { 
+.navigation .archive button:hover { fill: #fff; }
+.navigation .archive button { 
     color: var(--navbarArchiveSelectedColor); 
     fill: var(--navbarArchiveSelectedColor);
 }
 
 .navigation .logs { background-color: var(--navbarLogsBackgroundColor); }
-.navigation .logs a:hover { fill: #fff; }
-.navigation .logs a { 
+.navigation .logs button:hover { fill: #fff; }
+.navigation .logs button { 
     color: var(--navbarLogsSelectedColor);
     fill: var(--navbarLogsSelectedColor);
+}
+
+.navigation .null{
+    border: 4px solid transparent;
+    user-select: none;
+    pointer-events: none;
 }
 
 .navigation-secondary {
@@ -236,10 +242,11 @@ body {
 .desktop-layout{
     display: grid; 
     height: 100%;
+    width: 100%;
     padding: 15px;
-    grid-auto-columns: 1fr; 
-    grid-template-columns: 1fr 1fr 1fr 1fr 1.8fr; 
-    grid-template-rows: 0.4fr 0.4fr 2.2fr; 
+    grid-auto-columns: 0.4fr; 
+    grid-template-columns: 0.4fr 0.4fr 0.4fr 0.4fr 2fr; 
+    grid-template-rows: 0.4fr 0.4fr 2fr; 
     gap: 20px 20px; 
     grid-template-areas: 
         "Icon1 Icon2 Icon3 Icon4 ."
@@ -259,7 +266,10 @@ body {
 }
 
 #icon{
+    height: 100%;
     width: 100%;
+    max-height: 18vh;
+    max-width: 18vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -269,11 +279,12 @@ body {
     pointer-events: none;
     h1{ 
         padding: 0 4px;
-        margin: 8px;
+        margin: 6px;
         color: #9665ff;
         background: #000;
+        font-weight: 400;
+        font-size: 16px;
         user-select: none;
-        font-size: 18px;
     }
     button{
         display: flex;
@@ -294,8 +305,8 @@ body {
     display: flex;
     width: 50vh;
     height: 40vh;
-    top: 300px;
-    left: 400px;
+    top: 200px;
+    left: 200px;
     flex-direction: column;
     border: 4px solid #9665ff;
 }
@@ -304,8 +315,8 @@ body {
     display: flex;
     width: 60vh;
     height: 70vh;
-    top: 300px;
-    left: 400px;
+    top: 100px;
+    left: 800px;
     overflow-y: scroll;
     flex-direction: column;
     border: 4px solid #9665ff;

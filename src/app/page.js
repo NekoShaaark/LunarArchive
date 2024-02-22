@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { ArchiveIcon, LogsIcon } from '@/components/SvgHandler'
+import { ArchiveIcon, LogsIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Archive from './archive/page'
@@ -16,6 +16,11 @@ import logsStyles from '@/styles/Logs.module.css'
 export default function Home() {
 
   //--VARIABLE & STATES--//
+  const date = new Date()
+  const now = date.toLocaleTimeString("en-US", { hour12:false, hour:"2-digit", minute:"2-digit" })
+  const amORpm = date.getHours() >= 12 ? "PM" : "AM"
+  
+  const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
@@ -26,7 +31,7 @@ export default function Home() {
 
   const logsHandleOpen = () => { setLogsWindowOpen(true); setCurrentFocusedWindow("logs") }
   const logsHandleClose = () => { setLogsWindowOpen(false); setChangeFocusedWindow(true) }
-  
+
 
   //--THEME--//
   const theme = createTheme({
@@ -38,6 +43,7 @@ export default function Home() {
         styleOverrides: {
           root: {
             textTransform: 'none',
+            padding: 0,
             '&:hover': {
               backgroundColor: 'transparent'
             }, 
@@ -46,6 +52,18 @@ export default function Home() {
       },
     }
   })
+
+
+  //clock function
+  function updateTime() {
+    const date = new Date()
+    const amORpm = date.getHours() >= 12 ? "PM" : "AM"
+
+    const newTime = date.toLocaleTimeString('en-US', { hour12:false, hour:"2-digit", minute:"2-digit" })
+    setCurrentTime(newTime + ` ${amORpm}`)
+  }
+  setInterval(updateTime, 1000)
+
 
   //--ON SERVER INIT AGAIN??--//
   //apparently this can be run twice? with different conditions?? WHAT???
@@ -264,14 +282,15 @@ export default function Home() {
 
   
   return (
-    <> 
-      {/* background video */}
-      <video className="backgroundVideo" src='videoLoop.webm' autoPlay loop muted preload="auto"/>
+    <div className="layout">
+      <div className="layout-content"> 
+        {/* background video */}
+        <video className="backgroundVideo" src='videoLoop.webm' autoPlay loop muted preload="auto"/>
 
-      <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
 
-        {/* desktop/icons layout */}
-        <div className="desktop-layout">
+          {/* desktop/icons layout */}
+          <div className="desktop-layout">
           <div id="icon" className="icon-archive">
             <Button disableRipple onClick={archiveHandleOpen}>
               <ArchiveIcon width="8vh" height="8vh"/>
@@ -285,35 +304,86 @@ export default function Home() {
               <h1>Data Logs</h1>
             </Button>
           </div>
-        </div>
-
-
-        {/* archive window */}
-        {archiveWindowOpen &&
-          <div className="draggable" id="window-archive">
-            <div id="draggable-header">
-              <WindowHeader headerName="███hi██" selectedIcon="archiveIcon" setClose={archiveHandleClose}/> {/* false window header */}
-            </div>
-
-            <div className={archiveStyles.archiveBody}>
-              <Archive/>
-            </div>
           </div>
-        }
 
-        {/* data logs window */}
-        {logsWindowOpen &&
-          <div className="draggable" id="window-logs">
-            <div id="draggable-header">
-              <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose}/> {/* false window header */}
-            </div>
 
-            <div className={logsStyles.logsBody}>
-              <Logs/>
+          {/* archive window */}
+          {archiveWindowOpen &&
+            <div className="draggable" id="window-archive">
+              <div id="draggable-header">
+                <WindowHeader headerName="███hi██" selectedIcon="archiveIcon" setClose={archiveHandleClose}/> {/* false window header */}
+              </div>
+
+              <div className={archiveStyles.archiveBody}>
+                <Archive/>
+              </div>
             </div>
+          }
+
+          {/* data logs window */}
+          {logsWindowOpen &&
+            <div className="draggable" id="window-logs">
+              <div id="draggable-header">
+                <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose}/> {/* false window header */}
+              </div>
+
+              <div className={logsStyles.logsBody}>
+                <Logs/>
+              </div>
+            </div>
+          }
+        </ThemeProvider>
+      </div>
+
+      {/* NAVBAR */}
+      <div className="layout-nav">
+        <nav id="navbar" className="navigation">
+
+          {/* primary */}
+          <div className ="navigation-primary">
+            <ul>
+              {archiveWindowOpen &&
+                <li className="archive">
+                      <ThemeProvider theme={theme}>
+                        <Button disableRipple onClick={archiveHandleOpen}>
+                          <ArchiveIcon width={24} height={24}/>
+                          <span>{"Archive"}</span>
+                        </Button>
+                      </ThemeProvider>
+                </li>
+              }
+              
+              {logsWindowOpen &&
+                <li className="logs">
+                  <ThemeProvider theme={theme}>
+                    <Button disableRipple onClick={logsHandleOpen}>
+                      <LogsIcon width={24} height={24}/>
+                      <span>{"Data Logs"}</span>
+                    </Button>
+                  </ThemeProvider>
+                </li>
+              }
+
+              {/* this exists only to add empty space to the navbar to keep it from collapsing (or popping up when a new window is opened) */}
+              <li className="null">
+                <ThemeProvider theme={theme}>
+                  <Button disableRipple>
+                    <ArchiveIcon width={24} height={24}/>
+                  </Button>
+                </ThemeProvider>
+              </li>
+            </ul>
           </div>
-        }
-      </ThemeProvider>
-    </>
+
+          {/* secondary */}
+          <div className="navigation-secondary">
+            <ul>
+              <li className="time">{currentTime}</li>
+              <li className="something"><NoteIcon alt="???" width={24} height={24}/></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
   )
 }
