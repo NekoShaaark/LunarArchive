@@ -1,8 +1,9 @@
 #header {
     display: flex;
-    /* justify-content: center; */
     width: 100%;
+    /* justify-content: center; */
     border-bottom: 8px solid #9665ff;
+    background-color: #000;
     font-family: eightbitFortress;
 }
 
@@ -35,4 +36,14 @@
     display: inline-flex;
     margin: auto 4px; /* top and bottom | left and right */
     user-select: none;
+}
+
+.closeIcon {
+    background-color: #9665ff;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
+}
+.closeIcon:hover {
+    cursor: pointer;
+    background-color: #ff4b4b;
 }

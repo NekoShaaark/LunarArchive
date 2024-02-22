@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import '@/styles/globals.css'
-import SplashScreen from '@/components/SplashScreen'
+// import SplashScreen from '@/components/SplashScreen'
 import Navbar from '@/components/Navbar'
 
 

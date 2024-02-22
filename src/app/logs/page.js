@@ -1,9 +1,5 @@
 import styles from '@/styles/Logs.module.css'
 
-export const metadata = {
-  title: 'Logs',
-}
-
 
 export default function Logs() {
   return (

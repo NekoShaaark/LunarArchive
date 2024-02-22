@@ -1,12 +1,12 @@
 .archiveBody {
-  display: flex; /* change this to grid, and uncomment below comments to change to grid mode (or other example is Portfolio.module.css) */ 
+  display: flex;
   position: relative;
+  height: 100%;
+  width: 100%;
   background-image: var(--archive-background-gradient);
   background-blend-mode: overlay, overlay, overlay, normal;
   background-size: auto;
   background-repeat: no-repeat;
-  /* align-content: center; */
-  /* justify-items: center; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -30,7 +30,5 @@
 }
 
 .image {
-  position: absolute;
-  /* align-self: flex-start; */
-  margin-bottom: 30vh;
+  display: flex;
 }
