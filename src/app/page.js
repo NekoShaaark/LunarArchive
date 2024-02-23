@@ -42,7 +42,7 @@ export default function Home() {
     if(currentWindowsOpen.indexOf("archive") == -1){
       setCurrentWindowsOpen([...currentWindowsOpen, "archive"]) //add "archive" to the array
       setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "archive"])
-      // setNavbarOrder("open")
+      setNavbarOrder("open")
     }
   }
   const archiveHandleClose = () => { 
@@ -50,7 +50,6 @@ export default function Home() {
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
-    setNavbarOrder("close")
   }
 
   const logsHandleOpen = () => { 
@@ -61,15 +60,14 @@ export default function Home() {
     if(currentWindowsOpen.indexOf("logs") == -1){
       setCurrentWindowsOpen([...currentWindowsOpen, "logs"]) //add "logs" to the array
       setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "logs"])
-      // setNavbarOrder("open")
+      setNavbarOrder("open")
     }
   }
   const logsHandleClose = () => { 
     setLogsWindowOpen(false) 
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
-    setNavbarOrder("close")
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   
   const moonHandleOpen = () => { 
@@ -80,15 +78,14 @@ export default function Home() {
     if(currentWindowsOpen.indexOf("moon") == -1){
       setCurrentWindowsOpen([...currentWindowsOpen, "moon"]) //add "moon" to the array
       setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "moon"])
-      // setNavbarOrder("open")
+      setNavbarOrder("open")
     }
   }
   const moonHandleClose = () => { 
     setMoonWindowOpen(false) 
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
-    setNavbarOrder("close")
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
   }
 
 
@@ -137,13 +134,12 @@ export default function Home() {
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
     moveElementInArray(currentWindowsOpen, currentActiveWindow)
+    // console.log(currentWindowsOpen)
     
     //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
     var archiveIndex = currentWindowsOpen.indexOf("archive") + 10
     var logsIndex = currentWindowsOpen.indexOf("logs") + 10
     var moonIndex = currentWindowsOpen.indexOf("moon") + 10
-    
-    console.log(currentWindowsOpen)
     
     switch(currentActiveWindow){
       case "none":
@@ -182,6 +178,8 @@ export default function Home() {
         setCurrentFocusedWindow("moon")
         break
     }
+
+    setNavbarOrder("open")
   }
 
   //set navbar colors
@@ -231,41 +229,46 @@ export default function Home() {
     }
   }
 
-  //TODO: finish doing custom navbar order here
+  //REVIEW: for some reason sometimes the order doesn't line up? (not sure why or what causes this)
   function setNavbarOrder(openOrClose){
     var rootStyle = document.documentElement.style
 
+    console.log(currentNavbarIconsOpen)
+
     //open new navbar icon
+    if(openOrClose == "open" && currentWindowsOpen.length > 3){ 
+      console.log(currentNavbarIconsOpen)
+      console.log("three icons open already")
+      return
+    }
+
+    //might need to set this up so it only runs three times
     if(openOrClose == "open"){
-      // var iconOpened = currentNavbarIconsOpen[currentNavbarIconsOpen.length - 1]
-      // var indexOfIcon = currentNavbarIconsOpen.indexOf(iconOpened)
-      // console.log(`navbar ${iconOpened}: ${indexOfIcon}`)
+      // var windowOpened = currentWindowsOpen[currentWindowsOpen.length - 1]
+      // var indexOfWindow = currentWindowsOpen.indexOf(windowOpened)
+
+      var iconOpened = currentNavbarIconsOpen[currentNavbarIconsOpen.length - 1]
+      var indexOfIcon = currentNavbarIconsOpen.indexOf(iconOpened)
       // console.log(currentNavbarIconsOpen)
+      // console.log(iconOpened)
 
       switch(iconOpened){
         case "archive":
           rootStyle.setProperty('--navbarArchiveOrder', indexOfIcon)
-          console.log("woah something")
+          console.log("wow archive")
           break
 
         case "logs":
           rootStyle.setProperty('--navbarLogsOrder', indexOfIcon)
+          console.log("wow logs")
           break
 
         case "moon":
           rootStyle.setProperty('--navbarMoonOrder', indexOfIcon)
+          console.log("wow moon")
           break
       }
     }
-
-    //close and reorder all navbar icons
-    if(openOrClose == "close"){
-      // console.log("close: " + currentNavbarIconsOpen)
-    }
-    
-    // rootStyle.setProperty('--navbarArchiveOrder', 1)
-    // rootStyle.setProperty('--navbarLogsOrder', 2)
-    // rootStyle.setProperty('--navbarMoonOrder', 3)
   }
 
   //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
