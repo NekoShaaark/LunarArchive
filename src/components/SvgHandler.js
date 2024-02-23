@@ -41,11 +41,3 @@ export const NoteIcon = (props) => (
         <path d="M3 2h18v14h-2v2h-2v-2h-2v2h2v2h-2v2H3zm2 2v16h8v-6h6V4z"/>
     </svg>
 )
-export const RightIcon = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
-        <path
-          fill="#fff"
-          d="M8 5v2h2V5zm4 4V7h-2v2zm2 2V9h-2v2zm0 2h2v-2h-2zm-2 2v-2h2v2zm0 0h-2v2h2zm-4 4v-2h2v2z"
-        />
-    </svg>
-)

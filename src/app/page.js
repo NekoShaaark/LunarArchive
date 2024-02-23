@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { ArchiveIcon, LogsIcon, NoteIcon } from '@/components/SvgHandler'
+import { ArchiveIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -9,8 +9,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import WindowHeader from '@/components/WindowHeader'
 import archiveStyles from '@/styles/Archive.module.css'
 import logsStyles from '@/styles/Logs.module.css'
+import moonStyles from '@/styles/Moon.module.css'
 import Archive from './archive/page'
 import Logs from './logs/page'
+import Moon from './moon/page'
 
 
 
@@ -24,14 +26,70 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
+  const [moonWindowOpen, setMoonWindowOpen] = useState(false)
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
+  const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
+  const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
 
-  const archiveHandleOpen = () => { setArchiveWindowOpen(true); setCurrentFocusedWindow("archive") }
-  const archiveHandleClose = () => { setArchiveWindowOpen(false); setChangeFocusedWindow(true) }
 
-  const logsHandleOpen = () => { setLogsWindowOpen(true); setCurrentFocusedWindow("logs") }
-  const logsHandleClose = () => { setLogsWindowOpen(false); setChangeFocusedWindow(true) }
+  //--WINDOW OPEN HANDLERS--//
+  const archiveHandleOpen = () => { 
+    setArchiveWindowOpen(true) 
+    setCurrentFocusedWindow("archive") 
+    
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("archive") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "archive"]) //add "archive" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "archive"])
+      // setNavbarOrder("open")
+    }
+  }
+  const archiveHandleClose = () => { 
+    setArchiveWindowOpen(false) 
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
+    setNavbarOrder("close")
+  }
+
+  const logsHandleOpen = () => { 
+    setLogsWindowOpen(true) 
+    setCurrentFocusedWindow("logs") 
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("logs") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "logs"]) //add "logs" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "logs"])
+      // setNavbarOrder("open")
+    }
+  }
+  const logsHandleClose = () => { 
+    setLogsWindowOpen(false) 
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
+    setNavbarOrder("close")
+  }
+  
+  const moonHandleOpen = () => { 
+    setMoonWindowOpen(true) 
+    setCurrentFocusedWindow("moon") 
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("moon") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "moon"]) //add "moon" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "moon"])
+      // setNavbarOrder("open")
+    }
+  }
+  const moonHandleClose = () => { 
+    setMoonWindowOpen(false) 
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
+    setNavbarOrder("close")
+  }
 
 
   //--THEME--//
@@ -65,96 +123,180 @@ export default function Home() {
   }
   setInterval(updateTime, 1000)
 
+  function moveElementInArray(arrayToMove, elementToMove){
+    let indexToMove = arrayToMove.indexOf(elementToMove)
+    arrayToMove.push(arrayToMove.splice(indexToMove, 1)[0])
+  }
+
   //set currently active window
-  function setNoneWindowActive(archiveWindow, logsWindow, rootStyle){
-    archiveWindow ? archiveWindow.style.zIndex = 9 : null
-    logsWindow ? logsWindow.style.zIndex = 9 : null
-    setNoneNavbarColors(rootStyle)
-    setCurrentFocusedWindow("none")
-  }
+  function setActiveWindow(currentActiveWindow){
+    var archiveWindow = document.getElementById("window-archive")
+    var logsWindow = document.getElementById("window-logs")
+    var moonWindow = document.getElementById("window-moon")
 
-  function setArchiveWindowActive(archiveWindow, logsWindow, rootStyle){
-    archiveWindow ? archiveWindow.style.zIndex = 11 : null
-    logsWindow ? logsWindow.style.zIndex = 9 : null
-    setArchiveNavbarColors(rootStyle)
-    setCurrentFocusedWindow("archive")
-  }
+    //reorganize the window array to represent actual window hierarchy
+    if(!currentActiveWindow){ return }
+    moveElementInArray(currentWindowsOpen, currentActiveWindow)
+    
+    //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
+    var archiveIndex = currentWindowsOpen.indexOf("archive") + 10
+    var logsIndex = currentWindowsOpen.indexOf("logs") + 10
+    var moonIndex = currentWindowsOpen.indexOf("moon") + 10
+    
+    console.log(currentWindowsOpen)
+    
+    switch(currentActiveWindow){
+      case "none":
+        archiveWindow ? archiveWindow.style.zIndex = 9 : null
+        logsWindow ? logsWindow.style.zIndex = 9 : null
+        moonWindow ? moonWindow.style.zIndex = 9 : null
+        
+        setNavbarColors("none")
+        setCurrentFocusedWindow("none")
+        break
+        
+      case "archive":
+        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
+        logsWindow ? logsWindow.style.zIndex = logsIndex : null
+        moonWindow ? moonWindow.style.zIndex = moonIndex : null
+        
+        setNavbarColors("archive")
+        setCurrentFocusedWindow("archive")
+      break
 
-  function setLogsWindowActive(archiveWindow, logsWindow, rootStyle){
-    archiveWindow ? archiveWindow.style.zIndex = 9 : null
-    logsWindow ? logsWindow.style.zIndex = 11 : null
-    setLogsNavbarColors(rootStyle)
-    setCurrentFocusedWindow("logs")
+      case "logs":
+        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
+        logsWindow ? logsWindow.style.zIndex = logsIndex : null
+        moonWindow ? moonWindow.style.zIndex = moonIndex : null
+
+        setNavbarColors("logs")
+        setCurrentFocusedWindow("logs")
+        break
+
+      case "moon":
+        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
+        logsWindow ? logsWindow.style.zIndex = logsIndex : null
+        moonWindow ? moonWindow.style.zIndex = moonIndex : null
+
+        setNavbarColors("moon")
+        setCurrentFocusedWindow("moon")
+        break
+    }
   }
 
   //set navbar colors
-  function setNoneNavbarColors(rootStyle){
-    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-  
-    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+  function setNavbarColors(currentSelectedIcon){
+    var rootStyle = document.documentElement.style
+
+    switch(currentSelectedIcon){
+      case "none":
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+      
+        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        break
+
+      case "archive":
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+
+        rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
+        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        break
+
+      case "logs":
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+      
+        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
+        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        break
+      
+      case "moon":
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarMoonBackgroundColor', '#9665ff')
+      
+        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarMoonSelectedColor', '#000')
+        break
+    }
   }
 
-  function setArchiveNavbarColors(rootStyle){
-    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
-    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-  
-    rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
-    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-  }
+  //TODO: finish doing custom navbar order here
+  function setNavbarOrder(openOrClose){
+    var rootStyle = document.documentElement.style
 
-  function setLogsNavbarColors(rootStyle){
-    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
-  
-    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
-  }
+    //open new navbar icon
+    if(openOrClose == "open"){
+      // var iconOpened = currentNavbarIconsOpen[currentNavbarIconsOpen.length - 1]
+      // var indexOfIcon = currentNavbarIconsOpen.indexOf(iconOpened)
+      // console.log(`navbar ${iconOpened}: ${indexOfIcon}`)
+      // console.log(currentNavbarIconsOpen)
 
+      switch(iconOpened){
+        case "archive":
+          rootStyle.setProperty('--navbarArchiveOrder', indexOfIcon)
+          console.log("woah something")
+          break
+
+        case "logs":
+          rootStyle.setProperty('--navbarLogsOrder', indexOfIcon)
+          break
+
+        case "moon":
+          rootStyle.setProperty('--navbarMoonOrder', indexOfIcon)
+          break
+      }
+    }
+
+    //close and reorder all navbar icons
+    if(openOrClose == "close"){
+      // console.log("close: " + currentNavbarIconsOpen)
+    }
+    
+    // rootStyle.setProperty('--navbarArchiveOrder', 1)
+    // rootStyle.setProperty('--navbarLogsOrder', 2)
+    // rootStyle.setProperty('--navbarMoonOrder', 3)
+  }
 
   //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
   //runs on server init and when the [conditions] change or are updated
   useEffect(() => {
-    var rootStyle = document.documentElement.style
-    var archiveWindow = document.getElementById("window-archive")
-    var logsWindow = document.getElementById("window-logs")
     
     //if windows close, make the window that is still open the active window
     if(changeFocusedWindow){
-      if(!archiveWindowOpen && !logsWindowOpen){ setNoneWindowActive(archiveWindow, logsWindow, rootStyle); console.log("none here") }
-      if(archiveWindowOpen && !logsWindowOpen){ setArchiveWindowActive(archiveWindow, logsWindow, rootStyle); console.log("archive here") }
-      if(!archiveWindowOpen && logsWindowOpen){ setLogsWindowActive(archiveWindow, logsWindow, rootStyle); console.log("logs here") }
+      if(currentWindowsOpen.length === 0){ setActiveWindow("none"); console.log("none here") }
+      if(currentWindowsOpen.length === 1){ setActiveWindow(currentWindowsOpen[0]); console.log("only one left") }
+      if(currentWindowsOpen.length >= 2){ setActiveWindow(currentWindowsOpen[currentWindowsOpen.length - 1]); console.log("two or more left") }
       setChangeFocusedWindow(false)
-      console.log("changed to: " + currentFocusedWindow)
+      // console.log("changed to: " + currentFocusedWindow)
+      // console.log(currentWindowsOpen)
     }
-
+    
     //if the window is not set to change, set the current focused window as active
     if(!changeFocusedWindow){
-      switch(currentFocusedWindow){
-        case "archive":
-          console.log("current: archive "+ currentFocusedWindow)
-          setArchiveWindowActive(archiveWindow, logsWindow, rootStyle)
-          break
-
-        case "logs":
-          console.log("current: logs " + currentFocusedWindow)
-          setLogsWindowActive(archiveWindow, logsWindow, rootStyle)
-          break
-      }
+      setActiveWindow(currentFocusedWindow)
+      // setNavbarOrder("open")
+      // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, currentFocusedWindow])
+  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, currentFocusedWindow, currentWindowsOpen])
 
 
   //--ON SERVER INIT--//
   useEffect(() => {
-    var rootStyle = document.documentElement.style
-    var archiveWindow = document.getElementById("window-archive")
-    var logsWindow = document.getElementById("window-logs")
 
     //make all div elements draggable    
     let mydivs = document.getElementsByClassName("draggable")
-    var mydiv
+    let mydiv
     for(mydiv of mydivs) {
       dragElement(mydiv)
     }
@@ -170,17 +312,25 @@ export default function Home() {
       function dragMouseDown(e) {
         e.preventDefault()
 
-        //set navbar colors
-        // console.log(e.target.parentElement.parentElement)
-        if(e.target.parentElement.parentElement.id == "window-archive"){
-          setArchiveNavbarColors(rootStyle)
-          if(logsWindow){ setArchiveWindowActive(archiveWindow, logsWindow, rootStyle) }
-        }
+        //upon dragging/clicking-on, set that window that is being dragged to be the active window
+        switch(e.target.parentElement.parentElement.id){
+          case "window-archive":
+            setActiveWindow("archive")
+            moveElementInArray(currentWindowsOpen, "archive")
+            break
 
-        if(e.target.parentElement.parentElement.id == "window-logs"){
-          setLogsNavbarColors(rootStyle)
-          if(archiveWindow){ setLogsWindowActive(archiveWindow, logsWindow, rootStyle) }
+          case "window-logs":
+            setActiveWindow("logs")
+            moveElementInArray(currentWindowsOpen, "logs")
+            break
+
+          case "window-moon":
+            setActiveWindow("moon")
+            moveElementInArray(currentWindowsOpen, "moon")
+            break
         }
+        // console.log(e.target.parentElement.parentElement)
+        // console.log(currentWindowsOpen)
         
         //get cursor position at startup
         pos3 = e.clientX
@@ -242,6 +392,8 @@ export default function Home() {
   //STUB: maybe add a sorta "os-booting sqeuence" as a splashscreen
   //STUB: maybe add functionality to the "minimize" button (closes the window, but it stays on the navbar)
   //STUB: maybe add functionality for a "maximize" button (redirects the user to the window's webpage, and remembers what is currently open)
+  //REVIEW: it might be possible to make all these setting of css variables dynamic
+  //STUB: if css variable setting is dynamic: might be able make navbar icon order dynamic
 
   return (
     <div className="layout">
@@ -264,6 +416,13 @@ export default function Home() {
               <Button disableRipple onClick={logsHandleOpen}>
                 <LogsIcon width="8vh" height="8vh"/>
                 <h1>Data Logs</h1>
+              </Button>
+            </div>
+
+            <div id="icon" className="icon-moon">
+              <Button disableRipple onClick={moonHandleOpen}>
+                <MoonStarIcon width="8vh" height="8vh"/>
+                <h1>Moon</h1>
               </Button>
             </div>
           </div>
@@ -312,6 +471,28 @@ export default function Home() {
               </motion.div>
             }
           </AnimatePresence>
+
+          {/* moon window */}
+          <AnimatePresence>
+            {moonWindowOpen &&
+              <motion.div 
+                id="window-moon" 
+                className="draggable"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div id="draggable-header">
+                  <WindowHeader headerName="Moon" selectedIcon="moonStarIcon" setClose={moonHandleClose}/> {/* false window header */}
+                </div>
+
+                <div className={moonStyles.moonBody}>
+                  <Moon/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
         </ThemeProvider>
       </div>
 
@@ -322,6 +503,7 @@ export default function Home() {
           {/* primary */}
           <div className ="navigation-primary">
             <ul>
+              {/* archive navbar icon */}
               <AnimatePresence>
                 {archiveWindowOpen &&
                   <motion.li 
@@ -341,6 +523,7 @@ export default function Home() {
                 }
               </AnimatePresence>
               
+              {/* logs navbar icon */}
               <AnimatePresence>
                 {logsWindowOpen &&
                   <motion.li 
@@ -354,6 +537,26 @@ export default function Home() {
                       <Button disableRipple onClick={logsHandleOpen}>
                         <LogsIcon width={24} height={24}/>
                         <span>{"Data Logs"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* moon navbar icon */}
+              <AnimatePresence>
+                {moonWindowOpen &&
+                  <motion.li 
+                    className="moon"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={moonHandleOpen}>
+                        <MoonStarIcon width={24} height={24}/>
+                        <span>{"Moon"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>
