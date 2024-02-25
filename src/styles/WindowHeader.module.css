@@ -24,6 +24,7 @@
     align-self: center;
     margin: auto 4px auto auto; /* top | right | bottom | left */
     gap: 4px;
+    cursor: pointer;
     user-select: none;
 }
 
@@ -46,4 +47,14 @@
 .closeIcon:hover {
     cursor: pointer;
     background-color: #ff4b4b;
+}
+
+.minimizeIcon {
+    background-color: #9665ff;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
+}
+.minimizeIcon:hover {
+    cursor: pointer;
+    background-color: hwb(259 28% 0%);
 }

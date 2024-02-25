@@ -2,11 +2,15 @@ import Image from 'next/image'
 import styles from '@/styles/WindowHeader.module.css'
 import { CloseIcon, MinimizeIcon } from './SvgHandler'
 
-export default function WindowHeader({headerName, selectedIcon, setClose}) {
+export default function WindowHeader({headerName, selectedIcon, setClose, setMinimize}) {
   var displayIconLocation = `icons/${selectedIcon}.svg`
 
   function handleClose(){
     setClose()
+  }
+
+  function handleMinimize(){
+    setMinimize()
   }
 
   return ( 
@@ -18,8 +22,8 @@ export default function WindowHeader({headerName, selectedIcon, setClose}) {
       </h1>
       
       <div className={styles.systemIcons}>
-        <MinimizeIcon id={styles.systemIcon} alt="Minimize" width={24} height={24}/>
-        <CloseIcon className={styles.closeIcon} alt="Close" width={24} height={24} onClick={() => handleClose()}/>
+        <MinimizeIcon className={styles.minimizeIcon} alt="Minimize" width={24} height={24} onClick={handleMinimize}/>
+        <CloseIcon className={styles.closeIcon} alt="Close" width={24} height={24} onClick={handleClose}/>
       </div>
     </div>
   )

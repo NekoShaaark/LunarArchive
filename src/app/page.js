@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { ArchiveIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useAnimate } from 'framer-motion'
 
 import WindowHeader from '@/components/WindowHeader'
 import archiveStyles from '@/styles/Archive.module.css'
@@ -24,25 +24,74 @@ export default function Home() {
   const amORpm = date.getHours() >= 12 ? "PM" : "AM"
   
   const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
+
+  const [archiveMinimize, archiveAnimate] = useAnimate()
+  const [logsMinimize, logsAnimate] = useAnimate()
+  const [moonMinimize, moonAnimate] = useAnimate()
+  
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
   const [moonWindowOpen, setMoonWindowOpen] = useState(false)
+  const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
+  const [logsWindowMinimized, setLogsWindowMinimized] = useState(false)
+  const [moonWindowMinimized, setMoonWindowMinimized] = useState(false)
+
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
 
 
-  //--WINDOW OPEN HANDLERS--//
+  //--MINIMIZE ANIMATIONS--//
+  const dropWindowAnimation = async (animationItem) => {
+    switch(animationItem){
+      case "archive":
+        await archiveAnimate(archiveMinimize.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
+        break
+
+      case "logs":
+        await logsAnimate(logsMinimize.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
+        break
+
+      case "moon":
+        await moonAnimate(moonMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        break
+    }
+  }
+
+  const pullWindowAnimation = async (animationItem) => {
+    switch(animationItem){
+      case "archive":
+        await archiveAnimate(archiveMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+
+      case "logs":
+        await logsAnimate(logsMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+
+      case "moon":
+        await moonAnimate(moonMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+    }
+  }
+
+
+  //--WINDOW OPEN/CLOSE/MINIMIZE HANDLERS--//
   const archiveHandleOpen = () => { 
     setArchiveWindowOpen(true) 
-    setCurrentFocusedWindow("archive") 
+    setCurrentFocusedWindow("archive")
+    
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(archiveWindowMinimized){
+      pullWindowAnimation("archive")
+      setArchiveWindowMinimized(false)
+    }
     
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
     if(currentWindowsOpen.indexOf("archive") == -1){
+      setNavbarOrder("open")
       setCurrentWindowsOpen([...currentWindowsOpen, "archive"]) //add "archive" to the array
       setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "archive"])
-      setNavbarOrder("open")
     }
   }
   const archiveHandleClose = () => { 
@@ -51,10 +100,22 @@ export default function Home() {
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
+  const archiveHandleMinimize = () => {
+    setChangeFocusedWindow(true) 
+    setArchiveWindowMinimized(true)
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
+  }
 
   const logsHandleOpen = () => { 
     setLogsWindowOpen(true) 
     setCurrentFocusedWindow("logs") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(logsWindowMinimized){
+      pullWindowAnimation("logs")
+      setLogsWindowMinimized(false)
+    }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
     if(currentWindowsOpen.indexOf("logs") == -1){
@@ -69,10 +130,22 @@ export default function Home() {
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
+  const logsHandleMinimize = () => {
+    setChangeFocusedWindow(true) 
+    setLogsWindowMinimized(true)
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
+  }
   
   const moonHandleOpen = () => { 
     setMoonWindowOpen(true) 
     setCurrentFocusedWindow("moon") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(moonWindowMinimized){
+      pullWindowAnimation("moon")
+      setMoonWindowMinimized(false)
+    }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
     if(currentWindowsOpen.indexOf("moon") == -1){
@@ -84,6 +157,12 @@ export default function Home() {
   const moonHandleClose = () => { 
     setMoonWindowOpen(false) 
     setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
+  }
+  const moonHandleMinimize = () => {
+    setChangeFocusedWindow(true) 
+    setMoonWindowMinimized(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
   }
@@ -282,7 +361,8 @@ export default function Home() {
       if(currentWindowsOpen.length >= 2){ setActiveWindow(currentWindowsOpen[currentWindowsOpen.length - 1]); console.log("two or more left") }
       setChangeFocusedWindow(false)
       // console.log("changed to: " + currentFocusedWindow)
-      // console.log(currentWindowsOpen)
+      console.log(currentWindowsOpen)
+      return
     }
     
     //if the window is not set to change, set the current focused window as active
@@ -292,6 +372,17 @@ export default function Home() {
       // console.log("current focused window: " + currentFocusedWindow)
     }
   }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, currentFocusedWindow, currentWindowsOpen])
+
+
+  //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
+  //runs on server init and when the [conditions] change or are updated
+  useEffect(() => {
+
+    //play animation to drop window below navbar
+    if(archiveWindowMinimized){ dropWindowAnimation("archive") }
+    if(logsWindowMinimized){ dropWindowAnimation("logs") }
+    if(moonWindowMinimized){ dropWindowAnimation("moon") }
+  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized])
 
 
   //--ON SERVER INIT--//
@@ -392,9 +483,10 @@ export default function Home() {
   })
 
   
-  //STUB: maybe add functionality to the "minimize" button (closes the window, but it stays on the navbar)
   //STUB: maybe add functionality for a "maximize" button (redirects the user to the window's webpage, and remembers what is currently open)
   //REVIEW: if css variable setting is dynamic: might be able make navbar icon order dynamic
+  //REVIEW: when minimizing windows, they sometimes have the chance of displaying the incorrect navbar color
+  //REVIEW: when unminimizing windows, they sometimes have the chance of being incorrectly rearranged (moved to the beginning) in the navbar order [array] 
   //TODO: add a sorta "os-booting sqeuence" as a splashscreen
 
   return (
@@ -436,13 +528,20 @@ export default function Home() {
               <motion.div 
                 id="window-archive"
                 className="draggable"
+                ref={archiveMinimize}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.35 }}
               >
+                {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="███hi██" selectedIcon="archiveIcon" setClose={archiveHandleClose}/> {/* false window header */}
+                  <WindowHeader 
+                    headerName="███hi██" 
+                    selectedIcon="archiveIcon" 
+                    setClose={archiveHandleClose} 
+                    setMinimize={archiveHandleMinimize}
+                  /> 
                 </div>
                 
                 <div className={archiveStyles.archiveBody}>
@@ -458,13 +557,15 @@ export default function Home() {
               <motion.div 
                 id="window-logs" 
                 className="draggable"
+                ref={logsMinimize}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.5 }}
               >
+                {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose}/> {/* false window header */}
+                  <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose} setMinimize={logsHandleMinimize}/>
                 </div>
 
                 <div className={logsStyles.logsBody}>
@@ -480,13 +581,15 @@ export default function Home() {
               <motion.div 
                 id="window-moon" 
                 className="draggable"
+                ref={moonMinimize}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ duration: 0.5 }}
               >
+                {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Moon" selectedIcon="moonStarIcon" setClose={moonHandleClose}/> {/* false window header */}
+                  <WindowHeader headerName="Moon" selectedIcon="moonStarIcon" setClose={moonHandleClose} setMinimize={moonHandleMinimize}/>
                 </div>
 
                 <div className={moonStyles.moonBody}>
