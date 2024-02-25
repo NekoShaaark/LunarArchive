@@ -392,11 +392,10 @@ export default function Home() {
   })
 
   
-  //STUB: maybe add a sorta "os-booting sqeuence" as a splashscreen
   //STUB: maybe add functionality to the "minimize" button (closes the window, but it stays on the navbar)
   //STUB: maybe add functionality for a "maximize" button (redirects the user to the window's webpage, and remembers what is currently open)
-  //REVIEW: it might be possible to make all these setting of css variables dynamic
-  //STUB: if css variable setting is dynamic: might be able make navbar icon order dynamic
+  //REVIEW: if css variable setting is dynamic: might be able make navbar icon order dynamic
+  //TODO: add a sorta "os-booting sqeuence" as a splashscreen
 
   return (
     <div className="layout">
@@ -410,21 +409,21 @@ export default function Home() {
           <div className="desktop-layout">
             <div id="icon" className="icon-archive">
               <Button disableRipple onClick={archiveHandleOpen}>
-                <ArchiveIcon width="8vh" height="8vh"/>
+                <ArchiveIcon width="6vh" height="6vh"/>
                 <h1>Archive</h1>
               </Button>
             </div>
 
             <div id="icon" className="icon-logs">
               <Button disableRipple onClick={logsHandleOpen}>
-                <LogsIcon width="8vh" height="8vh"/>
+                <LogsIcon width="6vh" height="6vh"/>
                 <h1>Data Logs</h1>
               </Button>
             </div>
 
             <div id="icon" className="icon-moon">
               <Button disableRipple onClick={moonHandleOpen}>
-                <MoonStarIcon width="8vh" height="8vh"/>
+                <MoonStarIcon width="6vh" height="6vh"/>
                 <h1>Moon</h1>
               </Button>
             </div>

@@ -216,64 +216,28 @@ body {
 /* #endregion <======> */
 
 
-/* #region <===Windows===> */
-#window-content{
-    display: flex;
-    margin-bottom: 20px;
-    align-items: flex-end;
-    justify-content: center;
-    width: 100%;
-    gap: 20px;
-    z-index: 5;
-}
-#window-form{
-    display: flex;
-    margin-top: 20px;
-    flex-direction: column;
-}
-#window-form-content{
-    display: flex;
-    padding: 6px;
-    width: auto;
-    justify-content: center;
-    border: 2px solid #9665ff;
-}
-/* #endregion <===windows===> */
-
-
 /* #region <===desktop===> */
 /* #region ---desktop-layout--- */
 .desktop-layout{
-    display: grid; 
-    height: 100%;
-    width: 100%;
-    padding: 15px;
-    grid-auto-columns: 0.4fr; 
-    grid-template-columns: 0.4fr 0.4fr 0.4fr 0.4fr 2fr; 
-    grid-template-rows: 0.4fr 0.4fr 2fr; 
-    gap: 20px 20px; 
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(10, minmax(0, 1fr)); 
+    grid-template-rows: repeat(6, minmax(0, 1fr)); 
+    gap: 16px 20px;
+    margin: 16px;
     grid-template-areas: 
-        "icon-archive icon-logs icon-moon Icon4 ."
-        "Icon5 Icon6 . . ."
-        ". . . . ."; 
+        "Icon1 Icon2 Icon3 Icon4 Icon5 Icon6 Icon7 ."
+        "VIcon2 . . . . . . ."
+        "VIcon3 . . . . . . ."
+        "VIcon4 . . . . . . ."
+        "VIcon5 . . . . . . ."
+        "VIcon6 . . . . . . ."; 
 }
-
-.draggable {
-    position: absolute;
-    z-index: 9;
-}
-#draggable-header {
-    top: 0;
-    position: sticky;
-    cursor: grab;
-    z-index: 10;
-}
+.icon-archive{ grid-area: Icon1; }
+.icon-logs{ grid-area: Icon2; }
+.icon-moon{ grid-area: VIcon2; } 
 
 #icon{
-    height: 100%;
-    width: 100%;
-    max-height: 18vh;
-    max-width: 18vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -283,19 +247,19 @@ body {
     pointer-events: none;
     h1{ 
         padding: 0 4px;
-        margin: 6px;
+        margin: 0;
         color: #9665ff;
         background: #000;
+        font-size: 14px;
         font-weight: 400;
-        font-size: 16px;
         user-select: none;
     }
     button{
         display: flex;
+        gap: 8px;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        padding: 6px;
         text-decoration: none;
         pointer-events: auto;
     }
@@ -303,6 +267,19 @@ body {
 #icon:hover{
     border: 6px solid rgba(106, 64, 197, 0.5);
     background-color: rgba(44, 24, 87, 0.5);
+}
+/* #endregion ---desktop-layout--- */
+
+/* #region ---windows--- */
+.draggable {
+    position: absolute;
+    z-index: 9;
+}
+#draggable-header {
+    top: 0;
+    position: sticky;
+    cursor: grab;
+    z-index: 10;
 }
 
 #window-archive{
@@ -335,5 +312,5 @@ body {
     flex-direction: column;
     border: 4px solid #9665ff;
 }
-/* #region ---desktop-layout--- */
+/* #endregion ---windows--- */
 /* #endregion <===Desktop===> */
