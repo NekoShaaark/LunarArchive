@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { ArchiveIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
+import { ArchiveIcon, FolderIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
@@ -10,9 +10,11 @@ import WindowHeader from '@/components/WindowHeader'
 import archiveStyles from '@/styles/Archive.module.css'
 import logsStyles from '@/styles/Logs.module.css'
 import moonStyles from '@/styles/Moon.module.css'
+import documentsStyles from '@/styles/Documents.module.css'
 import Archive from './archive/page'
 import Logs from './logs/page'
 import Moon from './moon/page'
+import Documents from './documents/page'
 
 
 
@@ -22,20 +24,27 @@ export default function Home() {
   const date = new Date()
   const now = date.toLocaleTimeString("en-US", { hour12:false, hour:"2-digit", minute:"2-digit" })
   const amORpm = date.getHours() >= 12 ? "PM" : "AM"
-  
   const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
 
+  //minimize animation states
   const [archiveMinimize, archiveAnimate] = useAnimate()
   const [logsMinimize, logsAnimate] = useAnimate()
   const [moonMinimize, moonAnimate] = useAnimate()
+  const [documentsMinimize, documentsAnimate] = useAnimate()
   
+  //window open states
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
   const [moonWindowOpen, setMoonWindowOpen] = useState(false)
+  const [documentsWindowOpen, setDocumentsWindowOpen] = useState(false)
+
+  //window minimized states
   const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
   const [logsWindowMinimized, setLogsWindowMinimized] = useState(false)
   const [moonWindowMinimized, setMoonWindowMinimized] = useState(false)
+  const [documentsWindowMinimized, setDocumentsWindowMinimized] = useState(false)
 
+  //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
@@ -56,6 +65,10 @@ export default function Home() {
       case "moon":
         await moonAnimate(moonMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
+
+      case "documents":
+        await documentsAnimate(documentsMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        break
     }
   }
 
@@ -71,6 +84,10 @@ export default function Home() {
 
       case "moon":
         await moonAnimate(moonMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+
+      case "documents":
+        await documentsAnimate(documentsMinimize.current, { y: 0 }, { duration: 0.4 })
         break
     }
   }
@@ -167,6 +184,36 @@ export default function Home() {
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
   }
 
+  const documentsHandleOpen = () => { 
+    setDocumentsWindowOpen(true) 
+    setCurrentFocusedWindow("documents") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(documentsWindowMinimized){
+      pullWindowAnimation("documents")
+      setDocumentsWindowMinimized(false)
+    }
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("documents") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "documents"]) //add "documents" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "documents"])
+      setNavbarOrder("open")
+    }
+  }
+  const documentsHandleClose = () => { 
+    setChangeFocusedWindow(true) 
+    setDocumentsWindowOpen(false) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
+  }
+  const documentsHandleMinimize = () => {
+    setDocumentsWindowMinimized(true)
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
+  }
+
 
   //--THEME--//
   const theme = createTheme({
@@ -209,6 +256,7 @@ export default function Home() {
     var archiveWindow = document.getElementById("window-archive")
     var logsWindow = document.getElementById("window-logs")
     var moonWindow = document.getElementById("window-moon")
+    var documentsWindow = document.getElementById("window-documents")
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
@@ -219,42 +267,46 @@ export default function Home() {
     var archiveIndex = currentWindowsOpen.indexOf("archive") + 10
     var logsIndex = currentWindowsOpen.indexOf("logs") + 10
     var moonIndex = currentWindowsOpen.indexOf("moon") + 10
+    var documentsIndex = currentWindowsOpen.indexOf("documents") + 10
     
+    //check if active window is none
+    if(currentActiveWindow == "none"){
+      archiveWindow ? archiveWindow.style.zIndex = 9 : null
+      logsWindow ? logsWindow.style.zIndex = 9 : null
+      moonWindow ? moonWindow.style.zIndex = 9 : null
+      documentsWindow ? documentsWindow.style.zIndex = 9 : null
+      
+      setNavbarColors("none")
+      setCurrentFocusedWindow("none")
+      return
+    }
+
+    //set all windows' zIndex
+    archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
+    logsWindow ? logsWindow.style.zIndex = logsIndex : null
+    moonWindow ? moonWindow.style.zIndex = moonIndex : null
+    documentsWindow ? documentsWindow.style.zIndex = documentsIndex : null
+
+    //set navbarColors and focusedWindow
     switch(currentActiveWindow){
-      case "none":
-        archiveWindow ? archiveWindow.style.zIndex = 9 : null
-        logsWindow ? logsWindow.style.zIndex = 9 : null
-        moonWindow ? moonWindow.style.zIndex = 9 : null
-        
-        setNavbarColors("none")
-        setCurrentFocusedWindow("none")
-        break
-        
       case "archive":
-        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
-        logsWindow ? logsWindow.style.zIndex = logsIndex : null
-        moonWindow ? moonWindow.style.zIndex = moonIndex : null
-        
         setNavbarColors("archive")
         setCurrentFocusedWindow("archive")
-      break
+        break
 
       case "logs":
-        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
-        logsWindow ? logsWindow.style.zIndex = logsIndex : null
-        moonWindow ? moonWindow.style.zIndex = moonIndex : null
-
         setNavbarColors("logs")
         setCurrentFocusedWindow("logs")
         break
 
       case "moon":
-        archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
-        logsWindow ? logsWindow.style.zIndex = logsIndex : null
-        moonWindow ? moonWindow.style.zIndex = moonIndex : null
-
         setNavbarColors("moon")
         setCurrentFocusedWindow("moon")
+        break
+
+      case "documents":
+        setNavbarColors("documents")
+        setCurrentFocusedWindow("documents")
         break
     }
 
@@ -264,46 +316,67 @@ export default function Home() {
   //set navbar colors
   function setNavbarColors(currentSelectedIcon){
     var rootStyle = document.documentElement.style
+    console.log(currentSelectedIcon)
 
     switch(currentSelectedIcon){
       case "none":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
         rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
         rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
       
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
 
       case "archive":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
         rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
         rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
 
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
         rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
 
       case "logs":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
         rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
         rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
       
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
         rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
       
       case "moon":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
         rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
         rootStyle.setProperty('--navbarMoonBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
       
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarMoonSelectedColor', '#000')
+        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
+        break
+
+      case "documents":
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#9665ff')
+      
+        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#000')
         break
     }
   }
@@ -312,11 +385,11 @@ export default function Home() {
   function setNavbarOrder(openOrClose){
     var rootStyle = document.documentElement.style
 
-    console.log(currentNavbarIconsOpen)
+    // console.log(currentNavbarIconsOpen)
 
     //open new navbar icon
     if(openOrClose == "open" && currentWindowsOpen.length > 3){ 
-      console.log(currentNavbarIconsOpen)
+      // console.log(currentNavbarIconsOpen)
       console.log("three icons open already")
       return
     }
@@ -346,6 +419,11 @@ export default function Home() {
           rootStyle.setProperty('--navbarMoonOrder', indexOfIcon)
           console.log("wow moon")
           break
+
+        case "documents":
+          rootStyle.setProperty('--navbarDocumentsOrder', indexOfIcon)
+          console.log("wow documents")
+          break
       }
     }
   }
@@ -361,7 +439,7 @@ export default function Home() {
       if(currentWindowsOpen.length >= 2){ setActiveWindow(currentWindowsOpen[currentWindowsOpen.length - 1]); console.log("two or more left") }
       setChangeFocusedWindow(false)
       // console.log("changed to: " + currentFocusedWindow)
-      console.log(currentWindowsOpen)
+      // console.log(currentWindowsOpen)
       return
     }
     
@@ -371,7 +449,7 @@ export default function Home() {
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, currentFocusedWindow, currentWindowsOpen])
+  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, currentFocusedWindow, currentWindowsOpen])
 
 
   //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
@@ -382,7 +460,8 @@ export default function Home() {
     if(archiveWindowMinimized){ dropWindowAnimation("archive") }
     if(logsWindowMinimized){ dropWindowAnimation("logs") }
     if(moonWindowMinimized){ dropWindowAnimation("moon") }
-  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized])
+    if(documentsWindowMinimized){ dropWindowAnimation("documents") }
+  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized, documentsWindowMinimized])
 
 
   //--ON SERVER INIT--//
@@ -421,6 +500,11 @@ export default function Home() {
           case "window-moon":
             setActiveWindow("moon")
             moveElementInArray(currentWindowsOpen, "moon")
+            break
+
+          case "window-documents":
+            setActiveWindow("documents")
+            moveElementInArray(currentWindowsOpen, "documents")
             break
         }
         // console.log(e.target.parentElement.parentElement)
@@ -519,6 +603,13 @@ export default function Home() {
                 <h1>Moon</h1>
               </Button>
             </div>
+
+            <div id="icon" className="icon-documents">
+              <Button disableRipple onClick={documentsHandleOpen}>
+                <FolderIcon width="6vh" height="6vh"/>
+                <h1>Documents</h1>
+              </Button>
+            </div>
           </div>
 
 
@@ -598,6 +689,30 @@ export default function Home() {
               </motion.div>
             }
           </AnimatePresence>
+
+          {/* documents window */}
+          <AnimatePresence>
+            {documentsWindowOpen &&
+              <motion.div 
+                id="window-documents" 
+                className="draggable"
+                ref={documentsMinimize}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* false window header */}
+                <div id="draggable-header">
+                  <WindowHeader headerName="Documents" selectedIcon="folderIcon" setClose={documentsHandleClose} setMinimize={documentsHandleMinimize}/>
+                </div>
+
+                <div className={documentsStyles.documentsBody}>
+                  <Documents/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
         </ThemeProvider>
       </div>
 
@@ -662,6 +777,26 @@ export default function Home() {
                       <Button disableRipple onClick={moonHandleOpen}>
                         <MoonStarIcon width={24} height={24}/>
                         <span>{"Moon"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* docuemnts navbar icon */}
+              <AnimatePresence>
+                {documentsWindowOpen &&
+                  <motion.li 
+                    className="documents"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={documentsHandleOpen}>
+                        <FolderIcon width={24} height={24}/>
+                        <span>{"Documents"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>

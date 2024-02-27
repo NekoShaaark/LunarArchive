@@ -3,7 +3,7 @@
   position: relative;
   height: 100%;
   width: 100%;
-  background-image: var(--main-background-gradient);
+  background-image: var(--moon-background-gradient);
   background-blend-mode: overlay, overlay, overlay, normal;
   background-size: auto;
   background-repeat: no-repeat;

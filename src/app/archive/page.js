@@ -9,7 +9,7 @@ import styles from '@/styles/Archive.module.css'
 export default function Archive() {
   return (
     <>
-      <Image className={styles.image} src="/dedNiko.webp" width={326} height={112} alt="dedNiko"/>
+      <Image unoptimized className={styles.image} src="/dedNiko.webp" width={326} height={112} alt="dedNiko"/>
       
       <h1 className={styles.title}>Arc██ve</h1>
       <p className={styles.text}><b>&quot;Ho█ █id ██u get h██e?&quot;</b></p>
