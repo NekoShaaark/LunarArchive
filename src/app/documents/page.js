@@ -1,3 +1,5 @@
+"use client"
+
 import styles from '@/styles/Documents.module.css'
 import { ArchiveIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
@@ -12,10 +14,10 @@ export default function Documents() {
 
   const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
-  const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/")
+  const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Documents")
 
 
-  const files = 
+  const rootDir = 
   [
     {
       id: "0",
@@ -67,10 +69,11 @@ export default function Documents() {
     }
   ]
   
-  const rootFolder = files
-    const gamesFolder = files[0].files
+  //folder reference variables
+  const rootFolder = rootDir
+    const gamesFolder = rootDir[0].files
       const pewFolder = gamesFolder[1].files
-    const picturesFolder = files[1].files
+    const picturesFolder = rootDir[1].files
 
 
   function filesInFolder(folder){
@@ -96,57 +99,72 @@ export default function Documents() {
       openFolder(fileID)
       return
     }
-  }
+  }  
 
-  //TODO: "-1" should dynamically go back/up once in the current array
-  //TODO: all of these cases should be dynamic
   function openFolder(folderID){
+    //set all to false, and set only one to true
+    setRootFolderOpen(false)
+    setGamesFolderOpen(false)
+    setPicturesFolderOpen(false)
+    setPewFolderOpen(false)
+
+    //open a specific folder
     switch(folderID){
+      
+      //back
       case "-1":
+      case "Documents":
         setRootFolderOpen(true)
-        setGamesFolderOpen(false)
-        setPicturesFolderOpen(false)
-        setPewFolderOpen(false)
-        console.log("open root")
+        // console.log("open root")
         break
 
+      //games
       case "0":
-        setRootFolderOpen(false)
+      case "Games":
         setGamesFolderOpen(true)
-        setPicturesFolderOpen(false)
-        setPewFolderOpen(false)
-        console.log("open games")
+        // console.log("open games")
         break
 
+      //pictures
       case "1":
-        setRootFolderOpen(false)
-        setGamesFolderOpen(false)
+      case "Pictures":
         setPicturesFolderOpen(true)
-        setPewFolderOpen(false)
-        console.log("open pictures")
+        // console.log("open pictures")
         break
 
+      //pew
       case "01":
-        setRootFolderOpen(false)
-        setGamesFolderOpen(false)
-        setPicturesFolderOpen(false)
+      case "Pew":
         setPewFolderOpen(true)
-        console.log("open pew")
+        // console.log("open pew")
         break
     }
 
+    //update navabr directory
     updateCurrentDirectory(folderID)
   }
 
+  function backOneFolder(){
+    const currentDir = currentReadableDirectory.split("/")
+    const moveDir = currentDir[currentDir.length - 2]
+    // console.log(moveDir)
+    if(moveDir){ openFolder(moveDir) }
+  }
+
   function getCurrentDirectory(fileID, returnType){
-    if(fileID == "-1"){ return("/") }
+    
+    //fileID will be literal if it's passed from the "backOneFolder()" method (this allows the user to go back by exactly one folder)
+    if(fileID == "Documents"){ return "/Documents" }
+      if(fileID == "Games"){ return "/Documents/Games" }
+        if(fileID == "Pew"){ return "/Documents/Games/Pew" }
+      if(fileID == "Pictures"){ return "/Documents/Pictures" }
 
     //slice the fileID into its seperate array indices
     const arrayLayer = fileID.toString().slice("")
     const arrayLayer0 = arrayLayer[0]
     const arrayLayer1 = arrayLayer[1]
     const arrayLayer2 = arrayLayer[2]
-    var currentDir = ``
+    var currentDir = `/Documents`
     var layer2
     var layer1
     var layer0
@@ -154,19 +172,19 @@ export default function Documents() {
     //arrays are handled in ascending order due to adding on currentDir to itself each layer
     //layer0 handler
     if(arrayLayer0){ 
-      layer0 = files[arrayLayer0]
-      currentDir = `/${layer0.name}`
+      layer0 = rootDir[arrayLayer0]
+      currentDir += `/${layer0.name}`
     }
 
     //layer1 handler
     if(arrayLayer1){ 
-      layer1 = files[arrayLayer0].files[arrayLayer1]
+      layer1 = rootDir[arrayLayer0].files[arrayLayer1]
       currentDir += `/${layer1.name}`
     }
 
     //layer2 handler
     if(arrayLayer2){ 
-      layer2 = files[arrayLayer0].files[arrayLayer1].files[arrayLayer2]
+      layer2 = rootDir[arrayLayer0].files[arrayLayer1].files[arrayLayer2]
       currentDir += `/${layer2.name}`
     }
 
@@ -196,7 +214,7 @@ export default function Documents() {
   return (
     <>
       <div className={styles.navbar}>
-        <Button disableRipple onClick={() => openFolder("-1")}>
+        <Button disableRipple onClick={() => backOneFolder()}>
           Back
         </Button>
         <div className={styles.text}>{currentReadableDirectory}</div>
@@ -204,9 +222,9 @@ export default function Documents() {
       <div className={styles.grid}>
 
         {rootFolderOpen && filesInFolder(rootFolder)}
-        {gamesFolderOpen && filesInFolder(gamesFolder)}
-          {pewFolderOpen && filesInFolder(pewFolder)}
-        {picturesFolderOpen && filesInFolder(picturesFolder)}
+          {gamesFolderOpen && filesInFolder(gamesFolder)}
+            {pewFolderOpen && filesInFolder(pewFolder)}
+          {picturesFolderOpen && filesInFolder(picturesFolder)}
       
       </div>
     </>
