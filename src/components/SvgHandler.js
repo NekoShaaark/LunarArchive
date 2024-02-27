@@ -42,3 +42,33 @@ export const NoteIcon = (props) => (
         <path d="M3 2h18v14h-2v2h-2v-2h-2v2h2v2h-2v2H3zm2 2v16h8v-6h6V4z"/>
     </svg>
 )
+export const BackIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+    	<path d="M13 19h2v-4h7V9h-7V5h-2v2h-2v2H9v2H7v2h2v2h2v2h2zM8 7H6v2H4v2H2v2h2v2h2v2h2v2h2v-2H8v-2H6v-2H4v-2h2V9h2zm0 0h2V5H8z" />
+    </svg>
+)
+export const ImageIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+	<path d="M4 3H2v18h20V3zm16 2v14H4V5zm-6 4h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v2h2v-2h-2v-2h-2zM8 7H6v2h2z" />
+</svg>
+)
+export const ImagesIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+	    <path d="M24 2H4v16h20zM6 16V4h16v12zM2 4H0v18h20v-2H2zm12 2h2v2h-2zm-2 4V8h2v2zm-2 2v-2h2v2zm0 0v2H8v-2zm8-2h-2V8h2zm0 0h2v2h-2zM8 6h2v2H8z" />
+    </svg>
+)
+export const BugIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+	    <path d="M8 2h2v4h4V2h2v4h2v3h2v2h-2v2h4v2h-4v2h2v2h-2v3H6v-3H4v-2h2v-2H2v-2h4v-2H4V9h2V6h2zm8 6H8v3h8zm-5 5H8v7h3zm2 7h3v-7h-3zM4 9H2V7h2zm0 10v2H2v-2zm16 0h2v2h-2zm0-10V7h2v2z" />
+    </svg>
+)
+export const ChessIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+	    <path d="M2 2h20v20H2zm2 2v4h4v4H4v4h4v4h4v-4h4v4h4v-4h-4v-4h4V8h-4V4h-4v4H8V4zm8 8H8v4h4zm0-4v4h4V8z" />
+    </svg>
+)
+export const GamepadIcon = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+	    <path fill="#9665ff" d="M2 5h20v14H2zm18 12V7H4v10zM8 9h2v2h2v2h-2v2H8v-2H6v-2h2zm6 0h2v2h-2zm4 4h-2v2h2z" />
+    </svg>
+)

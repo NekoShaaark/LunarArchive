@@ -1,12 +1,13 @@
 "use client"
 
 import styles from '@/styles/Documents.module.css'
-import { ArchiveIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
-import { Button } from '@mui/material'
+import { ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, GamepadIcon, ImageIcon, ImagesIcon } from '@/components/SvgHandler'
+import { Button, ThemeProvider, createTheme } from '@mui/material'
 import { useState } from 'react'
+import Image from 'next/image'
 
 
-export default function Documents() {
+export default function Documents({ archiveOpen }) {
   const [rootFolderOpen, setRootFolderOpen] = useState(true)
 
   const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
@@ -22,27 +23,27 @@ export default function Documents() {
     {
       id: "0",
       name: "Games",
-      icon: <MoonStarIcon fill="#fff" width={48} height={48}/>,
+      icon: <GamepadIcon fill="#9665ff" width={48} height={48}/>,
       files: [
         {
           id: "00",
-          name: "OneShot",
-          icon: <ArchiveIcon fill="#fff" width={48} height={48}/>
+          name: "Niko5.png",
+          icon: <Image unoptimized src="/niko5.png" alt="niko5" width={48} height={48}/>
         },
         {
           id: "01",
           name: "Pew",
-          icon: <NoteIcon fill="#fff" width={48} height={48}/>,
+          icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
           files: [
             {
               id: "010",
-              name: "Skadoodle",
-              icon: <ArchiveIcon fill="#fff" width={48} height={48}/>
+              name: "Skadoodle.exe",
+              icon: <ChessIcon fill="#9665ff" width={48} height={48}/>
             },
             {
               id: "011",
-              name: "Scooby Doo",
-              icon: <ArchiveIcon fill="#fff" width={48} height={48}/>
+              name: "Scooby Doo 2.exe",
+              icon: <BugIcon fill="#9665ff" width={48} height={48}/>
             }
           ]
         }
@@ -51,23 +52,52 @@ export default function Documents() {
     {
       id: "1",
       name: "Pictures",
-      icon: <LogsIcon fill="#fff" width={48} height={48}/>,
+      icon: <ImagesIcon fill="#9665ff" width={48} height={48}/>,
       files: [
         {
           id: "10",
-          name: "Beach"
+          name: "Beach.png",
+          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "11",
-          name: "Sunset"
+          name: "Sunset.jpeg",
+          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "12",
-          name: "Castle"
+          name: "worldMachine.png",
+          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         }
       ]
+    },
+    {
+      id: "2",
+      name: "Archive.exe",
+      icon: <ArchiveIcon fill="#9665ff" width={48} height={48}/>,
+      fileType: "exe"
     }
   ]
+  
+  //--THEME--//
+  const theme = createTheme({
+    typography: {
+      fontFamily: 'eightbitFortress'
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            padding: 0,
+            '&:hover': {
+              backgroundColor: 'transparent'
+            }, 
+          }
+        },
+      },
+    }
+  })
   
   //folder reference variables
   const rootFolder = rootDir
@@ -77,27 +107,31 @@ export default function Documents() {
 
 
   function filesInFolder(folder){
-    // console.log(folder)
-
     return(
       folder.map((file, mapId) => (
-        <Button key={mapId} id={file.id} onClick={e => openFileOrFolder(e.currentTarget.id)}>
-          {file.name}{file.icon}
-        </Button>
+        <ThemeProvider key={mapId} theme={theme}>
+          <Button disableRipple className={styles.iconButton} key={mapId} id={file.id} onClick={e => openFileOrFolder(e.currentTarget)}>
+            <div className={styles.icon}>
+              {file.icon}
+              {file.name}
+            </div>
+          </Button>
+        </ThemeProvider>
       ))
     )
   }
 
-  function openFileOrFolder(fileID){
-    if(fileOrFolder(fileID) == "file"){
-      console.log("file")
-      return
-    }
+  function openFileOrFolder(file){
+    switch(fileOrFolder(file.id)){
+      case "file":
+        // console.log("file")
+        if(file.textContent == "Archive.exe"){ handleArchiveOpen() } //TODO: check file type and handle accordingly
+        break
 
-    if(fileOrFolder(fileID) == "folder"){
-      console.log("folder")
-      openFolder(fileID)
-      return
+      case "folder":
+        // console.log("folder")
+        openFolder(file.id)
+        break
     }
   }  
 
@@ -211,11 +245,16 @@ export default function Documents() {
   }
 
 
+  function handleArchiveOpen(){
+    archiveOpen()
+  }
+
+
   return (
     <>
       <div className={styles.navbar}>
-        <Button disableRipple onClick={() => backOneFolder()}>
-          Back
+        <Button className={styles.button} disableRipple onClick={() => backOneFolder()}>
+          <BackIcon fill="#9665ff" width={48} height={48}/>
         </Button>
         <div className={styles.text}>{currentReadableDirectory}</div>
       </div>

@@ -318,64 +318,36 @@ export default function Home() {
     var rootStyle = document.documentElement.style
     console.log(currentSelectedIcon)
 
-    switch(currentSelectedIcon){
-      case "none":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
-      
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
-        break
+    //set all to false, and set only one to true
+    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
+  
+    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
 
+    //set a specific icon to be active
+    switch(currentSelectedIcon){
       case "archive":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
-
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
 
       case "logs":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
         rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
-        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
-      
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
-        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
       
       case "moon":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
         rootStyle.setProperty('--navbarMoonBackgroundColor', '#9665ff')
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
-      
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarMoonSelectedColor', '#000')
-        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
         break
 
       case "documents":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-        rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
         rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#9665ff')
-      
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-        rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
         rootStyle.setProperty('--navbarDocumentsSelectedColor', '#000')
         break
     }
@@ -407,22 +379,22 @@ export default function Home() {
       switch(iconOpened){
         case "archive":
           rootStyle.setProperty('--navbarArchiveOrder', indexOfIcon)
-          console.log("wow archive")
+          // console.log("wow archive")
           break
 
         case "logs":
           rootStyle.setProperty('--navbarLogsOrder', indexOfIcon)
-          console.log("wow logs")
+          // console.log("wow logs")
           break
 
         case "moon":
           rootStyle.setProperty('--navbarMoonOrder', indexOfIcon)
-          console.log("wow moon")
+          // console.log("wow moon")
           break
 
         case "documents":
           rootStyle.setProperty('--navbarDocumentsOrder', indexOfIcon)
-          console.log("wow documents")
+          // console.log("wow documents")
           break
       }
     }
@@ -708,7 +680,7 @@ export default function Home() {
                 </div>
 
                 <div className={documentsStyles.documentsBody}>
-                  <Documents/>
+                  <Documents archiveOpen={archiveHandleOpen}/>
                 </div>
               </motion.div>
             }
