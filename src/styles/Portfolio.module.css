@@ -13,7 +13,7 @@
 
 #image {
   display: flex;
-  width: auto;
+  width: fit-content;
   border: 4px solid #000;
   box-shadow: 6px 4px 8px rgba(72, 72, 72, 0.58);
   cursor: zoom-in;
