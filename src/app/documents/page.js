@@ -79,6 +79,7 @@ export default function Documents({ archiveOpen }) {
     }
   ]
   
+  //FIXME: production build causes buttons' text color to appear blue, and flash while hovering
   //--THEME--//
   const theme = createTheme({
     typography: {
@@ -249,6 +250,8 @@ export default function Documents({ archiveOpen }) {
     archiveOpen()
   }
 
+  //TODO: navbar slash needs to be more prominent (maybe change font?)
+  //TODO: image viewer: when clicking on images open a new window that shows the image, and a little metadata description
 
   return (
     <>

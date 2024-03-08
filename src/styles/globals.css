@@ -23,6 +23,14 @@
     --navbarDocumentsBackgroundColor: #000;
     --navbarDocumentsSelectedColor: #9665ff;
     --navbarDocumentsOrder: 4;
+
+    --navbarPortfolioBackgroundColor: #000;
+    --navbarPortfolioSelectedColor: #9665ff;
+    --navbarPortfolioOrder: 5;
+
+    --navbarImageViewerBackgroundColor: #000;
+    --navbarImageViewerSelectedColor: #9665ff;
+    --navbarImageViewerOrder: 6;
 }
 
 
@@ -143,6 +151,20 @@ body {
     fill: var(--navbarDocumentsSelectedColor);
 }
 
+.navigation .portfolio { background-color: var(--navbarPortfolioBackgroundColor); order: var(--navbarPortfolioOrder); }
+.navigation .portfolio button:hover { fill: #fff; }
+.navigation .portfolio button { 
+    color: var(--navbarPortfolioSelectedColor);
+    fill: var(--navbarPortfolioSelectedColor);
+}
+
+.navigation .imageViewer { background-color: var(--navbarImageViewerBackgroundColor); order: var(--navbarImageViewerOrder); }
+.navigation .imageViewer button:hover { fill: #fff; }
+.navigation .imageViewer button { 
+    color: var(--navbarImageViewerSelectedColor);
+    fill: var(--navbarImageViewerSelectedColor);
+}
+
 .navigation .null{
     border: 4px solid transparent;
     user-select: none;
@@ -248,6 +270,7 @@ body {
 .icon-logs{ grid-area: Icon2; }
 .icon-documents{ grid-area: Icon3; }
 .icon-moon{ grid-area: VIcon2; } 
+.icon-portfolio{ grid-area: VIcon6; } 
 
 #icon{
     display: flex;
@@ -329,6 +352,25 @@ body {
     display: flex;
     width: 80vh;
     height: 50vh;
+    top: 160px;
+    left: 400px;
+    flex-direction: column;
+    border: 4px solid #9665ff;
+}
+
+#window-portfolio{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    z-index: 10;
+}
+
+#window-imageViewer{
+    display: flex;
+    width: fit-content;
+    height: fit-content;
     top: 160px;
     left: 400px;
     flex-direction: column;

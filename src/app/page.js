@@ -11,10 +11,15 @@ import archiveStyles from '@/styles/Archive.module.css'
 import logsStyles from '@/styles/Logs.module.css'
 import moonStyles from '@/styles/Moon.module.css'
 import documentsStyles from '@/styles/Documents.module.css'
+import portfolioStyles from '@/styles/Portfolio.module.css'
+import imageViewerStyles from '@/styles/ImageViewer.module.css'
+
 import Archive from './archive/page'
 import Logs from './logs/page'
 import Moon from './moon/page'
 import Documents from './documents/page'
+import Portfolio from './portfolio/page'
+import ImageHandler from '@/components/ImageHandler'
 
 
 
@@ -31,24 +36,38 @@ export default function Home() {
   const [logsMinimize, logsAnimate] = useAnimate()
   const [moonMinimize, moonAnimate] = useAnimate()
   const [documentsMinimize, documentsAnimate] = useAnimate()
+  const [portfolioMinimize, portfolioAnimate] = useAnimate()
+  const [imageViewerMinimize, imageViewerAnimate] = useAnimate()
   
   //window open states
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
   const [moonWindowOpen, setMoonWindowOpen] = useState(false)
   const [documentsWindowOpen, setDocumentsWindowOpen] = useState(false)
+  const [portfolioWindowOpen, setPortfolioWindowOpen] = useState(false)
+  const [imageViewerWindowOpen, setImageViewerWindowOpen] = useState(false)
 
   //window minimized states
   const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
   const [logsWindowMinimized, setLogsWindowMinimized] = useState(false)
   const [moonWindowMinimized, setMoonWindowMinimized] = useState(false)
   const [documentsWindowMinimized, setDocumentsWindowMinimized] = useState(false)
+  const [portfolioWindowMinimized, setPortfolioWindowMinimized] = useState(false)
+  const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
 
   //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
+  const [currentIvyImage, setCurrentIvyImage] = useState()
+
+  const handleIvyImage = async (e) => {
+    if(!e){ console.log("woahhhhhh undefined"); return }
+    console.log("currentIvy: " + currentIvyImage)
+    console.log("passingIvy: " + e)
+    setCurrentIvyImage(e)
+  }
 
 
   //--MINIMIZE ANIMATIONS--//
@@ -69,6 +88,14 @@ export default function Home() {
       case "documents":
         await documentsAnimate(documentsMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
+
+      case "portfolio":
+        await portfolioAnimate(portfolioMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        break
+
+      case "imageViewer":
+        await imageViewerAnimate(imageViewerMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        break
     }
   }
 
@@ -88,6 +115,14 @@ export default function Home() {
 
       case "documents":
         await documentsAnimate(documentsMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+
+      case "portfolio":
+        await portfolioAnimate(portfolioMinimize.current, { y: 0 }, { duration: 0.4 })
+        break
+
+      case "imageViewer":
+        await imageViewerAnimate(imageViewerMinimize.current, { y: 0 }, { duration: 0.4 })
         break
     }
   }
@@ -214,6 +249,66 @@ export default function Home() {
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
 
+  const portfolioHandleOpen = () => { 
+    setPortfolioWindowOpen(true) 
+    setCurrentFocusedWindow("portfolio") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(portfolioWindowMinimized){
+      pullWindowAnimation("portfolio")
+      setPortfolioWindowMinimized(false)
+    }
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("portfolio") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "portfolio"]) //add "portfolio" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "portfolio"])
+      setNavbarOrder("open")
+    }
+  }
+  const portfolioHandleClose = () => { 
+    setChangeFocusedWindow(true) 
+    setPortfolioWindowOpen(false) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
+  }
+  const portfolioHandleMinimize = () => {
+    setPortfolioWindowMinimized(true)
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
+  }
+
+  const imageViewerHandleOpen = () => { 
+    setImageViewerWindowOpen(true) 
+    setCurrentFocusedWindow("imageViewer") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(imageViewerWindowMinimized){
+      pullWindowAnimation("imageViewer")
+      setImageViewerWindowMinimized(false)
+    }
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("imageViewer") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "imageViewer"]) //add "imageViewer" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "imageViewer"])
+      setNavbarOrder("open")
+    }
+  }
+  const imageViewerHandleClose = () => { 
+    setChangeFocusedWindow(true) 
+    setImageViewerWindowOpen(false) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+  }
+  const imageViewerHandleMinimize = () => {
+    setImageViewerWindowMinimized(true)
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+  }
+
 
   //--THEME--//
   const theme = createTheme({
@@ -257,6 +352,8 @@ export default function Home() {
     var logsWindow = document.getElementById("window-logs")
     var moonWindow = document.getElementById("window-moon")
     var documentsWindow = document.getElementById("window-documents")
+    var portfolioWindow = document.getElementById("window-portfolio")
+    var imageViewerWindow = document.getElementById("window-imageViewer")
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
@@ -268,6 +365,8 @@ export default function Home() {
     var logsIndex = currentWindowsOpen.indexOf("logs") + 10
     var moonIndex = currentWindowsOpen.indexOf("moon") + 10
     var documentsIndex = currentWindowsOpen.indexOf("documents") + 10
+    var portfolioIndex = currentWindowsOpen.indexOf("portfolio") + 10
+    var imageViewerIndex = currentWindowsOpen.indexOf("imageViewer") + 10
     
     //check if active window is none
     if(currentActiveWindow == "none"){
@@ -275,6 +374,8 @@ export default function Home() {
       logsWindow ? logsWindow.style.zIndex = 9 : null
       moonWindow ? moonWindow.style.zIndex = 9 : null
       documentsWindow ? documentsWindow.style.zIndex = 9 : null
+      portfolioWindow ? portfolioWindow.style.zIndex = 9 : null
+      imageViewerWindow ? imageViewerWindow.style.zIndex = 9 : null
       
       setNavbarColors("none")
       setCurrentFocusedWindow("none")
@@ -286,6 +387,8 @@ export default function Home() {
     logsWindow ? logsWindow.style.zIndex = logsIndex : null
     moonWindow ? moonWindow.style.zIndex = moonIndex : null
     documentsWindow ? documentsWindow.style.zIndex = documentsIndex : null
+    portfolioWindow ? portfolioWindow.style.zIndex = portfolioIndex : null
+    imageViewerWindow ? imageViewerWindow.style.zIndex = imageViewerIndex : null
 
     //set navbarColors and focusedWindow
     switch(currentActiveWindow){
@@ -308,6 +411,16 @@ export default function Home() {
         setNavbarColors("documents")
         setCurrentFocusedWindow("documents")
         break
+
+      case "portfolio":
+        setNavbarColors("portfolio")
+        setCurrentFocusedWindow("portfolio")
+        break
+
+      case "imageViewer":
+        setNavbarColors("imageViewer")
+        setCurrentFocusedWindow("imageViewer")
+        break
     }
 
     setNavbarOrder("open")
@@ -323,11 +436,15 @@ export default function Home() {
     rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
     rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
     rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
   
     rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarPortfolioSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarImageViewerSelectedColor', '#9665ff')
 
     //set a specific icon to be active
     switch(currentSelectedIcon){
@@ -349,6 +466,16 @@ export default function Home() {
       case "documents":
         rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#9665ff')
         rootStyle.setProperty('--navbarDocumentsSelectedColor', '#000')
+        break
+
+      case "portfolio":
+        rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarPortfolioSelectedColor', '#000')
+        break
+
+      case "imageViewer":
+        rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarImageViewerSelectedColor', '#000')
         break
     }
   }
@@ -396,6 +523,16 @@ export default function Home() {
           rootStyle.setProperty('--navbarDocumentsOrder', indexOfIcon)
           // console.log("wow documents")
           break
+
+        case "portfolio":
+          rootStyle.setProperty('--navbarPortfolioOrder', indexOfIcon)
+          // console.log("wow portfolio")
+          break
+
+        case "imageViewer":
+          rootStyle.setProperty('--navbarImageViewerOrder', indexOfIcon)
+          // console.log("wow imageViewer")
+          break
       }
     }
   }
@@ -421,7 +558,8 @@ export default function Home() {
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, currentFocusedWindow, currentWindowsOpen])
+  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen,
+      currentFocusedWindow, currentWindowsOpen])
 
 
   //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
@@ -433,7 +571,10 @@ export default function Home() {
     if(logsWindowMinimized){ dropWindowAnimation("logs") }
     if(moonWindowMinimized){ dropWindowAnimation("moon") }
     if(documentsWindowMinimized){ dropWindowAnimation("documents") }
-  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized, documentsWindowMinimized])
+    if(portfolioWindowMinimized){ dropWindowAnimation("portfolio") }
+    if(imageViewerWindowMinimized){ dropWindowAnimation("imageViewer") }
+  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
+      imageViewerWindowMinimized])
 
 
   //--ON SERVER INIT--//
@@ -477,6 +618,16 @@ export default function Home() {
           case "window-documents":
             setActiveWindow("documents")
             moveElementInArray(currentWindowsOpen, "documents")
+            break
+
+          case "window-portfolio":
+            setActiveWindow("portfolio")
+            moveElementInArray(currentWindowsOpen, "portfolio")
+            break
+
+          case "window-imageViewer":
+            setActiveWindow("imageViewer")
+            moveElementInArray(currentWindowsOpen, "imageViewer")
             break
         }
         // console.log(e.target.parentElement.parentElement)
@@ -582,6 +733,20 @@ export default function Home() {
                 <h1>Documents</h1>
               </Button>
             </div>
+
+            <div id="icon" className="icon-portfolio">
+              <Button disableRipple onClick={portfolioHandleOpen}>
+                <FolderIcon width="6vh" height="6vh"/>
+                <h1>Portfolio</h1>
+              </Button>
+            </div>
+
+            <div id="icon" className="icon-imageViewer">
+              <Button disableRipple onClick={imageViewerHandleOpen}>
+                <FolderIcon width="6vh" height="6vh"/>
+                <h1>Ivy Image Viewer</h1>
+              </Button>
+            </div>
           </div>
 
 
@@ -685,6 +850,53 @@ export default function Home() {
               </motion.div>
             }
           </AnimatePresence>
+
+          {/* portfolio window */}
+          <AnimatePresence>
+            {portfolioWindowOpen &&
+              <motion.div 
+                id="window-portfolio"
+                ref={portfolioMinimize}
+                initial={{ opacity: 0, y: 20, scale: 0.75 }} //TODO: add little animation here to open the window a little more nicely
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 16, scale: 0.75 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* false window header */}
+                <div>
+                  <WindowHeader headerName="Portfolio" selectedIcon="folderIcon" setClose={portfolioHandleClose} setMinimize={portfolioHandleMinimize}/>
+                </div>
+
+                <div className={portfolioStyles.portfolioBody}>
+                  <Portfolio setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage}/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
+
+          {/* image viewer window */}
+          <AnimatePresence>
+            {imageViewerWindowOpen &&
+              <motion.div 
+                id="window-imageViewer" 
+                className="draggable"
+                ref={imageViewerMinimize}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* false window header */}
+                <div id="draggable-header">
+                  <WindowHeader headerName="Ivy" selectedIcon="folderIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
+                </div>
+
+                <div className={imageViewerStyles.imageViewerBody}>
+                  <ImageHandler setOpen={imageViewerHandleOpen} selectedImage={currentIvyImage} setImage={handleIvyImage}/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
         </ThemeProvider>
       </div>
 
@@ -769,6 +981,46 @@ export default function Home() {
                       <Button disableRipple onClick={documentsHandleOpen}>
                         <FolderIcon width={24} height={24}/>
                         <span>{"Documents"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* portfolio navbar icon */}
+              <AnimatePresence>
+                {portfolioWindowOpen &&
+                  <motion.li 
+                    className="portfolio"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={portfolioHandleOpen}>
+                        <FolderIcon width={24} height={24}/>
+                        <span>{"Portfolio"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* image viewer navbar icon */}
+              <AnimatePresence>
+                {imageViewerWindowOpen &&
+                  <motion.li 
+                    className="imageViewer"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={imageViewerHandleOpen}>
+                        <FolderIcon width={24} height={24}/>
+                        <span>{"Ivy"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>
