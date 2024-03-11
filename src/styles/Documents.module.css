@@ -36,19 +36,29 @@
   gap: 14px 10px;
 }
 
-.iconButton {
-  display: flex;
-  color: #9665ff;
-  border: 6px solid rgba(0, 0, 0, 0);
-  border-radius: 0;
-}
-.iconButton:hover {
-  border: 6px solid rgba(106, 64, 197, 0.5);
-  background-color: rgba(44, 24, 87, 0.5);
-}
-
 .icon {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #9665ff;
+  border: 6px solid rgba(0, 0, 0, 0);
+  border-radius: 0;
+  pointer-events: none;
+}
+.icon:hover {
+  border: 6px solid rgba(106, 64, 197, 0.5);
+  background-color: rgba(44, 24, 87, 0.5);
+  border-radius: 0;
+}
+
+.iconButton {
+  display: flex;
+  pointer-events: auto;
+}
+
+.iconContents {
+  display: flex;
+  color: #9665ff;
   flex-direction: column;
   align-items: center;
   justify-content: center;

@@ -9,10 +9,8 @@ import Image from 'next/image'
 
 export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight }) {
   const [rootFolderOpen, setRootFolderOpen] = useState(true)
-
-  const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
-  const [pewFolderOpen, setPewFolderOpen] = useState(false)
-
+    const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
+      const [pewFolderOpen, setPewFolderOpen] = useState(false)
   const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Documents")
@@ -84,8 +82,7 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
       icon: <ArchiveIcon fill="#9665ff" width={48} height={48}/>
     }
   ]
-  
-  //FIXME: production build causes buttons' text color to appear blue, and flash while hovering
+
   //--THEME--//
   const theme = createTheme({
     typography: {
@@ -115,16 +112,18 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
 
   function filesInFolder(folder){
     return(
-      folder.map((file, mapId) => (
-        <ThemeProvider key={mapId} theme={theme}>
-          <Button disableRipple className={styles.iconButton} key={mapId} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
-            <div className={styles.icon}>
-              {file.icon}
-              {file.name}
-            </div>
-          </Button>
-        </ThemeProvider>
-      ))
+      <ThemeProvider theme={theme}>
+        {folder.map((file, mapId) => (
+          <div key={mapId} className={styles.icon}>
+            <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
+              <div className={styles.iconContents}>
+                {file.icon}
+                {file.name}
+              </div>
+            </Button>
+          </div>
+        ))}
+      </ThemeProvider>
     )
   }
 
