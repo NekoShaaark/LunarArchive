@@ -60,13 +60,31 @@ export default function Home() {
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
+
+  //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
+  const [ivyImageWidth, setIvyImageWidth] = useState()
+  const [ivyImageHeight, setIvyImageHeight] = useState()
 
   const handleIvyImage = async (e) => {
-    if(!e){ console.log("woahhhhhh undefined"); return }
-    console.log("currentIvy: " + currentIvyImage)
-    console.log("passingIvy: " + e)
+    if(!e){ console.log("woahhhhhh ivyImage undefined"); return }
+    // console.log("currentIvy: " + currentIvyImage)
+    // console.log("passingIvy: " + e)
     setCurrentIvyImage(e)
+  }
+
+  const handleIvyImageWidth = async (e) => {
+    if(!e){ console.log("woahhhhhh ivyImageWidth undefined"); return }
+    // console.log("currentIvyWidth: " + ivyImageWidth)
+    // console.log("passingIvyWidth: " + e)
+    setIvyImageWidth(e)
+  }
+
+  const handleIvyImageHeight = async (e) => {
+    if(!e){ console.log("woahhhhhh ivyImageHeight undefined"); return }
+    // console.log("currentIvyHeight: " + ivyImageHeight)
+    // console.log("passingIvyHeight: " + e)
+    setIvyImageHeight(e)
   }
 
 
@@ -559,7 +577,7 @@ export default function Home() {
       // console.log("current focused window: " + currentFocusedWindow)
     }
   }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen,
-      currentFocusedWindow, currentWindowsOpen])
+      currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
   //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
@@ -845,7 +863,7 @@ export default function Home() {
                 </div>
 
                 <div className={documentsStyles.documentsBody}>
-                  <Documents archiveOpen={archiveHandleOpen}/>
+                  <Documents archiveOpen={archiveHandleOpen} setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage} setIvyImageWidth={handleIvyImageWidth} setIvyImageHeight={handleIvyImageHeight}/>
                 </div>
               </motion.div>
             }
@@ -868,7 +886,7 @@ export default function Home() {
                 </div>
 
                 <div className={portfolioStyles.portfolioBody}>
-                  <Portfolio setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage}/>
+                  <Portfolio setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage} setIvyImageWidth={handleIvyImageWidth} setIvyImageHeight={handleIvyImageHeight}/>
                 </div>
               </motion.div>
             }
@@ -892,7 +910,7 @@ export default function Home() {
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
-                  <ImageHandler setOpen={imageViewerHandleOpen} selectedImage={currentIvyImage} setImage={handleIvyImage}/>
+                  <ImageHandler selectedImage={currentIvyImage} setOpen={imageViewerHandleOpen} setImage={handleIvyImage} imageWidth={ivyImageWidth} setWidth={handleIvyImageWidth} imageHeight={ivyImageHeight} setHeight={handleIvyImageHeight}/>
                 </div>
               </motion.div>
             }

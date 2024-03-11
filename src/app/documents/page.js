@@ -7,7 +7,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 
 
-export default function Documents({ archiveOpen }) {
+export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight }) {
   const [rootFolderOpen, setRootFolderOpen] = useState(true)
 
   const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
@@ -28,6 +28,7 @@ export default function Documents({ archiveOpen }) {
         {
           id: "00",
           name: "Niko5.png",
+          fileType: "Image",
           icon: <Image unoptimized src="/niko5.png" alt="niko5" width={48} height={48}/>
         },
         {
@@ -38,11 +39,13 @@ export default function Documents({ archiveOpen }) {
             {
               id: "010",
               name: "Skadoodle.exe",
+              fileType: "exe",
               icon: <ChessIcon fill="#9665ff" width={48} height={48}/>
             },
             {
               id: "011",
               name: "Scooby Doo 2.exe",
+              fileType: "exe",
               icon: <BugIcon fill="#9665ff" width={48} height={48}/>
             }
           ]
@@ -57,16 +60,19 @@ export default function Documents({ archiveOpen }) {
         {
           id: "10",
           name: "Beach.png",
+          fileType: "Image",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "11",
           name: "Sunset.jpeg",
+          fileType: "Image",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "12",
           name: "worldMachine.png",
+          fileType: "Image",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         }
       ]
@@ -74,8 +80,8 @@ export default function Documents({ archiveOpen }) {
     {
       id: "2",
       name: "Archive.exe",
-      icon: <ArchiveIcon fill="#9665ff" width={48} height={48}/>,
-      fileType: "exe"
+      fileType: "exe",
+      icon: <ArchiveIcon fill="#9665ff" width={48} height={48}/>
     }
   ]
   
@@ -111,7 +117,7 @@ export default function Documents({ archiveOpen }) {
     return(
       folder.map((file, mapId) => (
         <ThemeProvider key={mapId} theme={theme}>
-          <Button disableRipple className={styles.iconButton} key={mapId} id={file.id} onClick={e => openFileOrFolder(e.currentTarget)}>
+          <Button disableRipple className={styles.iconButton} key={mapId} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
             <div className={styles.icon}>
               {file.icon}
               {file.name}
@@ -122,11 +128,32 @@ export default function Documents({ archiveOpen }) {
     )
   }
 
-  function openFileOrFolder(file){
+  function openFileOrFolder(file, fileType){
     switch(fileOrFolder(file.id)){
       case "file":
         // console.log("file")
-        if(file.textContent == "Archive.exe"){ handleArchiveOpen() } //TODO: check file type and handle accordingly
+        console.log(fileType)
+        if(file.textContent == "Archive.exe"){ handleArchiveOpen() }
+        if(fileType == "Image"){
+          switch(file.textContent){
+            case "Niko5.png":
+              handleIvyImage("niko5.png", 160, 160)
+              break
+
+            case "Beach.png":
+              handleIvyImage("beach.webp", 480, 270)
+              break
+
+            case "Sunset.jpeg":
+              handleIvyImage("sunset.webp", 720, 400)
+              break
+
+            case "worldMachine.png":
+              handleIvyImage("eclipse.webp", 500, 500)
+              break
+          }
+          handleIvyOpen()
+        }
         break
 
       case "folder":
@@ -248,6 +275,16 @@ export default function Documents({ archiveOpen }) {
 
   function handleArchiveOpen(){
     archiveOpen()
+  }
+
+  function handleIvyOpen(){
+    setIvyOpen()
+  }
+
+  function handleIvyImage(imageLocation, imageWidth, imageHeight){
+    setIvyImage(imageLocation)
+    setIvyImageWidth(imageWidth)
+    setIvyImageHeight(imageHeight)
   }
 
   //TODO: navbar slash needs to be more prominent (maybe change font?)

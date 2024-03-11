@@ -3,13 +3,13 @@ import styles from '@/styles/Portfolio.module.css'
 import Image from 'next/image'
 
 
-export default function Portfolio({setIvyOpen, setIvyImage}) {
+export default function Portfolio({ setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight }) {
   return (
     <>
       <section className={styles.section1}>
         <h1>The Beginnings of Animation</h1>
         <div id={styles.image}>
-          <ImageHandler selectedImage="Astolfo.webp" setOpen={setIvyOpen} setImage={setIvyImage}/>
+          <ImageHandler selectedImage="Astolfo.webp" setOpen={setIvyOpen} setImage={setIvyImage} imageWidth={480} setWidth={setIvyImageWidth} imageHeight={270} setHeight={setIvyImageHeight}/>
         </div>
         <p>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam error perspiciatis laudantium quod quae debitis, 
@@ -20,7 +20,7 @@ export default function Portfolio({setIvyOpen, setIvyImage}) {
 
         <section className={styles.section2}>
           <div id={styles.image}>
-            <ImageHandler selectedImage="placeholderImage.webp" setOpen={setIvyOpen} setImage={setIvyImage}/>
+            <ImageHandler selectedImage="placeholderImage.webp" setOpen={setIvyOpen} setImage={setIvyImage} imageWidth={480} setWidth={setIvyImageWidth} imageHeight={270} setHeight={setIvyImageHeight}/>
           </div>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Et quasi ad maxime iste cupiditate deserunt quia nostrum 
