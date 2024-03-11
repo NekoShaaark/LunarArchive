@@ -7,7 +7,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 
 
-export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight }) {
+export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription }) {
   const [rootFolderOpen, setRootFolderOpen] = useState(true)
     const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
       const [pewFolderOpen, setPewFolderOpen] = useState(false)
@@ -27,6 +27,7 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
           id: "00",
           name: "Niko5.png",
           fileType: "Image",
+          description: "Niko",
           icon: <Image unoptimized src="/niko5.png" alt="niko5" width={48} height={48}/>
         },
         {
@@ -59,18 +60,21 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
           id: "10",
           name: "Beach.png",
           fileType: "Image",
+          description: "Our time at the Beach.",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "11",
           name: "Sunset.jpeg",
           fileType: "Image",
+          description: "I love this Sunset..",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         },
         {
           id: "12",
           name: "worldMachine.png",
           fileType: "Image",
+          description: "TEMP",
           icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
         }
       ]
@@ -115,7 +119,7 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
       <ThemeProvider theme={theme}>
         {folder.map((file, mapId) => (
           <div key={mapId} className={styles.icon}>
-            <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
+            <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType, file.description)}>
               <div className={styles.iconContents}>
                 {file.icon}
                 {file.name}
@@ -127,7 +131,7 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
     )
   }
 
-  function openFileOrFolder(file, fileType){
+  function openFileOrFolder(file, fileType, fileDescription){
     switch(fileOrFolder(file.id)){
       case "file":
         // console.log("file")
@@ -136,19 +140,19 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
         if(fileType == "Image"){
           switch(file.textContent){
             case "Niko5.png":
-              handleIvyImage("niko5.png", 160, 160)
+              handleIvyImage("niko5.png", 160, 160, fileDescription)
               break
 
             case "Beach.png":
-              handleIvyImage("beach.webp", 480, 270)
+              handleIvyImage("beach.webp", 480, 270, fileDescription)
               break
 
             case "Sunset.jpeg":
-              handleIvyImage("sunset.webp", 720, 400)
+              handleIvyImage("sunset.webp", 720, 400, fileDescription)
               break
 
             case "worldMachine.png":
-              handleIvyImage("eclipse.webp", 500, 500)
+              handleIvyImage("eclipse.webp", 500, 500, fileDescription)
               break
           }
           handleIvyOpen()
@@ -280,10 +284,11 @@ export default function Documents({ archiveOpen, setIvyOpen, setIvyImage, setIvy
     setIvyOpen()
   }
 
-  function handleIvyImage(imageLocation, imageWidth, imageHeight){
+  function handleIvyImage(imageLocation, imageWidth, imageHeight, imageDescription){
     setIvyImage(imageLocation)
     setIvyImageWidth(imageWidth)
     setIvyImageHeight(imageHeight)
+    setIvyImageDescription(imageDescription)
   }
 
   //TODO: navbar slash needs to be more prominent (maybe change font?)

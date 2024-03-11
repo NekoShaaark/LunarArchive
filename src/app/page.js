@@ -65,7 +65,10 @@ export default function Home() {
   const [currentIvyImage, setCurrentIvyImage] = useState()
   const [ivyImageWidth, setIvyImageWidth] = useState()
   const [ivyImageHeight, setIvyImageHeight] = useState()
+  const [ivyImageDescription, setIvyImageDescription] = useState()
 
+
+  //--IMAGE VIEWER HANDLING--//
   const handleIvyImage = async (e) => {
     if(!e){ console.log("woahhhhhh ivyImage undefined"); return }
     // console.log("currentIvy: " + currentIvyImage)
@@ -85,6 +88,13 @@ export default function Home() {
     // console.log("currentIvyHeight: " + ivyImageHeight)
     // console.log("passingIvyHeight: " + e)
     setIvyImageHeight(e)
+  }
+
+  const handleIvyImageDescription = async (e) => {
+    if(!e){ console.log("woahhhhhh ivyImageDescription undefined"); return }
+    // console.log("currentIvyDescription: " + ivyImageDescription)
+    // console.log("passingIvyDescription: " + e)
+    setIvyImageDescription(e)
   }
 
 
@@ -759,12 +769,12 @@ export default function Home() {
               </Button>
             </div>
 
-            <div id="icon" className="icon-imageViewer">
+            {/* <div id="icon" className="icon-imageViewer">
               <Button disableRipple onClick={imageViewerHandleOpen}>
                 <FolderIcon width="6vh" height="6vh"/>
                 <h1>Ivy Image Viewer</h1>
               </Button>
-            </div>
+            </div> */}
           </div>
 
 
@@ -863,7 +873,14 @@ export default function Home() {
                 </div>
 
                 <div className={documentsStyles.documentsBody}>
-                  <Documents archiveOpen={archiveHandleOpen} setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage} setIvyImageWidth={handleIvyImageWidth} setIvyImageHeight={handleIvyImageHeight}/>
+                  <Documents 
+                    archiveOpen={archiveHandleOpen} 
+                    setIvyOpen={imageViewerHandleOpen} 
+                    setIvyImage={handleIvyImage} 
+                    setIvyImageWidth={handleIvyImageWidth} 
+                    setIvyImageHeight={handleIvyImageHeight}
+                    setIvyImageDescription={setIvyImageDescription}
+                  />
                 </div>
               </motion.div>
             }
@@ -886,7 +903,13 @@ export default function Home() {
                 </div>
 
                 <div className={portfolioStyles.portfolioBody}>
-                  <Portfolio setIvyOpen={imageViewerHandleOpen} setIvyImage={handleIvyImage} setIvyImageWidth={handleIvyImageWidth} setIvyImageHeight={handleIvyImageHeight}/>
+                  <Portfolio 
+                    setIvyOpen={imageViewerHandleOpen} 
+                    setIvyImage={handleIvyImage} 
+                    setIvyImageWidth={handleIvyImageWidth} 
+                    setIvyImageHeight={handleIvyImageHeight}
+                    setIvyImageDescription={setIvyImageDescription}
+                  />
                 </div>
               </motion.div>
             }
@@ -910,7 +933,18 @@ export default function Home() {
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
-                  <ImageHandler selectedImage={currentIvyImage} setOpen={imageViewerHandleOpen} setImage={handleIvyImage} imageWidth={ivyImageWidth} setWidth={handleIvyImageWidth} imageHeight={ivyImageHeight} setHeight={handleIvyImageHeight}/>
+                  <ImageHandler 
+                    selectedImage={currentIvyImage} 
+                    isOpen={imageViewerWindowOpen} 
+                    setOpen={imageViewerHandleOpen} 
+                    setImage={handleIvyImage} 
+                    imageWidth={ivyImageWidth} 
+                    setWidth={handleIvyImageWidth} 
+                    imageHeight={ivyImageHeight} 
+                    setHeight={handleIvyImageHeight} 
+                    imageDescription={ivyImageDescription} 
+                    setDescription={setIvyImageDescription}
+                  />
                 </div>
               </motion.div>
             }
