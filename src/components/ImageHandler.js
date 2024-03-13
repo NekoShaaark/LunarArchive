@@ -69,7 +69,7 @@ export default function ImageHandler({selectedImage, isOpen, setOpen, setImage, 
                 <h1 className={styles.text}>{imageUsingDescription}</h1>
             </>
             : 
-            //false / outside of Image Viewer
-            <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img" onClick={handleOpen}/>
+            //false / outside of Image Viewer  (this is technically never used)
+            <Image src={"placeholderImage.webp"} width={imageUsingWidth} height={imageUsingHeight} alt="NULL_IMAGE"/>
     )
 }

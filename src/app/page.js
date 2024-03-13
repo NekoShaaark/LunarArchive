@@ -1094,7 +1094,7 @@ export default function Home() {
           <div className="navigation-secondary">
             <ul>
               <li className="time">{currentTime}</li>
-              <li className="something"><NoteIcon alt="???" width={24} height={24}/></li>
+              <li className="something"><div><NoteIcon alt="???" width={24} height={24}/></div></li>
             </ul>
           </div>
         </nav>

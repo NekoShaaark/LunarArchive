@@ -67,7 +67,7 @@ body {
 }
 
 
-/* #region ---navigation--- */
+/* #region <---navigation---> */
 .layout-nav {
     display: flex;
     position: sticky;
@@ -88,6 +88,7 @@ body {
     border-top: 4px solid #9665ff;
 }
 
+/* #region ---primary--- */
 .navigation-primary {
     display: flex;
     position: relative;
@@ -171,7 +172,9 @@ body {
     pointer-events: none;
     order: 100;
 }
+/* #endregion ------ */
 
+/* #region ---secondary--- */
 .navigation-secondary {
     display: flex;
     position: relative;
@@ -194,17 +197,18 @@ body {
 .navigation-secondary .time {
     user-select: none;
 }
-.navigation-secondary .something {
+.navigation-secondary .something div {
     fill: #9665ff;
     cursor: pointer;
     :hover{
         fill: #007be0;
     }
 }
-/* #endregion */
+/* #endregion ------ */
+/* #endregion <------> */
 
 
-/* #region ---content--- */
+/* #region <---content---> */
 .layout-content {
     grid-area: content;
     display: grid;
@@ -219,7 +223,6 @@ body {
     background-size: auto;
     background-repeat: no-repeat;
 }
-/* #endregion ------ */
 
 .backgroundVideo {
     display: grid;
@@ -228,6 +231,7 @@ body {
     height: fit-content;
     z-index: -1;
 }
+/* #endregion <------> */
 /* #endregion <======> */
 
 
@@ -303,7 +307,7 @@ body {
     border: 6px solid rgba(106, 64, 197, 0.5);
     background-color: rgba(44, 24, 87, 0.5);
 }
-/* #endregion ---desktop-layout--- */
+/* #endregion ------ */
 
 /* #region ---windows--- */
 .draggable {
@@ -316,6 +320,7 @@ body {
     cursor: grab;
     z-index: 10;
 }
+
 
 #window-archive{
     display: flex;
@@ -376,5 +381,5 @@ body {
     flex-direction: column;
     border: 4px solid #9665ff;
 }
-/* #endregion ---windows--- */
-/* #endregion <===Desktop===> */
+/* #endregion ------ */
+/* #endregion <======> */
