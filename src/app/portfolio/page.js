@@ -1,4 +1,5 @@
-import ImageHandler from '@/components/ImageHandler'
+"use client"
+
 import styles from '@/styles/Portfolio.module.css'
 import Image from 'next/image'
 
