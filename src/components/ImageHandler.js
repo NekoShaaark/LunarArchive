@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import styles from "@/styles/ImageViewer.module.css"
 
-export default function ImageHandler({selectedImage, isOpen, setOpen, setImage, imageWidth, imageHeight, setWidth, setHeight, imageDescription, setDescription}) {
+export default function ImageHandler({selectedImage, isOpen, imageWidth, imageHeight, imageDescription}) {
     const [imageUsing, setImageUsing] = useState()
     const [imageUsingWidth, setImageUsingWidth] = useState()
     const [imageUsingHeight, setImageUsingHeight] = useState()
@@ -13,32 +13,6 @@ export default function ImageHandler({selectedImage, isOpen, setOpen, setImage, 
     var selectedImageWidth = `${imageWidth}`
     var selectedImageHeight = `${imageHeight}`
     var selectedImageDescription = `${imageDescription}`
-
-    function handleOpen(){
-        // console.log("wait this could be it: " + imageUsing)
-        setOpen()
-        handleImage(imageUsing)
-        handleWidth(imageUsingWidth)
-        handleHeight(imageUsingHeight)
-        handleDescription(imageUsingDescription)
-    }
-    
-    function handleImage(e){
-        setImage(e)
-        // console.log("handle: " + e)
-    }
-
-    function handleWidth(e){
-        setWidth(e)
-    }
-
-    function handleHeight(e){
-        setHeight(e)
-    }
-
-    function handleDescription(e){
-        setDescription(e)
-    }
     
     useEffect(() => {
         // console.log("useEffect")

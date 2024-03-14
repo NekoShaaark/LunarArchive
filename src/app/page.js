@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { ArchiveIcon, FolderIcon, LogsIcon, MoonStarIcon, NoteIcon } from '@/components/SvgHandler'
+import { AlertIcon, ArchiveIcon, FolderIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
@@ -13,6 +13,7 @@ import moonStyles from '@/styles/Moon.module.css'
 import documentsStyles from '@/styles/Documents.module.css'
 import portfolioStyles from '@/styles/Portfolio.module.css'
 import imageViewerStyles from '@/styles/ImageViewer.module.css'
+import alertStyles from '@/styles/AlertDialogue.module.css'
 
 import Archive from './archive/page'
 import Logs from './logs/page'
@@ -20,12 +21,15 @@ import Moon from './moon/page'
 import Documents from './documents/page'
 import Portfolio from './portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
+import AlertDialogue from '@/components/AlertDialogue'
 
 
 
 export default function Home() {
 
   //--VARIABLE & STATES--//
+
+  //date and time variables, handling and state
   const date = new Date()
   const now = date.toLocaleTimeString("en-US", { hour12:false, hour:"2-digit", minute:"2-digit" })
   const amORpm = date.getHours() >= 12 ? "PM" : "AM"
@@ -46,6 +50,7 @@ export default function Home() {
   const [documentsWindowOpen, setDocumentsWindowOpen] = useState(false)
   const [portfolioWindowOpen, setPortfolioWindowOpen] = useState(false)
   const [imageViewerWindowOpen, setImageViewerWindowOpen] = useState(false)
+  const [alertWindowOpen, setAlertWindowOpen] = useState(false)
 
   //window minimized states
   const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
@@ -60,6 +65,8 @@ export default function Home() {
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
+  const [windowHeaderName, setWindowHeaderName] = useState()
+  const [alertDescription, setAlertDescription] = useState()
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -95,6 +102,19 @@ export default function Home() {
     // console.log("currentIvyDescription: " + ivyImageDescription)
     // console.log("passingIvyDescription: " + e)
     setIvyImageDescription(e)
+  }
+
+
+  //--WINDOW HEADER HANDLING--//
+  const handleWindowHeaderName = async (e) => {
+    // console.log("window: " + e)
+    setWindowHeaderName(e)
+  }
+
+  //--ALERT DESCRIPTION HANDLING--//
+  const handleAlertDescription = async (e) => {
+    // console.log("alertDescription: " + e)
+    setAlertDescription(e)
   }
 
 
@@ -158,6 +178,9 @@ export default function Home() {
 
   //--WINDOW OPEN/CLOSE/MINIMIZE HANDLERS--//
   const archiveHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setArchiveWindowOpen(true) 
     setCurrentFocusedWindow("archive")
     
@@ -175,12 +198,18 @@ export default function Home() {
     }
   }
   const archiveHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
     setArchiveWindowOpen(false) 
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
   const archiveHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setChangeFocusedWindow(true) 
     setArchiveWindowMinimized(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
@@ -188,6 +217,9 @@ export default function Home() {
   }
 
   const logsHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setLogsWindowOpen(true) 
     setCurrentFocusedWindow("logs") 
 
@@ -205,12 +237,18 @@ export default function Home() {
     }
   }
   const logsHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
     setLogsWindowOpen(false) 
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   const logsHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setChangeFocusedWindow(true) 
     setLogsWindowMinimized(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
@@ -218,6 +256,9 @@ export default function Home() {
   }
   
   const moonHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setMoonWindowOpen(true) 
     setCurrentFocusedWindow("moon") 
 
@@ -235,12 +276,18 @@ export default function Home() {
     }
   }
   const moonHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
     setMoonWindowOpen(false) 
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
   }
   const moonHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setChangeFocusedWindow(true) 
     setMoonWindowMinimized(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
@@ -248,6 +295,9 @@ export default function Home() {
   }
 
   const documentsHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setDocumentsWindowOpen(true) 
     setCurrentFocusedWindow("documents") 
 
@@ -264,13 +314,19 @@ export default function Home() {
       setNavbarOrder("open")
     }
   }
-  const documentsHandleClose = () => { 
+  const documentsHandleClose = () => {
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+    
     setChangeFocusedWindow(true) 
     setDocumentsWindowOpen(false) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
   const documentsHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setDocumentsWindowMinimized(true)
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
@@ -278,6 +334,9 @@ export default function Home() {
   }
 
   const portfolioHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setPortfolioWindowOpen(true) 
     setCurrentFocusedWindow("portfolio") 
 
@@ -295,12 +354,18 @@ export default function Home() {
     }
   }
   const portfolioHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
     setChangeFocusedWindow(true) 
     setPortfolioWindowOpen(false) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
   const portfolioHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setPortfolioWindowMinimized(true)
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
@@ -308,6 +373,9 @@ export default function Home() {
   }
 
   const imageViewerHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
     setImageViewerWindowOpen(true) 
     setCurrentFocusedWindow("imageViewer") 
 
@@ -325,16 +393,40 @@ export default function Home() {
     }
   }
   const imageViewerHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
     setChangeFocusedWindow(true) 
     setImageViewerWindowOpen(false) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
   const imageViewerHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
     setImageViewerWindowMinimized(true)
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+  }
+
+  const alertHandleOpen = () => { 
+    setAlertWindowOpen(true) 
+    setCurrentFocusedWindow("alert") 
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("alert") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "alert"]) //add "alert" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "alert"])
+      setNavbarOrder("open")
+    }
+  }
+  const alertHandleClose = () => { 
+    setAlertWindowOpen(false) 
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "alert")) //remove "alert" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
   }
 
 
@@ -382,6 +474,7 @@ export default function Home() {
     var documentsWindow = document.getElementById("window-documents")
     var portfolioWindow = document.getElementById("window-portfolio")
     var imageViewerWindow = document.getElementById("window-imageViewer")
+    var alertWindow = document.getElementById("window-alert")
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
@@ -395,6 +488,7 @@ export default function Home() {
     var documentsIndex = currentWindowsOpen.indexOf("documents") + 10
     var portfolioIndex = currentWindowsOpen.indexOf("portfolio") + 10
     var imageViewerIndex = currentWindowsOpen.indexOf("imageViewer") + 10
+    var alertIndex = currentWindowsOpen.indexOf("alert") + 20  //this is an important window/dialogue so it goes above everything
     
     //check if active window is none
     if(currentActiveWindow == "none"){
@@ -404,6 +498,7 @@ export default function Home() {
       documentsWindow ? documentsWindow.style.zIndex = 9 : null
       portfolioWindow ? portfolioWindow.style.zIndex = 9 : null
       imageViewerWindow ? imageViewerWindow.style.zIndex = 9 : null
+      alertWindow ? alertWindow.style.zIndex = 9 : null
       
       setNavbarColors("none")
       setCurrentFocusedWindow("none")
@@ -417,6 +512,7 @@ export default function Home() {
     documentsWindow ? documentsWindow.style.zIndex = documentsIndex : null
     portfolioWindow ? portfolioWindow.style.zIndex = portfolioIndex : null
     imageViewerWindow ? imageViewerWindow.style.zIndex = imageViewerIndex : null
+    alertWindow ? alertWindow.style.zIndex = alertIndex : null
 
     //set navbarColors and focusedWindow
     switch(currentActiveWindow){
@@ -449,6 +545,11 @@ export default function Home() {
         setNavbarColors("imageViewer")
         setCurrentFocusedWindow("imageViewer")
         break
+
+      case "alert":
+        setNavbarColors("alert")
+        setCurrentFocusedWindow("alert")
+        break
     }
 
     setNavbarOrder("open")
@@ -466,6 +567,7 @@ export default function Home() {
     rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
     rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#000')
     rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarAlertBackgroundColor', '#000')
   
     rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
@@ -473,6 +575,9 @@ export default function Home() {
     rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarPortfolioSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarImageViewerSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarAlertSelectedColor', '#9665ff')
+
+    rootStyle.setProperty('--everythingButAlertBlur', '0px')
 
     //set a specific icon to be active
     switch(currentSelectedIcon){
@@ -504,6 +609,12 @@ export default function Home() {
       case "imageViewer":
         rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#9665ff')
         rootStyle.setProperty('--navbarImageViewerSelectedColor', '#000')
+        break
+
+      case "alert":
+        rootStyle.setProperty('--navbarAlertBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarAlertSelectedColor', '#000')
+        rootStyle.setProperty('--everythingButAlertBlur', '1px')
         break
     }
   }
@@ -561,12 +672,16 @@ export default function Home() {
           rootStyle.setProperty('--navbarImageViewerOrder', indexOfIcon)
           // console.log("wow imageViewer")
           break
+
+        case "alert":
+          rootStyle.setProperty('--navbarAlertOrder', indexOfIcon)
+          // console.log("wow alert")
+          break
       }
     }
   }
 
-  //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
-  //runs on server init and when the [conditions] change or are updated
+  //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS--//
   useEffect(() => {
     
     //if windows close, make the window that is still open the active window
@@ -586,12 +701,11 @@ export default function Home() {
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen,
-      currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
+  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen, 
+      alertWindowOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
-  //--ON SERVER INIT & WHEN [CONDITIONS] CHANGE--//
-  //runs on server init and when the [conditions] change or are updated
+  //--ON SERVER INIT & WHEN WINDOWS MINIMIZE--//
   useEffect(() => {
 
     //play animation to drop window below navbar
@@ -605,7 +719,7 @@ export default function Home() {
       imageViewerWindowMinimized])
 
 
-  //--ON SERVER INIT--//
+  //--ON SERVER INIT & WHEN DRAGGING WINDOWS--//
   useEffect(() => {
 
     //make all div elements draggable    
@@ -625,6 +739,12 @@ export default function Home() {
     
       function dragMouseDown(e) {
         e.preventDefault()
+
+        //if alert dialogue is open, allow nothing to be dragged
+        if(alertWindowOpen){
+          // console.log("hor hor hor")
+          return
+        }
 
         //upon dragging/clicking-on, set that window that is being dragged to be the active window
         switch(e.target.parentElement.parentElement.id){
@@ -656,6 +776,11 @@ export default function Home() {
           case "window-imageViewer":
             setActiveWindow("imageViewer")
             moveElementInArray(currentWindowsOpen, "imageViewer")
+            break
+          
+          case "window-alert":
+            setActiveWindow("alert")
+            moveElementInArray(currentWindowsOpen, "alert")
             break
         }
         // console.log(e.target.parentElement.parentElement)
@@ -764,17 +889,10 @@ export default function Home() {
 
             <div id="icon" className="icon-portfolio">
               <Button disableRipple onClick={portfolioHandleOpen}>
-                <FolderIcon width="6vh" height="6vh"/>
+                <PortfolioIcon width="6vh" height="6vh"/>
                 <h1>Portfolio</h1>
               </Button>
             </div>
-
-            {/* <div id="icon" className="icon-imageViewer">
-              <Button disableRipple onClick={imageViewerHandleOpen}>
-                <FolderIcon width="6vh" height="6vh"/>
-                <h1>Ivy Image Viewer</h1>
-              </Button>
-            </div> */}
           </div>
 
 
@@ -869,17 +987,20 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Documents" selectedIcon="folderIcon" setClose={documentsHandleClose} setMinimize={documentsHandleMinimize}/>
+                  <WindowHeader headerName="Documents" selectedIcon="folderIcon" setClose={documentsHandleClose} setMinimize={documentsHandleMinimize} newHeaderName={windowHeaderName}/>
                 </div>
 
                 <div className={documentsStyles.documentsBody}>
                   <Documents 
                     archiveOpen={archiveHandleOpen} 
+                    alertOpen={alertHandleOpen}
                     setIvyOpen={imageViewerHandleOpen} 
                     setIvyImage={handleIvyImage} 
                     setIvyImageWidth={handleIvyImageWidth} 
                     setIvyImageHeight={handleIvyImageHeight}
-                    setIvyImageDescription={setIvyImageDescription}
+                    setIvyImageDescription={handleIvyImageDescription}
+                    setHeaderName={handleWindowHeaderName}
+                    setErrorDescription={handleAlertDescription}
                   />
                 </div>
               </motion.div>
@@ -899,7 +1020,7 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div>
-                  <WindowHeader headerName="Portfolio" selectedIcon="folderIcon" setClose={portfolioHandleClose} setMinimize={portfolioHandleMinimize}/>
+                  <WindowHeader headerName="Portfolio" selectedIcon="portfolioIcon" setClose={portfolioHandleClose} setMinimize={portfolioHandleMinimize} keepMaximize={true}/>
                 </div>
 
                 <div className={portfolioStyles.portfolioBody}>
@@ -908,7 +1029,7 @@ export default function Home() {
                     setIvyImage={handleIvyImage} 
                     setIvyImageWidth={handleIvyImageWidth} 
                     setIvyImageHeight={handleIvyImageHeight}
-                    setIvyImageDescription={setIvyImageDescription}
+                    setIvyImageDescription={handleIvyImageDescription}
                   />
                 </div>
               </motion.div>
@@ -929,22 +1050,39 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Ivy" selectedIcon="folderIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
+                  <WindowHeader headerName="Ivy" selectedIcon="imageViewerIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
                   <ImageHandler 
                     selectedImage={currentIvyImage} 
                     isOpen={imageViewerWindowOpen} 
-                    setOpen={imageViewerHandleOpen} 
-                    setImage={handleIvyImage} 
                     imageWidth={ivyImageWidth} 
-                    setWidth={handleIvyImageWidth} 
                     imageHeight={ivyImageHeight} 
-                    setHeight={handleIvyImageHeight} 
                     imageDescription={ivyImageDescription} 
-                    setDescription={setIvyImageDescription}
                   />
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
+
+          {/* alert dialogue window */}
+          <AnimatePresence>
+            {alertWindowOpen &&
+              <motion.div 
+                id="window-alert"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* false window header */}
+                <div>
+                  <WindowHeader headerName="Error" selectedIcon="alertIcon" setClose={alertHandleClose} newHeaderName={windowHeaderName} removeMinimize={true}/>
+                </div>
+
+                <div className={alertStyles.alertBody}>
+                  <AlertDialogue setClose={alertHandleClose} errorDescription={alertDescription}/>
                 </div>
               </motion.div>
             }
@@ -1051,7 +1189,7 @@ export default function Home() {
                   >
                     <ThemeProvider theme={theme}>
                       <Button disableRipple onClick={portfolioHandleOpen}>
-                        <FolderIcon width={24} height={24}/>
+                        <PortfolioIcon width={24} height={24}/>
                         <span>{"Portfolio"}</span>
                       </Button>
                     </ThemeProvider>
@@ -1071,8 +1209,28 @@ export default function Home() {
                   >
                     <ThemeProvider theme={theme}>
                       <Button disableRipple onClick={imageViewerHandleOpen}>
-                        <FolderIcon width={24} height={24}/>
+                        <ImageViewerIcon width={24} height={24}/>
                         <span>{"Ivy"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* alert navbar icon */}
+              <AnimatePresence>
+                {alertWindowOpen &&
+                  <motion.li 
+                    className="alert"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple> {/* no "onClick" handler due to it never being used/needed */}
+                        <AlertIcon width={24} height={24}/>
+                        <span>{"Alert"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>

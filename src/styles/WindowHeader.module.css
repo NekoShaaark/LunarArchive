@@ -49,6 +49,17 @@
     background-color: #ff4b4b;
 }
 
+.maximizeIcon {
+    background-color: #9665ff;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
+    transform: scaleX(-1);
+}
+.maximizeIcon:hover {
+    cursor: pointer;
+    background-color: hwb(259 28% 0%);
+}
+
 .minimizeIcon {
     background-color: #9665ff;
     border-top: 4px solid #000;

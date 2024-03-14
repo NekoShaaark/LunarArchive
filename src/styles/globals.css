@@ -31,6 +31,12 @@
     --navbarImageViewerBackgroundColor: #000;
     --navbarImageViewerSelectedColor: #9665ff;
     --navbarImageViewerOrder: 6;
+
+    --navbarAlertBackgroundColor: #000;
+    --navbarAlertSelectedColor: #9665ff;
+    --navbarAlertOrder: 7;
+
+    --everythingButAlertBlur: 0px;
 }
 
 
@@ -166,6 +172,13 @@ body {
     fill: var(--navbarImageViewerSelectedColor);
 }
 
+.navigation .alert { background-color: var(--navbarAlertBackgroundColor); order: var(--navbarAlertOrder); }
+.navigation .alert button:hover { fill: #fff; }
+.navigation .alert button { 
+    color: var(--navbarAlertSelectedColor);
+    fill: var(--navbarAlertSelectedColor);
+}
+
 .navigation .null{
     border: 4px solid transparent;
     user-select: none;
@@ -222,6 +235,10 @@ body {
     background-blend-mode: overlay, overlay, overlay, normal;
     background-size: auto;
     background-repeat: no-repeat;
+}
+
+.layout-content > *:not(#window-alert) {
+    filter: blur(var(--everythingButAlertBlur));
 }
 
 .backgroundVideo {
@@ -378,6 +395,17 @@ body {
     height: fit-content;
     top: 140px;
     left: 360px;
+    flex-direction: column;
+    border: 4px solid #9665ff;
+}
+
+#window-alert{
+    display: flex;
+    position: absolute;
+    width: 40vh;
+    height: 20vh;
+    top: 260px;
+    left: 750px;
     flex-direction: column;
     border: 4px solid #9665ff;
 }
