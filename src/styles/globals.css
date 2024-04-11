@@ -40,10 +40,10 @@
 }
 
 
-/* https://www.dafont.com/8-bit-fortress.font */
+/* https://www.dafont.com/8-bit-fortress.font but i added missing glyphs/characters */
 @font-face {
     font-family: eightBitFortress;
-    src: url('/8bitFortress.woff2') format('woff2');
+    src: url('/8bitFortressEditedv3.woff2') format('woff2');
 }
 
 
@@ -119,7 +119,7 @@ body {
     color: #9665ff;
     text-decoration: none;
     font-family: eightBitFortress;
-    font-size: 14px;
+    font-size: medium;
     font-weight: 400;
 }
 .navigation span {
@@ -194,7 +194,7 @@ body {
     margin-left: auto;
     color: #9665ff;
     font-family: eightBitFortress;
-    font-size: 14px;
+    font-size: medium;
     font-weight: 400;
 }
 .navigation-secondary li {
@@ -287,9 +287,9 @@ body {
         "VIcon5 . . . . . . ."
         "VIcon6 . . . . . . ."; 
 }
-.icon-archive{ grid-area: Icon1; }
+.icon-archive{ grid-area: Icon3; }
 .icon-logs{ grid-area: Icon2; }
-.icon-documents{ grid-area: Icon3; }
+.icon-documents{ grid-area: Icon1; }
 .icon-moon{ grid-area: VIcon2; } 
 .icon-portfolio{ grid-area: VIcon6; } 
 
@@ -306,7 +306,7 @@ body {
         margin: 0;
         color: #9665ff;
         background: #000;
-        font-size: 14px;
+        font-size: medium;
         font-weight: 400;
         user-select: none;
     }
@@ -377,7 +377,10 @@ body {
     top: 160px;
     left: 400px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border-image: linear-gradient(to bottom, #9665ff 40%, rgba(0, 0, 0, 0)) 1 / 4px;
+    border-width: 4px;
+    border-style: solid;
+    /* border: 4px solid #9665ff; */
 }
 
 #window-portfolio{

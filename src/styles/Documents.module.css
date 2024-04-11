@@ -3,7 +3,7 @@
   position: relative;
   height: 100%;
   width: 100%;
-  background: #000;
+  background: linear-gradient(to bottom, black 38%, rgba(0, 0, 0, 0));
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -15,7 +15,8 @@
   padding-left: 10px;
   align-self: center;
   font-family: eightBitFortress;
-  font-size: 14px;
+  font-size: medium;
+  font-weight: 400;
 }
 
 .navbar {
@@ -62,4 +63,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: eightBitFortress;
+  font-size: medium;
+  font-weight: 400;
+}
+
+.backButton {
+  display: flex;
+  fill: #9665ff;
+}
+.backButton:hover {
+  fill: rgb(106, 58, 209);
 }

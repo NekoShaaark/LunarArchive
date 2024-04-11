@@ -37,6 +37,7 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
             {
               id: "000",
               name: "Niko5.png",
+              nameColor: "#e4c525",
               fileType: "Image",
               description: "Niko",
               icon: <Image unoptimized src="/niko5.png" alt="niko5" width={48} height={48}/>
@@ -85,8 +86,9 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
                     {
                       id: "00141",
                       name: "Sharkness.exe",
+                      nameColor: "#1e59ff",
                       fileType: "exe",
-                      icon: <BugIcon fill="#9665ff" width={48} height={48}/>
+                      icon: <BugIcon fill="#1e59ff" width={48} height={48}/>
                     },
                   ]
                 },
@@ -496,7 +498,11 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
     const arrayLayer1 = arrayLayer[1]
     const arrayLayer2 = arrayLayer[2]
     const arrayLayer3 = arrayLayer[3]
+    const arrayLayer4 = arrayLayer[4]
+    const arrayLayer5 = arrayLayer[5] //not used yet (as of current the furtherest the user can go from Sys to Heomework)
     var currentDir = `/Users/Neko/Sys`
+    var layer5
+    var layer4
     var layer3
     var layer2
     var layer1
@@ -527,8 +533,22 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
       currentDir += `/${layer3.name}`
     }
 
+    //layer4 handler
+    if(arrayLayer4){ 
+      layer4 = rootDir[arrayLayer0].files[arrayLayer1].files[arrayLayer2].files[arrayLayer3].files[arrayLayer4]
+      currentDir += `/${layer4.name}`
+    }
+
+    //layer5 handler
+    if(arrayLayer5){ 
+      layer5 = rootDir[arrayLayer0].files[arrayLayer1].files[arrayLayer2].files[arrayLayer3].files[arrayLayer4].files[arrayLayer5]
+      currentDir += `/${layer5.name}`
+    }
+
     //arrays are in decending order due to process-of-elimination (and layer0 will always fire if it went in ascending order)
     if(returnType == "array"){
+      if(arrayLayer5){ return(layer5) }
+      if(arrayLayer4){ return(layer4) }
       if(arrayLayer3){ return(layer3) }
       if(arrayLayer2){ return(layer2) }
       if(arrayLayer1){ return(layer1) }
@@ -581,12 +601,13 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
 
   //TODO: navbar slash needs to be more prominent (maybe change font?)
   //TODO: function to put in a dynamic/specific directory path
+  //TODO: when hovering over icons, they should be bordered with a different color
 
   return (
     <>
       <div className={styles.navbar}>
-        <Button className={styles.button} disableRipple onClick={() => backOneFolder()}>
-          <BackIcon fill="#9665ff" width={48} height={48}/>
+        <Button disableRipple onClick={() => backOneFolder()}>
+          <BackIcon className={styles.backButton} width={48} height={48}/>
         </Button>
         <div className={styles.text}>{currentReadableDirectory}</div>
       </div>

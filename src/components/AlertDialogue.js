@@ -50,7 +50,9 @@ export default function AlertDialogue({ setClose, errorDescription }) {
         <ThemeProvider theme={theme}>
             <h1 className={styles.text}>{alertDescription}</h1>
             <div className={styles.button}>
-              <Button variant="contained" disableRipple autoFocus onClick={handleClose}>Oki Doki</Button>
+              <Button disableRipple autoFocus variant="contained" sx={{fontSize:"medium"}} onClick={handleClose}>
+                Oki Doki
+              </Button>
             </div>
         </ThemeProvider>
     )
