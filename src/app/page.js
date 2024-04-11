@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { AlertIcon, ArchiveIcon, FolderIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
+import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
@@ -61,12 +61,13 @@ export default function Home() {
   const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
 
   //other states
-  const [currentFocusedWindow, setCurrentFocusedWindow] = useState()
+  const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
-  const [currentWindowsOpen, setCurrentWindowsOpen] = useState([])
-  const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState([])
+  const [currentWindowsOpen, setCurrentWindowsOpen] = useState(["none"])
+  const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState(["none"])
   const [windowHeaderName, setWindowHeaderName] = useState()
   const [alertDescription, setAlertDescription] = useState()
+  const [denyAccess, setDenyAccess] = useState(true)
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -181,6 +182,11 @@ export default function Home() {
     //if alert dialogue is open, allow nothing to be opened
     if(alertWindowOpen){ return }
 
+    // if(denyAccess){
+    //   alertHandleOpen()
+    //   return
+    // }
+
     setArchiveWindowOpen(true) 
     setCurrentFocusedWindow("archive")
     
@@ -220,6 +226,11 @@ export default function Home() {
     //if alert dialogue is open, allow nothing to be opened
     if(alertWindowOpen){ return }
 
+    if(denyAccess){
+      alertHandleOpen()
+      return
+    }
+
     setLogsWindowOpen(true) 
     setCurrentFocusedWindow("logs") 
 
@@ -258,6 +269,11 @@ export default function Home() {
   const moonHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
     if(alertWindowOpen){ return }
+
+    if(denyAccess){
+      alertHandleOpen()
+      return
+    }
 
     setMoonWindowOpen(true) 
     setCurrentFocusedWindow("moon") 
@@ -506,6 +522,7 @@ export default function Home() {
     }
 
     //set all windows' zIndex
+    //if window exists, set zIndex to above grabbed zIndex, otherwise set to null
     archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
     logsWindow ? logsWindow.style.zIndex = logsIndex : null
     moonWindow ? moonWindow.style.zIndex = moonIndex : null
@@ -681,7 +698,7 @@ export default function Home() {
     }
   }
 
-  //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS--//
+  //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
     
     //if windows close, make the window that is still open the active window
@@ -859,26 +876,26 @@ export default function Home() {
 
           {/* desktop/icons layout */}
           <div className="desktop-layout">
-            <div id="icon" className="icon-archive">
+            {/* <div id="icon" className="icon-archive">
               <Button disableRipple onClick={archiveHandleOpen}>
                 <ArchiveIcon width="6vh" height="6vh"/>
                 <h1>Archive</h1>
               </Button>
-            </div>
+            </div> */}
 
-            <div id="icon" className="icon-logs">
+            {/* <div id="icon" className="icon-logs">
               <Button disableRipple onClick={logsHandleOpen}>
                 <LogsIcon width="6vh" height="6vh"/>
                 <h1>Data Logs</h1>
               </Button>
-            </div>
+            </div> */}
 
-            <div id="icon" className="icon-moon">
+            {/* <div id="icon" className="icon-moon">
               <Button disableRipple onClick={moonHandleOpen}>
                 <MoonStarIcon width="6vh" height="6vh"/>
                 <h1>Moon</h1>
               </Button>
-            </div>
+            </div> */}
 
             <div id="icon" className="icon-documents">
               <Button disableRipple onClick={documentsHandleOpen}>
@@ -887,10 +904,17 @@ export default function Home() {
               </Button>
             </div>
 
-            <div id="icon" className="icon-portfolio">
+            {/* <div id="icon" className="icon-portfolio">
               <Button disableRipple onClick={portfolioHandleOpen}>
                 <PortfolioIcon width="6vh" height="6vh"/>
                 <h1>Portfolio</h1>
+              </Button>
+            </div> */}
+
+            <div id="icon" className="icon-portfolio">
+              <Button disableRipple onClick={alertHandleOpen}>
+                <ImageIcon width="6vh" height="6vh"/>
+                <h1>tutorial.png</h1>
               </Button>
             </div>
           </div>
