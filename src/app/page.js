@@ -14,6 +14,7 @@ import documentsStyles from '@/styles/Documents.module.css'
 import portfolioStyles from '@/styles/Portfolio.module.css'
 import imageViewerStyles from '@/styles/ImageViewer.module.css'
 import alertStyles from '@/styles/AlertDialogue.module.css'
+import textEditorStyles from '@/styles/TextEditor.module.css'
 
 import Archive from './archive/page'
 import Logs from './logs/page'
@@ -22,6 +23,7 @@ import Documents from './documents/page'
 import Portfolio from './portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
+import TextEditor from '@/components/TextEditor'
 
 
 
@@ -42,6 +44,7 @@ export default function Home() {
   const [documentsMinimize, documentsAnimate] = useAnimate()
   const [portfolioMinimize, portfolioAnimate] = useAnimate()
   const [imageViewerMinimize, imageViewerAnimate] = useAnimate()
+  const [textEditorMinimize, textEditorAnimate] = useAnimate()
   
   //window open states
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
@@ -51,6 +54,7 @@ export default function Home() {
   const [portfolioWindowOpen, setPortfolioWindowOpen] = useState(false)
   const [imageViewerWindowOpen, setImageViewerWindowOpen] = useState(false)
   const [alertWindowOpen, setAlertWindowOpen] = useState(false)
+  const [textEditorWindowOpen, setTextEditorWindowOpen] = useState(false)
 
   //window minimized states
   const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
@@ -59,6 +63,7 @@ export default function Home() {
   const [documentsWindowMinimized, setDocumentsWindowMinimized] = useState(false)
   const [portfolioWindowMinimized, setPortfolioWindowMinimized] = useState(false)
   const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
+  const [textEditorWindowMinimized, setTextEditorWindowMinimized] = useState(false)
 
   //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
@@ -74,6 +79,12 @@ export default function Home() {
   const [ivyImageWidth, setIvyImageWidth] = useState()
   const [ivyImageHeight, setIvyImageHeight] = useState()
   const [ivyImageDescription, setIvyImageDescription] = useState()
+  const [ivyHeaderName, setIvyImageHeaderName] = useState("Image Viewer")
+
+  //text editor (notus) states
+  const [currentNotusText, setCurrentNotusText] = useState()
+  const [notusHeaderName, setNotusHeaderName] = useState("Text Editor")
+  const [currentNotusFile, setCurrentNotusFile] = useState("Text Editor")
 
 
   //--IMAGE VIEWER HANDLING--//
@@ -103,6 +114,36 @@ export default function Home() {
     // console.log("currentIvyDescription: " + ivyImageDescription)
     // console.log("passingIvyDescription: " + e)
     setIvyImageDescription(e)
+  }
+
+  const handleIvyHeaderName = async (e) => {
+    if(!e){ console.log("woahhhhhh ivyImageHeaderName undefined"); return }
+    // console.log("currentIvyHeaderName: " + ivyImageHeaderName)
+    // console.log("passingIvyHeaderName: " + e)
+    setIvyImageHeaderName(e)
+  }
+
+
+  //--TEXT EDITOR HANDLING--//
+  const handleNotusText = async (e) => {
+    if(!e){ console.log("wahhhhhhhh notusText undefined"); return }
+    // console.log("currentNotus: " + currentNotusText)
+    // console.log("passingNotus: " + e)
+    setCurrentNotusText(e)
+  }
+
+  const handleNotusHeaderName = async (e) => {
+    if(!e){ console.log("woahhhhhh notusHeaderName undefined"); return }
+    // console.log("currentNotusHeaderName: " + notusHeaderName)
+    // console.log("passingNotusHeaderName: " + e)
+    setNotusHeaderName(e)
+  }
+
+  const handleCurrentNotusFile = async (e) => {
+    if(!e){ console.log("woahhhhhh notusCurrentFile undefined"); return }
+    // console.log("currentNotusCurrentFile: " + notusCurrentFile)
+    // console.log("passingNotusCurrentFile: " + e)
+    setCurrentNotusFile(e)
   }
 
 
@@ -145,6 +186,10 @@ export default function Home() {
       case "imageViewer":
         await imageViewerAnimate(imageViewerMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
+
+      case "textEditor":
+        await textEditorAnimate(textEditorMinimize.current, { y: "650%" }, { duration: 0.6, delay: 0.12 })
+        break
     }
   }
 
@@ -173,6 +218,9 @@ export default function Home() {
       case "imageViewer":
         await imageViewerAnimate(imageViewerMinimize.current, { y: 0 }, { duration: 0.4 })
         break
+
+      case "textEditor":
+        await textEditorAnimate(textEditorMinimize.current, { y: 0 }, { duration: 0.4 })
     }
   }
 
@@ -445,6 +493,45 @@ export default function Home() {
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
   }
 
+  const textEditorHandleOpen = () => { 
+    //if alert dialogue is open, allow nothing to be opened
+    if(alertWindowOpen){ return }
+
+    setTextEditorWindowOpen(true) 
+    setCurrentFocusedWindow("textEditor") 
+
+    //check if window is minimized, if so, play animation to drag window back above navbar
+    if(textEditorWindowMinimized){
+      pullWindowAnimation("textEditor")
+      setTextEditorWindowMinimized(false)
+    }
+
+    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+    if(currentWindowsOpen.indexOf("textEditor") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "textEditor"]) //add "textEditor" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "textEditor"])
+      setNavbarOrder("open")
+    }
+  }
+  const textEditorHandleClose = () => { 
+    //if alert dialogue is open, allow nothing to be closed
+    if(alertWindowOpen){ return }
+
+    setChangeFocusedWindow(true) 
+    setTextEditorWindowOpen(false) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
+  }
+  const textEditorHandleMinimize = () => {
+    //if alert dialogue is open, allow nothing to be minimized
+    if(alertWindowOpen){ return }
+
+    setTextEditorWindowMinimized(true)
+    setChangeFocusedWindow(true) 
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
+  }
+
 
   //--THEME--//
   const theme = createTheme({
@@ -491,6 +578,7 @@ export default function Home() {
     var portfolioWindow = document.getElementById("window-portfolio")
     var imageViewerWindow = document.getElementById("window-imageViewer")
     var alertWindow = document.getElementById("window-alert")
+    var textEditorWindow = document.getElementById("window-textEditor")
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
@@ -505,6 +593,7 @@ export default function Home() {
     var portfolioIndex = currentWindowsOpen.indexOf("portfolio") + 10
     var imageViewerIndex = currentWindowsOpen.indexOf("imageViewer") + 10
     var alertIndex = currentWindowsOpen.indexOf("alert") + 20  //this is an important window/dialogue so it goes above everything
+    var textEditorIndex = currentWindowsOpen.indexOf("textEditor") + 10
     
     //check if active window is none
     if(currentActiveWindow == "none"){
@@ -515,6 +604,7 @@ export default function Home() {
       portfolioWindow ? portfolioWindow.style.zIndex = 9 : null
       imageViewerWindow ? imageViewerWindow.style.zIndex = 9 : null
       alertWindow ? alertWindow.style.zIndex = 9 : null
+      textEditorWindow ? textEditorWindow.style.zIndex = 9 : null
       
       setNavbarColors("none")
       setCurrentFocusedWindow("none")
@@ -530,6 +620,7 @@ export default function Home() {
     portfolioWindow ? portfolioWindow.style.zIndex = portfolioIndex : null
     imageViewerWindow ? imageViewerWindow.style.zIndex = imageViewerIndex : null
     alertWindow ? alertWindow.style.zIndex = alertIndex : null
+    textEditorWindow ? textEditorWindow.style.zIndex = textEditorIndex : null
 
     //set navbarColors and focusedWindow
     switch(currentActiveWindow){
@@ -567,6 +658,11 @@ export default function Home() {
         setNavbarColors("alert")
         setCurrentFocusedWindow("alert")
         break
+
+      case "textEditor":
+        setNavbarColors("textEditor")
+        setCurrentFocusedWindow("textEditor")
+        break
     }
 
     setNavbarOrder("open")
@@ -585,6 +681,7 @@ export default function Home() {
     rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#000')
     rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
     rootStyle.setProperty('--navbarAlertBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#000')
   
     rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
@@ -593,6 +690,7 @@ export default function Home() {
     rootStyle.setProperty('--navbarPortfolioSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarImageViewerSelectedColor', '#9665ff')
     rootStyle.setProperty('--navbarAlertSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarTextEditorSelectedColor', '#9665ff')
 
     rootStyle.setProperty('--everythingButAlertBlur', '0px')
 
@@ -632,6 +730,11 @@ export default function Home() {
         rootStyle.setProperty('--navbarAlertBackgroundColor', '#9665ff')
         rootStyle.setProperty('--navbarAlertSelectedColor', '#000')
         rootStyle.setProperty('--everythingButAlertBlur', '1px')
+        break
+
+      case "textEditor":
+        rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarTextEditorSelectedColor', '#000')
         break
     }
   }
@@ -694,6 +797,11 @@ export default function Home() {
           rootStyle.setProperty('--navbarAlertOrder', indexOfIcon)
           // console.log("wow alert")
           break
+
+        case "textEditor":
+          rootStyle.setProperty('--navbarTextEditorOrder', indexOfIcon)
+          // console.log("wow textEditor")
+          break
       }
     }
   }
@@ -719,7 +827,7 @@ export default function Home() {
       // console.log("current focused window: " + currentFocusedWindow)
     }
   }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen, 
-      alertWindowOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
+      alertWindowOpen, textEditorWindowOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
   //--ON SERVER INIT & WHEN WINDOWS MINIMIZE--//
@@ -732,8 +840,9 @@ export default function Home() {
     if(documentsWindowMinimized){ dropWindowAnimation("documents") }
     if(portfolioWindowMinimized){ dropWindowAnimation("portfolio") }
     if(imageViewerWindowMinimized){ dropWindowAnimation("imageViewer") }
+    if(textEditorWindowMinimized){ dropWindowAnimation("textEditor") }
   }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
-      imageViewerWindowMinimized])
+      imageViewerWindowMinimized, textEditorWindowMinimized])
 
 
   //--ON SERVER INIT & WHEN DRAGGING WINDOWS--//
@@ -798,6 +907,11 @@ export default function Home() {
           case "window-alert":
             setActiveWindow("alert")
             moveElementInArray(currentWindowsOpen, "alert")
+            break
+
+          case "window-textEditor":
+            setActiveWindow("textEditor")
+            moveElementInArray(currentWindowsOpen, "textEditor")
             break
         }
         // console.log(e.target.parentElement.parentElement)
@@ -911,7 +1025,7 @@ export default function Home() {
               </Button>
             </div> */}
 
-            <div id="icon" className="icon-portfolio">
+            <div id="icon" className="icon-tutorial">
               <Button disableRipple onClick={alertHandleOpen}>
                 <ImageIcon width="6vh" height="6vh"/>
                 <h1>tutorial.png</h1>
@@ -1023,8 +1137,13 @@ export default function Home() {
                     setIvyImageWidth={handleIvyImageWidth} 
                     setIvyImageHeight={handleIvyImageHeight}
                     setIvyImageDescription={handleIvyImageDescription}
+                    setIvyImageHeaderName={handleIvyHeaderName}
                     setHeaderName={handleWindowHeaderName}
                     setErrorDescription={handleAlertDescription}
+                    setNotusOpen={textEditorHandleOpen}
+                    setNotusText={handleNotusText}
+                    setNotusHeaderName={handleNotusHeaderName}
+                    setNotusFile={handleCurrentNotusFile}
                   />
                 </div>
               </motion.div>
@@ -1074,7 +1193,7 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Ivy" selectedIcon="imageViewerIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
+                  <WindowHeader headerName={`Ivy - ${ivyHeaderName}`} selectedIcon="imageViewerIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
@@ -1083,7 +1202,7 @@ export default function Home() {
                     isOpen={imageViewerWindowOpen} 
                     imageWidth={ivyImageWidth} 
                     imageHeight={ivyImageHeight} 
-                    imageDescription={ivyImageDescription} 
+                    imageDescription={ivyImageDescription}
                   />
                 </div>
               </motion.div>
@@ -1107,6 +1226,34 @@ export default function Home() {
 
                 <div className={alertStyles.alertBody}>
                   <AlertDialogue setClose={alertHandleClose} errorDescription={alertDescription}/>
+                </div>
+              </motion.div>
+            }
+          </AnimatePresence>
+
+          {/* text editor window */}
+          <AnimatePresence>
+            {textEditorWindowOpen &&
+              <motion.div 
+                id="window-textEditor" 
+                className="draggable"
+                ref={textEditorMinimize}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* false window header */}
+                <div id="draggable-header">
+                  <WindowHeader headerName={`Notus - ${notusHeaderName}`} selectedIcon="noteIcon" setClose={textEditorHandleClose} setMinimize={textEditorHandleMinimize}/>
+                </div>
+
+                <div className={textEditorStyles.textEditorBody}>
+                  <TextEditor 
+                    isOpen={textEditorWindowOpen}
+                    selectedText={currentNotusText}
+                    selectedMdxFile={currentNotusFile} 
+                  />
                 </div>
               </motion.div>
             }
@@ -1255,6 +1402,26 @@ export default function Home() {
                       <Button disableRipple> {/* no "onClick" handler due to it never being used/needed */}
                         <AlertIcon width={24} height={24}/>
                         <span>{"Alert"}</span>
+                      </Button>
+                    </ThemeProvider>
+                  </motion.li>
+                }
+              </AnimatePresence>
+
+              {/* text editor navbar icon */}
+              <AnimatePresence>
+                {textEditorWindowOpen &&
+                  <motion.li 
+                    className="textEditor"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <ThemeProvider theme={theme}>
+                      <Button disableRipple onClick={textEditorHandleOpen}>
+                        <NoteIcon width={24} height={24}/>
+                        <span>{"Notus"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>

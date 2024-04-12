@@ -1,0 +1,27 @@
+.textEditorBody {
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    /* max-width: fit-content; */
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.text {
+    display: flex;
+    width: 100%;
+    margin: 0 12px;
+    color: #9665ff;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    font-family: eightBitFortress;
+    font-size: larger;
+    font-weight: 400;
+    text-align: left;
+}

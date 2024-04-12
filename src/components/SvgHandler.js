@@ -59,7 +59,7 @@ export const NoteIcon = (props) => (
 )
 export const BackIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
-    	<path d="M13 19h2v-4h7V9h-7V5h-2v2h-2v2H9v2H7v2h2v2h2v2h2zM8 7H6v2H4v2H2v2h2v2h2v2h2v2h2v-2H8v-2H6v-2H4v-2h2V9h2zm0 0h2V5H8z" />
+	    <path d="M11 7h10v2H11zm-8 4h2V9h2v2h14v2H7v2H5v-2H3zm4 4v2h2v-2zm0-6V7h2v2zm14 6H11v2h10z" />
     </svg>
 )
 export const ImageIcon = (props) => (
