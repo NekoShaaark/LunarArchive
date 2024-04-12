@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
+import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
@@ -72,6 +72,7 @@ export default function Home() {
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState(["none"])
   const [windowHeaderName, setWindowHeaderName] = useState()
   const [alertDescription, setAlertDescription] = useState()
+  const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
 
   //image viewer (ivy) states
@@ -157,6 +158,13 @@ export default function Home() {
   const handleAlertDescription = async (e) => {
     // console.log("alertDescription: " + e)
     setAlertDescription(e)
+  }
+
+  //--DOCUMENTS OPENING HANDLING--//
+  const handleDocumentsDirToOpen = async (e) => {
+    if(!e){ console.log("woahhhhhh documentsDirToOpen undefined"); return }
+    console.log("documentsDirToOpen: " + e)
+    setDocumentsDirToOpen(e)
   }
 
 
@@ -1012,7 +1020,7 @@ export default function Home() {
             </div> */}
 
             <div id="icon" className="icon-documents">
-              <Button disableRipple onClick={documentsHandleOpen}>
+              <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() }}>
                 <FolderIcon width="6vh" height="6vh"/>
                 <h1>Documents</h1>
               </Button>
@@ -1026,9 +1034,16 @@ export default function Home() {
             </div> */}
 
             <div id="icon" className="icon-tutorial">
-              <Button disableRipple onClick={alertHandleOpen}>
+              <Button disableRipple onClick={() => { handleAlertDescription("Coming soon"); alertHandleOpen() }}>
                 <ImageIcon width="6vh" height="6vh"/>
                 <h1>tutorial.png</h1>
+              </Button>
+            </div>
+
+            <div id="icon" className="icon-moon">
+              <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
+                <ImagesIcon width="6vh" height="6vh"/>
+                <h1>Pictures</h1>
               </Button>
             </div>
           </div>
@@ -1130,6 +1145,7 @@ export default function Home() {
 
                 <div className={documentsStyles.documentsBody}>
                   <Documents 
+                    currentOpenDir={documentsDirToOpen}
                     archiveOpen={archiveHandleOpen} 
                     alertOpen={alertHandleOpen}
                     setIvyOpen={imageViewerHandleOpen} 

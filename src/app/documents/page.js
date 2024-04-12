@@ -3,11 +3,11 @@
 import styles from '@/styles/Documents.module.css'
 import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, GamepadIcon, ImageIcon, ImagesIcon, NoteIcon } from '@/components/SvgHandler'
 import { Button, ThemeProvider, createTheme } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 
-export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
+export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
   const [sysFolderOpen, setSysFolderOpen] = useState(false)
     const [documentsFolderOpen, setDocumentsFolderOpen] = useState(true) //default open
       
@@ -27,8 +27,19 @@ export default function Documents({ archiveOpen, alertOpen, setIvyOpen, setIvyIm
     const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
+  var dirToOpen = `${currentOpenDir}`
 
 
+  useEffect(() => {
+    closeAllFolders()
+    // console.log("toOpen: " + dirToOpen)
+    switch(dirToOpen){
+      case "Documents": setDocumentsFolderOpen(true); setCurrentReadableDirectory("/Users/Neko/Sys/Documents"); break
+      case "Pictures": setPicturesFolderOpen(true); setCurrentReadableDirectory("/Users/Neko/Sys/Pictures"); break
+    }
+  }, [dirToOpen])
+
+  //--SYSTEM DIRECTORY ARRAY--//
   const sysDir = 
   [
     {
