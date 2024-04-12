@@ -1,4 +1,5 @@
 import styles from '@/styles/Logs.module.css'
+import TypewriterEffect from '@/components/TypewriterEffect'
 
 
 export default function Logs() {
@@ -9,8 +10,7 @@ export default function Logs() {
       
       <p className={styles.floating1}>Some other text</p>
 
-      <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
-      <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
+      <p className={styles.text}><TypewriterEffect text={`Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5`} delay={40}/></p>
       <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
       <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
       <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>

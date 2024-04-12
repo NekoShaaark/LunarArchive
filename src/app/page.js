@@ -1459,7 +1459,11 @@ export default function Home() {
           <div className="navigation-secondary">
             <ul>
               <li className="time">{currentTime}</li>
-              <li className="something"><div><NoteIcon alt="???" width={24} height={24}/></div></li>
+              <li className="something">
+                <div onClick={() => { textEditorHandleOpen(); handleNotusHeaderName("Secret?"); handleCurrentNotusFile("Navbar.txt") }}>
+                  <NoteIcon alt="???" width={24} height={24}/>
+                </div>
+              </li>
             </ul>
           </div>
         </nav>

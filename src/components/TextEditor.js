@@ -10,6 +10,7 @@ import Something from '@/components/mdxFiles/Something.mdx'
 import BlackHole from '@/components/mdxFiles/Rejected_ideas/blackHole.mdx'
 import MissingChildren from '@/components/mdxFiles/accepted_Ideas/missingChildren.mdx'
 import EvilNekoVirus from '@/components/mdxFiles/accepted_Ideas/evilNekoVirus.mdx'
+import Navbar from '@/components/mdxFiles/Navbar.mdx'
 
 
 export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
@@ -36,6 +37,7 @@ export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
         case "blackHole.txt": return <div className={styles.text}><BlackHole/></div>
         case "missingChildren.txt": return <div className={styles.text}><MissingChildren/></div>
         case "evilNekoVirus.exe": return <div className={styles.text}><EvilNekoVirus/></div>
+        case "Navbar.txt": return <div className={styles.text} style={{margin:"0"}}><Navbar/></div>
 
         case "undefined": return <p className={styles.text}>{textUsing}</p>
     }

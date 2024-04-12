@@ -5,6 +5,7 @@ import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, Gamep
 import { Button, ThemeProvider, createTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { AnimatePresence, motion } from 'framer-motion'
 
 
 export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
@@ -381,21 +382,29 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
   function filesInFolder(folder){
     return(
       <ThemeProvider theme={theme}>
-        {/* map all files in folder */}
-        {folder.map((file, mapId) => (
-          <div key={mapId} className={styles.icon}>
-            {/* button to interact with files/folder */}
-            <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType, file.description)}>
-              <div className={styles.iconContents}>
-                {/* set custom color for name (icon is done within' the file array) */}
-                {file.icon}
-                <span style={{color: file.nameColor}}>
-                  {file.name}
-                </span>
-              </div>
-            </Button>
-          </div>
-        ))}
+        <AnimatePresence>
+          {/* map all files in folder */}
+          {folder.map((file, mapId) => (
+            <motion.div 
+              key={mapId} 
+              className={styles.icon}
+              initial={{ opacity: 0, scale: 0.75, z: 16, y: 16 }}
+              animate={{ opacity: 1, scale: 1, z: 0, y: 0  }}
+              transition={{ duration: (mapId*0.2) + 0.4 }}
+            >
+              {/* button to interact with files/folder */}
+              <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType, file.description)}>
+                <div className={styles.iconContents}>
+                  {/* set custom color for name (icon is done within' the file array) */}
+                  {file.icon}
+                  <span style={{color: file.nameColor}}>
+                    {file.name}
+                  </span>
+                </div>
+              </Button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </ThemeProvider>
     )
   }
