@@ -3,10 +3,11 @@
   position: relative;
   height: 100%;
   width: 100%;
-  background: linear-gradient(to bottom, black 38%, rgba(0, 0, 0, 0));
+  /* background: linear-gradient(to bottom, black 38%, rgba(0, 0, 0, 0)); */
+  background: #000;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .text {
@@ -21,7 +22,7 @@
 
 .navbar {
   display: flex;
-  height: 4vh;
+  height: auto;
   width: 100%;
   flex-direction: row;
   border-bottom: 4px solid #9665ff;
@@ -32,9 +33,33 @@
   display: grid;
   height: inherit;
   width: inherit;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); 
-  grid-template-rows: repeat(4, minmax(0, 1fr)); 
+  /* max-width: inherit; */
+  /* max-height: min-content; */
+  grid-auto-rows: 0.9fr;
+  grid-template-columns: repeat(4, auto-fit); 
+  grid-template-rows: repeat(4, auto-fit); 
+  grid-template-areas: 
+    "IconA1 IconB1 IconC1 IconD1"
+    "IconA2 IconB2 IconC2 IconD2"
+    "IconA3 IconB3 IconC3 IconD3"
+    "IconA4 IconB4 IconC4 IconD4";
+  align-items: flex-start;
+  justify-items: center;
   gap: 14px 10px;
+}
+@media only screen and (max-width: 550px) {
+  .grid {
+    height: auto;
+    width: 100%;
+    grid-auto-rows: 0.2fr;
+    grid-template-columns: repeat(4, auto-fit); 
+    grid-template-rows: repeat(2, auto-fit);
+    grid-template-areas: 
+      "IconA1 IconB1"
+      "IconA2 IconB2"
+      "IconA3 IconB3"
+      "IconA4 IconB4"; 
+  }
 }
 
 .icon {

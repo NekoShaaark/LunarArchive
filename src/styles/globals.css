@@ -82,7 +82,7 @@ body {
     display: flex;
     position: sticky;
     height: auto;
-    width: 100%;
+    width: auto;
     bottom: 0;
     z-index: 3;
     background-color: #000;
@@ -191,9 +191,10 @@ body {
 }
 
 .navigation .null{
-    border: 4px solid transparent;
+    border: 6px solid transparent;
     user-select: none;
     pointer-events: none;
+    width: 0;
     order: 100;
 }
 /* #endregion ------ */
@@ -286,24 +287,24 @@ body {
 .desktop-layout{
     display: grid;
     grid-auto-rows: 1fr;
-    grid-template-columns: repeat(10, minmax(0, 1fr)); 
-    grid-template-rows: repeat(6, minmax(0, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(120px, 140px)); 
+    grid-template-rows: repeat(auto-fit, minmax(80px, auto-fit)); 
     gap: 16px 20px;
     margin: 16px;
     grid-template-areas: 
-        "Icon1 Icon2 Icon3 Icon4 Icon5 Icon6 Icon7 ."
-        "VIcon2 . . . . . . ."
-        "VIcon3 . . . . . . ."
-        "VIcon4 . . . . . . ."
-        "VIcon5 . . . . . . ."
-        "VIcon6 VIcon26 . . . . . ."; 
+        "IconA1 IconB1 IconC1"
+        "IconA2 IconB2 IconC2"
+        "IconA3 IconB3 IconC3"
+        "IconA4 IconB4 IconC4"
+        "IconA5 IconB5 IconC5"
+        "IconA6 IconB6 IconC6"; 
 }
-.icon-archive{ grid-area: Icon3; }
-.icon-logs{ grid-area: Icon2; }
-.icon-documents{ grid-area: Icon1; }
-.icon-moon{ grid-area: VIcon2; } 
-.icon-portfolio{ grid-area: VIcon26; } 
-.icon-tutorial{ grid-area: VIcon6; }
+.icon-archive{ grid-area: IconC1; }
+.icon-logs{ grid-area: IconB1; }
+.icon-documents{ grid-area: IconA1; }
+.icon-moon{ grid-area: IconA2; } 
+.icon-portfolio{ grid-area: IconB5; } 
+.icon-tutorial{ grid-area: IconA6; }
 
 #icon{
     display: flex;
@@ -389,10 +390,10 @@ body {
     top: 160px;
     left: 400px;
     flex-direction: column;
-    border-image: linear-gradient(to bottom, #9665ff 40%, rgba(0, 0, 0, 0)) 1 / 4px;
+    /* border-image: linear-gradient(to bottom, #9665ff 40%, rgba(0, 0, 0, 0)) 1 / 4px;
     border-width: 4px;
-    border-style: solid;
-    /* border: 4px solid #9665ff; */
+    border-style: solid; */
+    border: 4px solid #9665ff;
 }
 
 #window-portfolio{
@@ -433,6 +434,32 @@ body {
     left: 260px;
     flex-direction: column;
     border: 4px solid #9665ff;
+}
+
+@media only screen and (max-width: 550px) {
+    #window-archive, 
+    #window-logs, 
+    #window-moon, 
+    #window-documents, 
+    #window-portfolio,
+    #window-imageViewer,
+    #window-alert,
+    #window-textEditor {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        border: 0;
+    }
+    .navigation li {
+        padding-inline: 0;
+        width: auto;
+    }
+    .navigation span {
+        padding: 0;
+        gap: 0;
+        font-size: 0;
+    }
 }
 /* #endregion ------ */
 /* #endregion <======> */
