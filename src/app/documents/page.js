@@ -6,6 +6,7 @@ import { Button, ThemeProvider, createTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
+import TypewriterEffect from '@/components/TypewriterEffect'
 
 
 export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
@@ -28,6 +29,7 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
     const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
+  const [typewriterDelay, setTypewriterDelay] = useState(20)
   var dirToOpen = `${currentOpenDir}`
 
 
@@ -410,6 +412,8 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
   }
 
   function openFileOrFolder(file, fileType, fileDescription){
+    setTypewriterDelay(40)
+
     switch(fileOrFolder(file.id)){
       case "file":
         console.log("file")
@@ -795,7 +799,7 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         <Button disableRipple onClick={() => backOneFolder()}>
           <BackIcon className={styles.backButton} width={48} height={48}/>
         </Button>
-        <div className={styles.text}>{currentReadableDirectory}</div>
+        <div className={styles.text}><TypewriterEffect text={currentReadableDirectory} delay={typewriterDelay}/></div>
       </div>
       <div className={styles.grid}>
 
