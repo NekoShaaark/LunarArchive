@@ -22,7 +22,7 @@
 
 .navbar {
   display: flex;
-  height: auto;
+  height: 4vh;
   width: 100%;
   flex-direction: row;
   border-bottom: 4px solid #9665ff;
@@ -47,26 +47,14 @@
   justify-items: center;
   gap: 14px 10px;
 }
-@media only screen and (max-width: 550px) {
-  .grid {
-    height: auto;
-    width: 100%;
-    grid-auto-rows: 0.2fr;
-    grid-template-columns: repeat(4, auto-fit); 
-    grid-template-rows: repeat(2, auto-fit);
-    grid-template-areas: 
-      "IconA1 IconB1"
-      "IconA2 IconB2"
-      "IconA3 IconB3"
-      "IconA4 IconB4"; 
-  }
-}
 
 .icon {
   display: flex;
+  width: 75%;
   align-items: center;
   justify-content: center;
   fill: #9665ff;
+  flex-direction: column;
   border: 6px solid rgba(0, 0, 0, 0);
   border-radius: 0;
   pointer-events: none;
@@ -99,4 +87,42 @@
 }
 .backButton:hover {
   fill: rgb(106, 58, 209);
+}
+
+
+/* MOBILE OVERRIDES */
+@media only screen and (max-width: 550px) {
+  .grid {
+    height: auto;
+    width: 100%;
+    grid-auto-rows: 0.2fr;
+    grid-template-columns: repeat(4, auto-fit); 
+    grid-template-rows: repeat(2, auto-fit);
+    grid-template-areas: 
+      "IconA1 IconB1"
+      "IconA2 IconB2"
+      "IconA3 IconB3"
+      "IconA4 IconB4"; 
+  }
+  .navbar {
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 920px) {
+  .grid {
+    height: auto;
+    width: 100%;
+    grid-auto-rows: 0.2fr;
+    grid-template-columns: repeat(4, auto-fit); 
+    grid-template-rows: repeat(4, auto-fit);
+    grid-template-areas: 
+      "IconA1 IconB1" "IconC1" "IconD1"
+      "IconA2 IconB2" "IconC2" "IconD2"
+      "IconA3 IconB3" "IconC3" "IconD3"
+      "IconA4 IconB4" "IconC4" "IconD4";
+  }
+  .navbar {
+    height: auto;
+  }
 }

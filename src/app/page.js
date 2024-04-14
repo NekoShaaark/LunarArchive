@@ -562,6 +562,13 @@ export default function Home() {
   })
 
 
+  //--MOTION VARIANTS--//
+  const fadeIn = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 }
+  }
+
+
   //--FUNCTIONS & STATE HANDLING--//
   function updateTime() {
     const date = new Date()
@@ -998,54 +1005,80 @@ export default function Home() {
 
           {/* desktop/icons layout */}
           <div className="desktop-layout">
-            {/* <div id="icon" className="icon-archive">
+            <AnimatePresence>
+              {/* <div id="icon" className="icon-archive">
               <Button disableRipple onClick={archiveHandleOpen}>
                 <ArchiveIcon width="6vh" height="6vh"/>
                 <h1>Archive</h1>
               </Button>
-            </div> */}
+              </div> */}
 
-            {/* <div id="icon" className="icon-logs">
+              {/* <div id="icon" className="icon-logs">
               <Button disableRipple onClick={logsHandleOpen}>
                 <LogsIcon width="6vh" height="6vh"/>
                 <h1>Data Logs</h1>
               </Button>
-            </div> */}
+              </div> */}
 
-            {/* <div id="icon" className="icon-moon">
+              {/* <div id="icon" className="icon-moon">
               <Button disableRipple onClick={moonHandleOpen}>
                 <MoonStarIcon width="6vh" height="6vh"/>
                 <h1>Moon</h1>
               </Button>
-            </div> */}
+              </div> */}
 
-            <div id="icon" className="icon-documents">
-              <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() }}>
-                <FolderIcon width="6vh" height="6vh"/>
-                <h1>Documents</h1>
-              </Button>
-            </div>
+              <motion.div 
+                id="icon" 
+                key={1}
+                className="icon-documents" 
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 0.4 }}
+              >
+                <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() }}>
+                  <FolderIcon width="6vh" height="6vh"/>
+                  <h1>Documents</h1>
+                </Button>
+              </motion.div>
 
-            {/* <div id="icon" className="icon-portfolio">
+              <motion.div 
+                id="icon" 
+                key={2}
+                className="icon-moon"
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 0.8 }}
+              >
+                <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
+                  <ImagesIcon width="6vh" height="6vh"/>
+                  <h1>Pictures</h1>
+                </Button>
+              </motion.div>
+
+              {/* <div id="icon" className="icon-portfolio">
               <Button disableRipple onClick={portfolioHandleOpen}>
                 <PortfolioIcon width="6vh" height="6vh"/>
                 <h1>Portfolio</h1>
               </Button>
-            </div> */}
+              </div> */}
 
-            <div id="icon" className="icon-tutorial">
-              <Button disableRipple onClick={() => { handleAlertDescription("Coming soon"); alertHandleOpen() }}>
-                <ImageIcon width="6vh" height="6vh"/>
-                <h1>tutorial.png</h1>
-              </Button>
-            </div>
-
-            <div id="icon" className="icon-moon">
-              <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
-                <ImagesIcon width="6vh" height="6vh"/>
-                <h1>Pictures</h1>
-              </Button>
-            </div>
+              <motion.div 
+                id="icon" 
+                key={3}
+                className="icon-tutorial"
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 1.0 }}
+              >
+                <Button disableRipple onClick={() => { handleAlertDescription("Coming soon"); alertHandleOpen() }}>
+                  <ImageIcon width="6vh" height="6vh"/>
+                  <h1>tutorial.png</h1>
+                </Button>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
 

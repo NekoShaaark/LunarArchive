@@ -435,8 +435,33 @@ body {
     flex-direction: column;
     border: 4px solid #9665ff;
 }
+/* #endregion ------ */
+/* #endregion <======> */
 
-@media only screen and (max-width: 550px) {
+
+/* #region <===MOBILE OVERRIDES===> */
+/* #region ---550px--- */
+@media only screen and (max-width: 550px) { 
+    .navigation li {
+        padding-inline: 0;
+        width: auto;
+    }
+    .navigation span {
+        padding: 0;
+        gap: 0;
+        font-size: 0;
+    }
+
+    .desktop-layout {
+        grid-template-areas: 
+        "IconA1 IconB1 IconC1"
+        "IconA2 IconB2 IconC2"
+        "IconA3 IconB3 IconC3"
+        "IconA4 IconB4 IconC4"
+        "IconA5 IconB5 IconC5"; 
+    }
+    .icon-tutorial{ grid-area: IconA5; }
+
     #window-archive, 
     #window-logs, 
     #window-moon, 
@@ -451,14 +476,42 @@ body {
         left: 0px;
         border: 0;
     }
+}
+/* #endregion ------ */
+
+/* #region ---920px--- */
+@media only screen and (max-width: 920px) { 
     .navigation li {
-        padding-inline: 0;
+        /* padding-inline: 0; */
         width: auto;
     }
-    .navigation span {
+    /* .navigation span {
         padding: 0;
         gap: 0;
         font-size: 0;
+    } */
+
+    .desktop-layout {
+        grid-template-areas: 
+        "IconA1 IconB1 IconC1"
+        "IconA2 IconB2 IconC2"
+        "IconA3 IconB3 IconC3"; 
+    }
+    .icon-tutorial{ grid-area: IconA3; }
+
+    #window-archive, 
+    #window-logs, 
+    #window-moon, 
+    #window-documents, 
+    #window-portfolio,
+    #window-imageViewer,
+    #window-alert,
+    #window-textEditor {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        border: 0;
     }
 }
 /* #endregion ------ */
