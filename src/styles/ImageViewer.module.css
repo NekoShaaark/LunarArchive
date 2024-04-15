@@ -22,7 +22,16 @@
   font-family: eightBitFortress;
   font-size: larger;
   font-weight: 400;
-  border-top: 6px solid #9665ff;
+  border-top: 6px solid var(--globalColor);
   user-select: none;
   text-align: center;
+}
+
+/* MOBILE OVERRIDES */
+@media only screen and (max-width: 920px) {
+  .imageViewerBody {
+    height: 10%;
+    width: auto;
+    justify-content: flex-start;
+  }
 }

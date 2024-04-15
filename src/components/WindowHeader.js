@@ -1,13 +1,11 @@
 "use client"
 
-import Image from 'next/image'
 import styles from '@/styles/WindowHeader.module.css'
-import { CloseIcon, MinimizeIcon, RestoreIcon } from './SvgHandler'
+import { AlertIcon, ArchiveIcon, CloseIcon, FolderIcon, ImageViewerIcon, LogsIcon, MinimizeIcon, MoonStarIcon, NoteIcon, PortfolioIcon, RestoreIcon } from './SvgHandler'
 import { useEffect, useState } from 'react'
 
 export default function WindowHeader({headerName, selectedIcon, setClose, setMinimize, newHeaderName, removeMinimize, keepMaximize}) {
   const [windowHeaderName, setWindowHeaderName] = useState()
-  var displayIconLocation = `icons/${selectedIcon}.svg`
 
   function handleClose(){
     setClose()
@@ -26,7 +24,14 @@ export default function WindowHeader({headerName, selectedIcon, setClose, setMin
 
   return ( 
     <div id={styles.header}>
-      <Image id={styles.displayIcon} src={displayIconLocation} alt="Icon" width={24} height={24}/>
+      { selectedIcon == "alertIcon" && <AlertIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "archiveIcon" && <ArchiveIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "folderIcon" && <FolderIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "imageViewerIcon" && <ImageViewerIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "logsIcon" && <LogsIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "moonStarIcon" && <MoonStarIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "noteIcon" && <NoteIcon id={styles.displayIcon} width={24} height={24}/> }
+      { selectedIcon == "portfolioIcon" && <PortfolioIcon id={styles.displayIcon} width={24} height={24}/> }
       
       <h1 className={styles.name}>
         {windowHeaderName}

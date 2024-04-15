@@ -11,7 +11,7 @@
 }
 
 .text {
-  color: #9665ff;
+  color: var(--globalColor);
   margin: 0;
   padding-left: 10px;
   align-self: center;
@@ -25,7 +25,7 @@
   height: 4vh;
   width: 100%;
   flex-direction: row;
-  border-bottom: 4px solid #9665ff;
+  border-bottom: 4px solid var(--globalColor);
   background-color: #000;
 }
 
@@ -53,15 +53,15 @@
   width: 75%;
   align-items: center;
   justify-content: center;
-  fill: #9665ff;
+  fill: var(--globalColor);
   flex-direction: column;
   border: 6px solid rgba(0, 0, 0, 0);
   border-radius: 0;
   pointer-events: none;
 }
 .icon:hover {
-  border: 6px solid rgba(106, 64, 197, 0.5);
-  background-color: rgba(44, 24, 87, 0.5);
+  border: 6px solid var(--globalHoverBorderColor);
+  background-color: var(--globalHoverBackgroundColor);
   border-radius: 0;
 }
 
@@ -72,7 +72,7 @@
 
 .iconContents {
   display: flex;
-  color: #9665ff;
+  color: var(--globalColor);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -83,10 +83,10 @@
 
 .backButton {
   display: flex;
-  fill: #9665ff;
+  fill: var(--globalColor);
 }
 .backButton:hover {
-  fill: rgb(106, 58, 209);
+  fill: var(--globalColorHover);
 }
 
 

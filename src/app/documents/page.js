@@ -30,11 +30,13 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
 
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
   const [typewriterDelay, setTypewriterDelay] = useState(20)
+  const [globalColor, setGlobalColor] = useState()
   var dirToOpen = `${currentOpenDir}`
 
 
   useEffect(() => {
     closeAllFolders()
+    setGlobalColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor'))
     // console.log("toOpen: " + dirToOpen)
     switch(dirToOpen){
       case "Documents": setDocumentsFolderOpen(true); setCurrentReadableDirectory("/Users/Neko/Sys/Documents"); break
@@ -54,42 +56,42 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         {
           id: "00",
           name: "Archives",
-          icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+          icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
           files: [
             {
               id: "000",
               name: "Discord Stuffies",
-              icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+              icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0000",
                   name: "accepted_Ideas",
-                  icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+                  icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
                       id: "00000",
                       name: "missingChildren.txt",
                       fileType: "Text",
-                      icon: <NoteIcon fill="#9665ff" width={48} height={48}/>
+                      icon: <NoteIcon fill={globalColor} width={48} height={48}/>
                     },
                     {
                       id: "00001",
                       name: "evilNekoVirus.exe",
                       fileType: "Text",
-                      icon: <NoteIcon fill="#9665ff" width={48} height={48}/>
+                      icon: <NoteIcon fill={globalColor} width={48} height={48}/>
                     }
                   ]
                 },
                 {
                   id: "0001",
                   name: "Rejected_ideas",
-                  icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+                  icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
                       id: "00010",
                       name: "blackHole.txt",
                       fileType: "Text",
-                      icon: <NoteIcon fill="#9665ff" width={48} height={48}/>
+                      icon: <NoteIcon fill={globalColor} width={48} height={48}/>
                     }
                   ]
                 },
@@ -99,7 +101,7 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
               id: "001",
               name: "Something.txt",
               fileType: "Text",
-              icon: <NoteIcon fill="#9665ff" width={48} height={48}/>
+              icon: <NoteIcon fill={globalColor} width={48} height={48}/>
             }
           ]
         },
@@ -120,43 +122,43 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
             {
               id: "011",
               name: "More Games",
-              icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+              icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0110",
                   name: "Skadoodle.exe",
                   fileType: "exe",
-                  icon: <ChessIcon fill="#9665ff" width={48} height={48}/>
+                  icon: <ChessIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
                   id: "0111",
                   name: "ScoobyDoo2.exe",
                   fileType: "exe",
-                  icon: <BugIcon fill="#9665ff" width={48} height={48}/>
+                  icon: <BugIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
                   id: "0112",
                   name: "HomeWwo.png",
                   fileType: "Image",
                   description: `"I always used to hate algebra..."`,
-                  icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
+                  icon: <ImageIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
                   id: "0113",
                   name: "MathSolver3.2.exe",
                   fileType: "exe",
-                  icon: <BugIcon fill="#9665ff" width={48} height={48}/>,
+                  icon: <BugIcon fill={globalColor} width={48} height={48}/>,
                 },
                 {
                   id: "0114",
                   name: "Heomework",
-                  icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+                  icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
                       id: "01140",
                       name: "Skadoodle2.exe",
                       fileType: "exe",
-                      icon: <ChessIcon fill="#9665ff" width={48} height={48}/>
+                      icon: <ChessIcon fill={globalColor} width={48} height={48}/>
                     },
                     {
                       id: "01141",
@@ -171,20 +173,20 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
                   id: "0115",
                   name: "MathSolver.exe",
                   fileType: "exe",
-                  icon: <BugIcon fill="#9665ff" width={48} height={48}/>,
+                  icon: <BugIcon fill={globalColor} width={48} height={48}/>,
                 }
               ]
             },
             {
               id: "012",
               name: "N3w fO1d3r",
-              icon: <FolderIcon fill="#9665ff" width={48} height={48}/>,
+              icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0120",
                   name: "sakhduh23.exe",
                   fileType: "exe",
-                  icon: <BugIcon fill="#9665ff" width={48} height={48}/>
+                  icon: <BugIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
                   id: "0121",
@@ -306,21 +308,21 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           name: "Beach.png",
           fileType: "Image",
           description: `"Our time at the Beach."`,
-          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
           id: "11",
           name: "Sunset.jpeg",
           fileType: "Image",
           description: `"I love this Sunset.."`,
-          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
           id: "12",
           name: "worldMachine.png",
           fileType: "Image",
           description: `"Wonder how The Machine was made..."`,
-          icon: <ImageIcon fill="#9665ff" width={48} height={48}/>
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         }
       ]
     },

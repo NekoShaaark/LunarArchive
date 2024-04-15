@@ -1,0 +1,69 @@
+.settingsBody {
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  background-blend-mode: overlay, overlay, overlay, normal;
+  background-size: auto;
+  background-repeat: no-repeat;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  height: inherit;
+  width: inherit;
+  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(2, 50%);
+  grid-template-rows: repeat(3, auto-fit);
+  grid-template-areas: 
+    "IconA1 IconB1"
+    "IconA2 IconB2"
+    "IconA3 IconB3";
+  /* align-items: center; */
+  /* justify-items: center; */
+  margin: 12px;
+  gap: 14px 10px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  font-family: eightbitFortress;
+  font-weight: 400;
+  font-size: small;
+  margin-inline: 12px;
+  gap: 8px;
+}
+
+.name {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 4px 4px; /* top and bottom | left and right */
+  justify-content: center;
+  font-weight: 400;
+  user-select: none;
+  color: var(--globalColor);
+}
+
+.button {
+  display: flex;
+  width: 100%;
+  margin-inline: 12px;
+  flex-direction: row;
+  border-top: 4px solid var(--globalColor);
+  border-bottom: 4px solid var(--globalColor);
+}
+
+.icon {
+  display: flex;
+  background: var(--globalColor);
+  border-inline: 4px solid var(--globalColor);
+  border-radius: 0;
+}

@@ -8,36 +8,48 @@
     --logs-background-gradient: linear-gradient(183deg, #007be0 20%, #000 95%);
     --moon-background-gradient: linear-gradient(112.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(157.5deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(135deg, rgb(214, 214, 214) 0%, rgb(214, 214, 214) 10%,rgb(195, 195, 195) 10%, rgb(195, 195, 195) 53%,rgb(176, 176, 176) 53%, rgb(176, 176, 176) 55%,rgb(157, 157, 157) 55%, rgb(157, 157, 157) 60%,rgb(137, 137, 137) 60%, rgb(137, 137, 137) 88%,rgb(118, 118, 118) 88%, rgb(118, 118, 118) 91%,rgb(99, 99, 99) 91%, rgb(99, 99, 99) 100%),linear-gradient(90deg, rgb(195, 195, 195),rgb(228, 228, 228)); 
     
+    --globalColor: #9665ff;
+    --globalColorHover: #6a3ad1;
+    --globalHoverBorderColor: rgba(106, 64, 197, 0.5);
+    --globalHoverBackgroundColor: rgba(44, 24, 87, 0.5);
+    /* --globalColor: #c31c1c; */
+    /* --globalColorHover: #d13a3a; */
+    /* --globalHoverBorderColor: rgba(197, 64, 64, 0.5); */
+    /* --globalHoverBackgroundColor: rgba(87, 24, 24, 0.5); */
+    
+    --desktopWallpaper: url("/Wallpapers/Wallpaper-Starry.webp");
+    --desktopWallpaperBrightness: 0;
+
     --navbarArchiveBackgroundColor: #000;
-    --navbarArchiveSelectedColor: #9665ff;
+    --navbarArchiveSelectedColor: var(--globalColor);
     --navbarArchiveOrder: 1;
     
     --navbarLogsBackgroundColor: #000;
-    --navbarLogsSelectedColor: #9665ff;
+    --navbarLogsSelectedColor: var(--globalColor);
     --navbarLogsOrder: 2;
 
-    --navbarMoonBackgroundColor: #000;
-    --navbarMoonSelectedColor: #9665ff;
-    --navbarMoonOrder: 3;
+    --navbarSettingsBackgroundColor: #000;
+    --navbarSettingsSelectedColor: var(--globalColor);
+    --navbarSettingsOrder: 3;
 
     --navbarDocumentsBackgroundColor: #000;
-    --navbarDocumentsSelectedColor: #9665ff;
+    --navbarDocumentsSelectedColor: var(--globalColor);
     --navbarDocumentsOrder: 4;
 
     --navbarPortfolioBackgroundColor: #000;
-    --navbarPortfolioSelectedColor: #9665ff;
+    --navbarPortfolioSelectedColor: var(--globalColor);
     --navbarPortfolioOrder: 5;
 
     --navbarImageViewerBackgroundColor: #000;
-    --navbarImageViewerSelectedColor: #9665ff;
+    --navbarImageViewerSelectedColor: var(--globalColor);
     --navbarImageViewerOrder: 6;
 
     --navbarAlertBackgroundColor: #000;
-    --navbarAlertSelectedColor: #9665ff;
+    --navbarAlertSelectedColor: var(--globalColor);
     --navbarAlertOrder: 7;
 
     --navbarTextEditorBackgroundColor: #000;
-    --navbarTextEditorSelectedColor: #9665ff;
+    --navbarTextEditorSelectedColor: var(--globalColor);
     --navbarTextEditorOrder: 8;
 
     --everythingButAlertBlur: 0px;
@@ -95,7 +107,7 @@ body {
     width: 100%;
     padding: 5px 5px;
     background-color: #000;
-    border-top: 4px solid #9665ff;
+    border-top: 4px solid var(--globalColor);
 }
 
 /* #region ---primary--- */
@@ -115,12 +127,12 @@ body {
     padding: 12px;
     width: 16vh;
     background-color: #000;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 .navigation button {
     display: flex;
     align-items: flex-end;
-    color: #9665ff;
+    color: var(--globalColor);
     text-decoration: none;
     font-family: eightBitFortress;
     font-size: medium;
@@ -148,11 +160,11 @@ body {
     fill: var(--navbarLogsSelectedColor);
 }
 
-.navigation .moon { background-color: var(--navbarMoonBackgroundColor); order: var(--navbarMoonOrder); }
-.navigation .moon button:hover { fill: #fff; }
-.navigation .moon button { 
-    color: var(--navbarMoonSelectedColor);
-    fill: var(--navbarMoonSelectedColor);
+.navigation .settings { background-color: var(--navbarSettingsBackgroundColor); order: var(--navbarSettingsOrder); }
+.navigation .settings button:hover { fill: #fff; }
+.navigation .settings button { 
+    color: var(--navbarSettingsSelectedColor);
+    fill: var(--navbarSettingsSelectedColor);
 }
 
 .navigation .documents { background-color: var(--navbarDocumentsBackgroundColor); order: var(--navbarDocumentsOrder); }
@@ -204,7 +216,7 @@ body {
     display: flex;
     position: relative;
     margin-left: auto;
-    color: #9665ff;
+    color: var(--globalColor);
     font-family: eightBitFortress;
     font-size: medium;
     font-weight: 400;
@@ -223,7 +235,7 @@ body {
     user-select: none;
 }
 .navigation-secondary .something div {
-    fill: #9665ff;
+    fill: var(--globalColor);
     cursor: pointer;
     :hover{
         fill: #007be0;
@@ -243,7 +255,8 @@ body {
     width: 100%;
     z-index: 1;
     /* background: yellow; */
-    background: url("/starryBackground.webp");
+    background: var(--desktopWallpaper);
+    background-color: rgba(0, 0, 0, var(--desktopWallpaperBrightness));
     background-blend-mode: overlay, overlay, overlay, normal;
     background-size: auto;
     background-repeat: no-repeat;
@@ -299,11 +312,12 @@ body {
         "IconA5 IconB5 IconC5"
         "IconA6 IconB6 IconC6"; 
 }
-.icon-archive{ grid-area: IconC1; }
-.icon-logs{ grid-area: IconB1; }
+/* .icon-archive{ grid-area: IconC1; } */
+/* .icon-logs{ grid-area: IconB1; } */
 .icon-documents{ grid-area: IconA1; }
-.icon-moon{ grid-area: IconA2; } 
-.icon-portfolio{ grid-area: IconB5; } 
+.icon-pictures{ grid-area: IconA2; } 
+.icon-settings{ grid-area: IconA3; }
+/* .icon-portfolio{ grid-area: IconB5; }  */
 .icon-tutorial{ grid-area: IconA6; }
 
 #icon{
@@ -311,13 +325,13 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    fill: #9665ff;
+    fill: var(--globalColor);
     border: 6px solid rgba(0, 0, 0, 0);
     pointer-events: none;
     h1{ 
         padding: 0 4px;
         margin: 0;
-        color: #9665ff;
+        color: var(--globalColor);
         background: #000;
         font-size: medium;
         font-weight: 400;
@@ -330,12 +344,13 @@ body {
         align-items: center;
         flex-direction: column;
         text-decoration: none;
+        filter: drop-shadow(-3px 2px 2px rgba(0, 0, 0, 0.36));
         pointer-events: auto;
     }
 }
 #icon:hover{
-    border: 6px solid rgba(106, 64, 197, 0.5);
-    background-color: rgba(44, 24, 87, 0.5);
+    border: 6px solid var(--globalHoverBorderColor);
+    background-color: var(--globalHoverBackgroundColor);
 }
 /* #endregion ------ */
 
@@ -359,7 +374,7 @@ body {
     top: 200px;
     left: 200px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
 #window-logs{
@@ -370,17 +385,17 @@ body {
     left: 800px;
     overflow-y: scroll;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
-#window-moon{
+#window-settings{
     display: flex;
-    width: 40vh;
-    height: 30vh;
-    top: 130px;
-    left: 600px;
+    width: 80vh;
+    height: 40vh;
+    top: 220px;
+    left: 300px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
 #window-documents{
@@ -390,10 +405,10 @@ body {
     top: 160px;
     left: 400px;
     flex-direction: column;
-    /* border-image: linear-gradient(to bottom, #9665ff 40%, rgba(0, 0, 0, 0)) 1 / 4px;
+    /* border-image: linear-gradient(to bottom, var(--globalColor) 40%, rgba(0, 0, 0, 0)) 1 / 4px;
     border-width: 4px;
     border-style: solid; */
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
 #window-portfolio{
@@ -412,7 +427,7 @@ body {
     top: 140px;
     left: 360px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
 #window-alert{
@@ -423,7 +438,7 @@ body {
     top: 260px;
     left: 750px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 
 #window-textEditor{
@@ -433,7 +448,7 @@ body {
     top: 220px;
     left: 260px;
     flex-direction: column;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
 }
 /* #endregion ------ */
 /* #endregion <======> */

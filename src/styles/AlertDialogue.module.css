@@ -10,7 +10,7 @@
 
 .text {
   display: flex;
-  color: #9665ff;
+  color: var(--globalColor);
   user-select: none;
   font-family: eightBitFortress;
   font-size: x-large;

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from '@/components/SvgHandler'
+import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, settingsStarIcon, NoteIcon, PortfolioIcon, MoonStarIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
@@ -9,7 +9,7 @@ import { AnimatePresence, motion, useAnimate } from 'framer-motion'
 import WindowHeader from '@/components/WindowHeader'
 import archiveStyles from '@/styles/Archive.module.css'
 import logsStyles from '@/styles/Logs.module.css'
-import moonStyles from '@/styles/Moon.module.css'
+import settingsStyles from '@/styles/Settings.module.css'
 import documentsStyles from '@/styles/Documents.module.css'
 import portfolioStyles from '@/styles/Portfolio.module.css'
 import imageViewerStyles from '@/styles/ImageViewer.module.css'
@@ -18,7 +18,7 @@ import textEditorStyles from '@/styles/TextEditor.module.css'
 
 import Archive from './archive/page'
 import Logs from './logs/page'
-import Moon from './moon/page'
+import Settings from './settings/page'
 import Documents from './documents/page'
 import Portfolio from './portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
@@ -40,7 +40,7 @@ export default function Home() {
   //minimize animation states
   const [archiveMinimize, archiveAnimate] = useAnimate()
   const [logsMinimize, logsAnimate] = useAnimate()
-  const [moonMinimize, moonAnimate] = useAnimate()
+  const [settingsMinimize, settingsAnimate] = useAnimate()
   const [documentsMinimize, documentsAnimate] = useAnimate()
   const [portfolioMinimize, portfolioAnimate] = useAnimate()
   const [imageViewerMinimize, imageViewerAnimate] = useAnimate()
@@ -49,7 +49,7 @@ export default function Home() {
   //window open states
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
   const [logsWindowOpen, setLogsWindowOpen] = useState(false)
-  const [moonWindowOpen, setMoonWindowOpen] = useState(false)
+  const [settingsWindowOpen, setSettingsWindowOpen] = useState(false)
   const [documentsWindowOpen, setDocumentsWindowOpen] = useState(false)
   const [portfolioWindowOpen, setPortfolioWindowOpen] = useState(false)
   const [imageViewerWindowOpen, setImageViewerWindowOpen] = useState(false)
@@ -59,7 +59,7 @@ export default function Home() {
   //window minimized states
   const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
   const [logsWindowMinimized, setLogsWindowMinimized] = useState(false)
-  const [moonWindowMinimized, setMoonWindowMinimized] = useState(false)
+  const [settingsWindowMinimized, setSettingsWindowMinimized] = useState(false)
   const [documentsWindowMinimized, setDocumentsWindowMinimized] = useState(false)
   const [portfolioWindowMinimized, setPortfolioWindowMinimized] = useState(false)
   const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
@@ -179,8 +179,8 @@ export default function Home() {
         await logsAnimate(logsMinimize.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
         break
 
-      case "moon":
-        await moonAnimate(moonMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+      case "settings":
+        await settingsAnimate(settingsMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "documents":
@@ -211,8 +211,8 @@ export default function Home() {
         await logsAnimate(logsMinimize.current, { y: 0 }, { duration: 0.4 })
         break
 
-      case "moon":
-        await moonAnimate(moonMinimize.current, { y: 0 }, { duration: 0.4 })
+      case "settings":
+        await settingsAnimate(settingsMinimize.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "documents":
@@ -322,48 +322,43 @@ export default function Home() {
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   
-  const moonHandleOpen = () => { 
+  const settingsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
     if(alertWindowOpen){ return }
 
-    if(denyAccess){
-      alertHandleOpen()
-      return
-    }
-
-    setMoonWindowOpen(true) 
-    setCurrentFocusedWindow("moon") 
+    setSettingsWindowOpen(true) 
+    setCurrentFocusedWindow("settings") 
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(moonWindowMinimized){
-      pullWindowAnimation("moon")
-      setMoonWindowMinimized(false)
+    if(settingsWindowMinimized){
+      pullWindowAnimation("settings")
+      setSettingsWindowMinimized(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("moon") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "moon"]) //add "moon" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "moon"])
+    if(currentWindowsOpen.indexOf("settings") == -1){
+      setCurrentWindowsOpen([...currentWindowsOpen, "settings"]) //add "settings" to the array
+      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "settings"])
       setNavbarOrder("open")
     }
   }
-  const moonHandleClose = () => { 
+  const settingsHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
     if(alertWindowOpen){ return }
 
-    setMoonWindowOpen(false) 
+    setSettingsWindowOpen(false) 
     setChangeFocusedWindow(true) 
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
-  const moonHandleMinimize = () => {
+  const settingsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
     if(alertWindowOpen){ return }
 
     setChangeFocusedWindow(true) 
-    setMoonWindowMinimized(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "moon")) //remove "moon" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "moon"))
+    setSettingsWindowMinimized(true)
+    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
+    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
 
   const documentsHandleOpen = () => { 
@@ -588,7 +583,7 @@ export default function Home() {
   function setActiveWindow(currentActiveWindow){
     var archiveWindow = document.getElementById("window-archive")
     var logsWindow = document.getElementById("window-logs")
-    var moonWindow = document.getElementById("window-moon")
+    var settingsWindow = document.getElementById("window-settings")
     var documentsWindow = document.getElementById("window-documents")
     var portfolioWindow = document.getElementById("window-portfolio")
     var imageViewerWindow = document.getElementById("window-imageViewer")
@@ -603,7 +598,7 @@ export default function Home() {
     //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
     var archiveIndex = currentWindowsOpen.indexOf("archive") + 10
     var logsIndex = currentWindowsOpen.indexOf("logs") + 10
-    var moonIndex = currentWindowsOpen.indexOf("moon") + 10
+    var settingsIndex = currentWindowsOpen.indexOf("settings") + 10
     var documentsIndex = currentWindowsOpen.indexOf("documents") + 10
     var portfolioIndex = currentWindowsOpen.indexOf("portfolio") + 10
     var imageViewerIndex = currentWindowsOpen.indexOf("imageViewer") + 10
@@ -614,7 +609,7 @@ export default function Home() {
     if(currentActiveWindow == "none"){
       archiveWindow ? archiveWindow.style.zIndex = 9 : null
       logsWindow ? logsWindow.style.zIndex = 9 : null
-      moonWindow ? moonWindow.style.zIndex = 9 : null
+      settingsWindow ? settingsWindow.style.zIndex = 9 : null
       documentsWindow ? documentsWindow.style.zIndex = 9 : null
       portfolioWindow ? portfolioWindow.style.zIndex = 9 : null
       imageViewerWindow ? imageViewerWindow.style.zIndex = 9 : null
@@ -630,7 +625,7 @@ export default function Home() {
     //if window exists, set zIndex to above grabbed zIndex, otherwise set to null
     archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
     logsWindow ? logsWindow.style.zIndex = logsIndex : null
-    moonWindow ? moonWindow.style.zIndex = moonIndex : null
+    settingsWindow ? settingsWindow.style.zIndex = settingsIndex : null
     documentsWindow ? documentsWindow.style.zIndex = documentsIndex : null
     portfolioWindow ? portfolioWindow.style.zIndex = portfolioIndex : null
     imageViewerWindow ? imageViewerWindow.style.zIndex = imageViewerIndex : null
@@ -649,9 +644,9 @@ export default function Home() {
         setCurrentFocusedWindow("logs")
         break
 
-      case "moon":
-        setNavbarColors("moon")
-        setCurrentFocusedWindow("moon")
+      case "settings":
+        setNavbarColors("settings")
+        setCurrentFocusedWindow("settings")
         break
 
       case "documents":
@@ -685,70 +680,75 @@ export default function Home() {
 
   //set navbar colors
   function setNavbarColors(currentSelectedIcon){
+
+    //get root style of icons, and get globalColor ":root" style
+    //NOTE: rootStyle is the local rootStyle (non-computed), while globalColor (computed) references the actual global variables 
     var rootStyle = document.documentElement.style
+    var globalColor = getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor')
+    // console.log("globalColor: " + globalColor)
     console.log(currentSelectedIcon)
 
     //set all to false, and set only one to true
     rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
     rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarMoonBackgroundColor', '#000')
+    rootStyle.setProperty('--navbarSettingsBackgroundColor', '#000')
     rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
     rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#000')
     rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
     rootStyle.setProperty('--navbarAlertBackgroundColor', '#000')
     rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#000')
   
-    rootStyle.setProperty('--navbarArchiveSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarLogsSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarMoonSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarDocumentsSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarPortfolioSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarImageViewerSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarAlertSelectedColor', '#9665ff')
-    rootStyle.setProperty('--navbarTextEditorSelectedColor', '#9665ff')
+    rootStyle.setProperty('--navbarArchiveSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarLogsSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarSettingsSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarDocumentsSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarPortfolioSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarImageViewerSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarAlertSelectedColor', globalColor)
+    rootStyle.setProperty('--navbarTextEditorSelectedColor', globalColor)
 
     rootStyle.setProperty('--everythingButAlertBlur', '0px')
 
     //set a specific icon to be active
     switch(currentSelectedIcon){
       case "archive":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarArchiveBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
         break
 
       case "logs":
-        rootStyle.setProperty('--navbarLogsBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarLogsBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
         break
       
-      case "moon":
-        rootStyle.setProperty('--navbarMoonBackgroundColor', '#9665ff')
-        rootStyle.setProperty('--navbarMoonSelectedColor', '#000')
+      case "settings":
+        rootStyle.setProperty('--navbarSettingsBackgroundColor', globalColor)
+        rootStyle.setProperty('--navbarSettingsSelectedColor', '#000')
         break
 
       case "documents":
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarDocumentsBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarDocumentsSelectedColor', '#000')
         break
 
       case "portfolio":
-        rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarPortfolioBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarPortfolioSelectedColor', '#000')
         break
 
       case "imageViewer":
-        rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarImageViewerBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarImageViewerSelectedColor', '#000')
         break
 
       case "alert":
-        rootStyle.setProperty('--navbarAlertBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarAlertBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarAlertSelectedColor', '#000')
         rootStyle.setProperty('--everythingButAlertBlur', '1px')
         break
 
       case "textEditor":
-        rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#9665ff')
+        rootStyle.setProperty('--navbarTextEditorBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarTextEditorSelectedColor', '#000')
         break
     }
@@ -788,9 +788,9 @@ export default function Home() {
           // console.log("wow logs")
           break
 
-        case "moon":
-          rootStyle.setProperty('--navbarMoonOrder', indexOfIcon)
-          // console.log("wow moon")
+        case "settings":
+          rootStyle.setProperty('--navbarSettingsOrder', indexOfIcon)
+          // console.log("wow settings")
           break
 
         case "documents":
@@ -821,6 +821,43 @@ export default function Home() {
     }
   }
 
+
+  //--ONCE ON SERVER INIT FOR LOCAL STORAGE SETTING--//
+  useEffect(() => {
+
+    //find local storage, and handle
+    if(typeof(Storage) !== "undefined"){
+      var rootStyle = document.documentElement.style
+
+      //if there is no wallpaper, set all to default
+      if(localStorage.getItem("selectedWallpaper") == null){
+        console.log("what the heck man i'm setting initial local storage here")
+
+        rootStyle.setProperty("--desktopWallpaper", "/Wallpapers/Wallpaper-Starry.webp")
+        rootStyle.setProperty("--globalColor", "#9665ff")
+        rootStyle.setProperty("--globalColorHover", "#6a3ad1")
+        rootStyle.setProperty("--globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")
+        rootStyle.setProperty("--globalHoverBackgroundColor", "rgba(44, 24, 87, 0.5)")
+        
+        localStorage.setItem("selectedWallpaper", "Starry")
+        localStorage.setItem("selectedTheme", "Purple")
+        localStorage.setItem("desktopWallpaper", `url("/Wallpapers/Wallpaper-Starry.webp")`)
+        localStorage.setItem("globalColor", "#9665ff")
+        localStorage.setItem("globalColorHover", "#6a3ad1")
+        localStorage.setItem("globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")
+        localStorage.setItem("globalHoverBackgroundColor", "rgba(44, 24, 87, 0.5)")
+        return
+      }
+
+      //set css properties according to last usage
+      rootStyle.setProperty("--desktopWallpaper", localStorage.getItem("desktopWallpaper"))
+      rootStyle.setProperty("--globalColor", localStorage.getItem("globalColor"))
+      rootStyle.setProperty("--globalColorHover", localStorage.getItem("globalColorHover"))
+      rootStyle.setProperty("--globalHoverBorderColor", localStorage.getItem("globalHoverBorderColor"))
+      rootStyle.setProperty("--globalHoverBackgroundColor", localStorage.getItem("globalHoverBackgroundColor"))
+    }
+  }, [])
+
   //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
     
@@ -841,7 +878,7 @@ export default function Home() {
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, moonWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen, 
+  }, [archiveWindowOpen, logsWindowOpen, settingsWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen, 
       alertWindowOpen, textEditorWindowOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
@@ -851,12 +888,12 @@ export default function Home() {
     //play animation to drop window below navbar
     if(archiveWindowMinimized){ dropWindowAnimation("archive") }
     if(logsWindowMinimized){ dropWindowAnimation("logs") }
-    if(moonWindowMinimized){ dropWindowAnimation("moon") }
+    if(settingsWindowMinimized){ dropWindowAnimation("settings") }
     if(documentsWindowMinimized){ dropWindowAnimation("documents") }
     if(portfolioWindowMinimized){ dropWindowAnimation("portfolio") }
     if(imageViewerWindowMinimized){ dropWindowAnimation("imageViewer") }
     if(textEditorWindowMinimized){ dropWindowAnimation("textEditor") }
-  }, [archiveWindowMinimized, logsWindowMinimized, moonWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
+  }, [archiveWindowMinimized, logsWindowMinimized, settingsWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
       imageViewerWindowMinimized, textEditorWindowMinimized])
 
 
@@ -899,9 +936,9 @@ export default function Home() {
             moveElementInArray(currentWindowsOpen, "logs")
             break
 
-          case "window-moon":
-            setActiveWindow("moon")
-            moveElementInArray(currentWindowsOpen, "moon")
+          case "window-settings":
+            setActiveWindow("settings")
+            moveElementInArray(currentWindowsOpen, "settings")
             break
 
           case "window-documents":
@@ -999,7 +1036,7 @@ export default function Home() {
     <div className="layout">
       <div className="layout-content"> 
         {/* background video */}
-        <video className="backgroundVideo" src='videoLoop.webm' autoPlay loop muted preload="auto"/>
+        {/* <video className="backgroundVideo" src="videoLoop.webm" autoPlay loop muted preload="auto"/> */}
 
         <ThemeProvider theme={theme}>
 
@@ -1017,13 +1054,6 @@ export default function Home() {
               <Button disableRipple onClick={logsHandleOpen}>
                 <LogsIcon width="6vh" height="6vh"/>
                 <h1>Data Logs</h1>
-              </Button>
-              </div> */}
-
-              {/* <div id="icon" className="icon-moon">
-              <Button disableRipple onClick={moonHandleOpen}>
-                <MoonStarIcon width="6vh" height="6vh"/>
-                <h1>Moon</h1>
               </Button>
               </div> */}
 
@@ -1045,7 +1075,7 @@ export default function Home() {
               <motion.div 
                 id="icon" 
                 key={2}
-                className="icon-moon"
+                className="icon-pictures"
                 variants={fadeIn}
                 initial="initial"
                 animate="animate"
@@ -1054,6 +1084,21 @@ export default function Home() {
                 <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
                   <ImagesIcon width="6vh" height="6vh"/>
                   <h1>Pictures</h1>
+                </Button>
+              </motion.div>
+
+              <motion.div 
+                id="icon" 
+                key={3}
+                className="icon-settings" 
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 0.6 }}
+              >
+                <Button disableRipple onClick={settingsHandleOpen}>
+                  <MoonStarIcon width="6vh" height="6vh"/>
+                  <h1>Settings</h1>
                 </Button>
               </motion.div>
 
@@ -1066,7 +1111,7 @@ export default function Home() {
 
               <motion.div 
                 id="icon" 
-                key={3}
+                key={4}
                 className="icon-tutorial"
                 variants={fadeIn}
                 initial="initial"
@@ -1135,13 +1180,13 @@ export default function Home() {
             }
           </AnimatePresence>
 
-          {/* moon window */}
+          {/* settings window */}
           <AnimatePresence>
-            {moonWindowOpen &&
+            {settingsWindowOpen &&
               <motion.div 
-                id="window-moon" 
+                id="window-settings" 
                 className="draggable"
-                ref={moonMinimize}
+                ref={settingsMinimize}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
@@ -1149,11 +1194,11 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName="Moon" selectedIcon="moonStarIcon" setClose={moonHandleClose} setMinimize={moonHandleMinimize}/>
+                  <WindowHeader headerName="Settings" selectedIcon="moonStarIcon" setClose={settingsHandleClose} setMinimize={settingsHandleMinimize}/>
                 </div>
 
-                <div className={moonStyles.moonBody}>
-                  <Moon/>
+                <div className={settingsStyles.settingsBody}>
+                  <Settings/>
                 </div>
               </motion.div>
             }
@@ -1357,20 +1402,20 @@ export default function Home() {
                 }
               </AnimatePresence>
 
-              {/* moon navbar icon */}
+              {/* settings navbar icon */}
               <AnimatePresence>
-                {moonWindowOpen &&
+                {settingsWindowOpen &&
                   <motion.li 
-                    className="moon"
+                    className="settings"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -6 }}
                     transition={{ duration: 0.5 }}
                   >
                     <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={moonHandleOpen}>
+                      <Button disableRipple onClick={settingsHandleOpen}>
                         <MoonStarIcon width={24} height={24}/>
-                        <span>{"Moon"}</span>
+                        <span>{"Settings"}</span>
                       </Button>
                     </ThemeProvider>
                   </motion.li>

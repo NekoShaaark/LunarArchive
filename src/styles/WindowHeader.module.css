@@ -3,7 +3,7 @@
     width: 100%;
     height: auto;
     /* justify-content: center; */
-    border-bottom: 8px solid #9665ff;
+    border-bottom: 8px solid var(--globalColor);
     background-color: #000;
     font-family: eightbitFortress;
 }
@@ -18,7 +18,7 @@
     font-size: medium;
     font-weight: 400;
     user-select: none;
-    color: #9665ff;
+    color: var(--globalColor);
 }
 .systemIcons {
     display: inline-flex;
@@ -30,7 +30,7 @@
 }
 
 #systemIcon {
-    background-color: #9665ff;
+    background-color: var(--globalColor);
     border-top: 4px solid #000;
     border-bottom: 4px solid #000;
 }
@@ -38,35 +38,36 @@
     display: inline-flex;
     margin: auto 4px; /* top and bottom | left and right */
     user-select: none;
+    fill: var(--globalColor);
 }
 
 .closeIcon {
-    background-color: #9665ff;
+    background-color: var(--globalColor);
     border-top: 4px solid #000;
     border-bottom: 4px solid #000;
 }
 .closeIcon:hover {
     cursor: pointer;
-    background-color: #ff4b4b;
+    background-color: #d13a3a;
 }
 
 .maximizeIcon {
-    background-color: #9665ff;
+    background-color: var(--globalColor);
     border-top: 4px solid #000;
     border-bottom: 4px solid #000;
     transform: scaleX(-1);
 }
 .maximizeIcon:hover {
     cursor: pointer;
-    background-color: hwb(259 28% 0%);
+    background-color: var(--globalColorHover);
 }
 
 .minimizeIcon {
-    background-color: #9665ff;
+    background-color: var(--globalColor);
     border-top: 4px solid #000;
     border-bottom: 4px solid #000;
 }
 .minimizeIcon:hover {
     cursor: pointer;
-    background-color: hwb(259 28% 0%);
+    background-color: var(--globalColorHover);
 }
