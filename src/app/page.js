@@ -45,6 +45,12 @@ export default function Home() {
   const [portfolioMinimize, portfolioAnimate] = useAnimate()
   const [imageViewerMinimize, imageViewerAnimate] = useAnimate()
   const [textEditorMinimize, textEditorAnimate] = useAnimate()
+
+  //desktop settings states
+  const [selectedWallpaper, setSelectedWallpaper] = useState("Starry")
+  const [selectedTheme, setSelectedTheme] = useState("Purple")
+  const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
+  const [brightnessValue, setBrightnessValue] = useState(100)
   
   //window open states
   const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
@@ -86,6 +92,30 @@ export default function Home() {
   const [currentNotusText, setCurrentNotusText] = useState()
   const [notusHeaderName, setNotusHeaderName] = useState("Text Editor")
   const [currentNotusFile, setCurrentNotusFile] = useState("Text Editor")
+
+
+  //--DESKTOP SETTINGS HANDLING--//
+  const handleSelectedWallpaper = async (e) => {
+    if(!e){ console.log("woahhhhhh selectedWallpaper undefined"); return }
+    console.log("currentWallpaper: " + selectedWallpaper)
+    console.log("passingWallpaper: " + e)
+    setSelectedWallpaper(e)
+  }
+
+  const handleSelectedTheme = async (e) => {
+    if(!e){ console.log("woahhhhhh selectedTheme undefined"); return }
+    setSelectedTheme(e)
+  }
+
+  const handleCurrentArrayIndex = async (e) => {
+    if(!e){ console.log("woahhhhhh currentArrayIndex undefined"); return }
+    setCurrentArrayIndex(e)
+  }
+
+  const handleBrightnessValue = async (e) => {
+    if(!e){ console.log("woahhhhhh brightnessValue undefined"); return }
+    setBrightnessValue(e)
+  }
 
 
   //--IMAGE VIEWER HANDLING--//
@@ -858,6 +888,12 @@ export default function Home() {
       rootStyle.setProperty("--globalHoverBorderColor", localStorage.getItem("globalHoverBorderColor"))
       rootStyle.setProperty("--globalHoverBackgroundColor", localStorage.getItem("globalHoverBackgroundColor"))
       rootStyle.setProperty("--desktopWallpaperBrightness", localStorage.getItem("desktopWallpaperBrightness"))
+
+      //set wallpaper, theme and brightness according to localStorage
+      handleSelectedWallpaper(localStorage.getItem("selectedWallpaper"))
+      handleSelectedTheme(localStorage.getItem("selectedTheme"))
+      // handleCurrentArrayIndex(0)
+      handleBrightnessValue(localStorage.getItem("desktopWallpaperBrightness"))
     }
   }, [])
 
@@ -1201,7 +1237,16 @@ export default function Home() {
                 </div>
 
                 <div className={settingsStyles.settingsBody}>
-                  <Settings/>
+                  <Settings
+                    setSelectedWallpaper={handleSelectedWallpaper}
+                    setSelectedTheme={handleSelectedTheme}
+                    setCurrentArrayIndex={handleCurrentArrayIndex}
+                    setBrightnessValue={handleBrightnessValue}
+                    selectedWallpaper={selectedWallpaper}
+                    selectedTheme={selectedTheme}
+                    currentArrayIndex={currentArrayIndex}
+                    brightnessValue={brightnessValue}
+                  />
                 </div>
               </motion.div>
             }

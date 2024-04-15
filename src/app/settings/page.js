@@ -28,14 +28,10 @@ const theme = createTheme({
 })
 
 
-export default function Settings() {
+export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCurrentArrayIndex, setBrightnessValue, selectedWallpaper, selectedTheme, currentArrayIndex, brightnessValue }) {
   const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
   const themeArray = ["Purple", "Red", "Blue", "Green"]
-  const [selectedWallpaper, setSelectedWallpaper] = useState(localStorage.getItem("selectedWallpaper"))
-  const [selectedTheme, setSelectedTheme] = useState(localStorage.getItem("selectedTheme"))
-  const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
-  const [brightnessValue, setBrightnessValue] = useState(localStorage.getItem("desktopWallpaperBrightness"))
 
 
   //ON SERVER INIT & ON WALLPAPER/THEME UPDATE
