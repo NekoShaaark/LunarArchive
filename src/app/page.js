@@ -838,6 +838,7 @@ export default function Home() {
         rootStyle.setProperty("--globalColorHover", "#6a3ad1")
         rootStyle.setProperty("--globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")
         rootStyle.setProperty("--globalHoverBackgroundColor", "rgba(44, 24, 87, 0.5)")
+        rootStyle.setProperty("--desktopWallpaperBrightness", "100")
         
         localStorage.setItem("selectedWallpaper", "Starry")
         localStorage.setItem("selectedTheme", "Purple")
@@ -846,6 +847,7 @@ export default function Home() {
         localStorage.setItem("globalColorHover", "#6a3ad1")
         localStorage.setItem("globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")
         localStorage.setItem("globalHoverBackgroundColor", "rgba(44, 24, 87, 0.5)")
+        localStorage.setItem("desktopWallpaperBrightness", "100")
         return
       }
 
@@ -855,6 +857,7 @@ export default function Home() {
       rootStyle.setProperty("--globalColorHover", localStorage.getItem("globalColorHover"))
       rootStyle.setProperty("--globalHoverBorderColor", localStorage.getItem("globalHoverBorderColor"))
       rootStyle.setProperty("--globalHoverBackgroundColor", localStorage.getItem("globalHoverBackgroundColor"))
+      rootStyle.setProperty("--desktopWallpaperBrightness", localStorage.getItem("desktopWallpaperBrightness"))
     }
   }, [])
 

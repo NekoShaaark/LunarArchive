@@ -256,7 +256,7 @@ body {
     z-index: 1;
     /* background: yellow; */
     background: var(--desktopWallpaper);
-    background-color: rgba(0, 0, 0, var(--desktopWallpaperBrightness));
+    background-color: rgba(0, 0, 0, calc(calc(100 - var(--desktopWallpaperBrightness)) / 100));
     background-blend-mode: overlay, overlay, overlay, normal;
     background-size: auto;
     background-repeat: no-repeat;

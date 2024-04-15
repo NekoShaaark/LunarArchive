@@ -1,7 +1,10 @@
+"use client"
+
 import { useEffect, useState } from 'react'
-import { Button, ThemeProvider, createTheme } from '@mui/material'
+import { Button, Slider, ThemeProvider, createTheme } from '@mui/material'
 import { LeftIcon, RightIcon } from '@/components/SvgHandler'
 import styles from '@/styles/Settings.module.css'
+import { useRouter } from 'next/navigation'
 
 //--THEME--//
 const theme = createTheme({
@@ -26,13 +29,16 @@ const theme = createTheme({
 
 
 export default function Settings() {
+  const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
   const themeArray = ["Purple", "Red", "Blue", "Green"]
   const [selectedWallpaper, setSelectedWallpaper] = useState(localStorage.getItem("selectedWallpaper"))
   const [selectedTheme, setSelectedTheme] = useState(localStorage.getItem("selectedTheme"))
   const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
+  const [brightnessValue, setBrightnessValue] = useState(localStorage.getItem("desktopWallpaperBrightness"))
 
 
+  //ON SERVER INIT & ON WALLPAPER/THEME UPDATE
   useEffect(() => {
     var rootStyle = document.documentElement.style
     var wallpaper = `/Wallpapers/Wallpaper-${selectedWallpaper}.webp`
@@ -76,6 +82,7 @@ export default function Settings() {
     rootStyle.setProperty("--globalColorHover", globalColorHover)
     rootStyle.setProperty("--globalHoverBorderColor", globalHoverBorderColor)
     rootStyle.setProperty("--globalHoverBackgroundColor", globalHoverBackgroundColor)
+    rootStyle.setProperty("--desktopWallpaperBrightness", brightnessValue)
     console.log("set color to: " + selectedTheme)
 
     //if can, store css properties as local data
@@ -87,11 +94,23 @@ export default function Settings() {
       localStorage.setItem("globalColorHover", globalColorHover)
       localStorage.setItem("globalHoverBorderColor", globalHoverBorderColor)
       localStorage.setItem("globalHoverBackgroundColor", globalHoverBackgroundColor)
+      localStorage.setItem("desktopWallpaperBrightness", brightnessValue)
     }
   }, [selectedWallpaper, selectedTheme])
 
 
-  function cycleArray(array, direction){    
+  //ON SERVER INIT & ON BRIGHTNESS UPDATE
+  useEffect(() => {
+    var rootStyle = document.documentElement.style
+
+    rootStyle.setProperty("--desktopWallpaperBrightness", (brightnessValue))
+    if(typeof(Storage) !== "undefined"){
+      localStorage.setItem("desktopWallpaperBrightness", brightnessValue)
+    }
+  }, [brightnessValue])
+
+
+  function cycleArray(array, direction){
     //determine array direction
     var newArrayIndex
     if(direction == "upwards"){ newArrayIndex = currentArrayIndex + 1 }
@@ -113,6 +132,21 @@ export default function Settings() {
         setSelectedTheme(themeArray[newArrayIndex])
         break
     }
+  }
+
+  function updateBrightness(sliderOrNum, value){
+    if(sliderOrNum == "slider"){ setBrightnessValue(value); return }
+
+    //change by one value
+    var newValue = brightnessValue + value
+    if(newValue > 100){ return }
+    if(newValue < 0){ return }
+    setBrightnessValue(newValue)
+  }
+
+  const openWallpaper = () => {
+    console.log("redirecting to wallpapers")
+    router.push(`/Wallpapers/Wallpaper-${selectedWallpaper}.webp`)
   }
 
 
@@ -139,7 +173,31 @@ export default function Settings() {
           </section>
 
           <section className={styles.section}>
-            <h1 className={styles.name}>Brightness</h1>
+            <h1 className={styles.name}>Brightness: {brightnessValue}%</h1>
+            <div className={styles.button}>
+
+              <Button className={styles.icon} disableRipple onClick={() => updateBrightness("num", -1)}>
+                <LeftIcon width="3vh" height="3vh"/>
+              </Button>
+
+              <Slider
+                defaultValue={100}
+                value={brightnessValue}
+                sx={{margin: "14px", padding: 0, width: "100%"}}
+                onChange={e => updateBrightness("slider", e.target.value)}
+                color="error"
+                valueLabelDisplay="off"
+                shiftStep={1}
+                step={1}
+                min={0}
+                max={100}
+              />
+
+              <Button className={styles.icon} disableRipple onClick={() => updateBrightness("num", 1)}>
+                <RightIcon width="3vh" height="3vh"/>
+              </Button>
+
+            </div>
           </section>
 
           <section className={styles.section}>
@@ -164,7 +222,9 @@ export default function Settings() {
           </section>
 
           <section className={styles.section}>
-            <h1 className={styles.name}>View Wallpaper</h1>
+            <div className={styles.isolatedButton} onClick={openWallpaper}>
+              View Wallpaper
+            </div>
           </section>
 
           <section className={styles.section}>
