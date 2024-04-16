@@ -17,9 +17,9 @@ export default function RootLayout({ children }) {
 
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <head/>
-      <body>
+      <body suppressHydrationWarning={true}>
         {/* {isLoading && isHome ? (
           <SplashScreen finishLoading={() => setIsLoading(false)}/>
         ) : ( */}

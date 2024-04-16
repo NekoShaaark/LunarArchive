@@ -24,6 +24,7 @@ import Portfolio from './portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
+import Image from 'next/image'
 
 
 
@@ -116,8 +117,8 @@ export default function Home() {
 
   const handleBrightnessValue = async (e) => {
     if(!e){ console.log("woahhhhhh brightnessValue undefined"); e = 0 }
-    console.log("currentBrightness: " + brightnessValue)
-    console.log("passingBrightness: " + e)
+    // console.log("currentBrightness: " + brightnessValue)
+    // console.log("passingBrightness: " + e)
     setBrightnessValue(e)
   }
 
@@ -1080,6 +1081,7 @@ export default function Home() {
       <div className="layout-content"> 
         {/* background video */}
         {/* <video className="backgroundVideo" src="videoLoop.webm" autoPlay loop muted preload="auto"/> */}
+        <Image className="backgroundVideo" src={`Wallpapers/Wallpaper-${selectedWallpaper}.webp`} loading="lazy" width={100} height={100}/>
 
         <ThemeProvider theme={theme}>
 
