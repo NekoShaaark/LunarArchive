@@ -6,35 +6,43 @@ import { LeftIcon, RightIcon } from '@/components/SvgHandler'
 import styles from '@/styles/Settings.module.css'
 import { useRouter } from 'next/navigation'
 
-//--THEME--//
-const theme = createTheme({
-  typography: {
-    fontFamily: 'eightbitFortress'
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          padding: 0,
-          minWidth: '32px',
-          borderRadius: 0,
-          borderInline: '4px solid #c31c1c',
-          backgroundColor: '#c31c1c',
-          '&:hover': {
-            backgroundColor: '#d13a3a'
-          }, 
-        }
-      },
-    },
-  }
-})
-
 
 export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCurrentArrayIndex, setBrightnessValue, selectedWallpaper, selectedTheme, currentArrayIndex, brightnessValue }) {
   const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
   const themeArray = ["Purple", "Red", "Blue", "Green"]
+  const [themeGlobalBackgroundColor, setThemeGlobalBackgroundColor] = useState("#c31c1c")
+  const [themeGlobalHoverBackgroundColor, setThemeGlobalHoverBackgroundColor] = useState("#d13a3a")
+
+  //--THEME--//
+  const settingsTheme = createTheme({
+    typography: {
+      fontFamily: 'eightbitFortress'
+    },
+    palette: {
+      themeGlobal: { 
+        main: `${themeGlobalBackgroundColor}`,
+        contrastText: '#000',
+      }
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            padding: 0,
+            minWidth: '32px',
+            borderRadius: 0,
+            borderInline: `4px solid ${themeGlobalBackgroundColor}`,
+            backgroundColor: `${themeGlobalBackgroundColor}`, //needs to be referenced in ``
+            '&:hover': {
+              backgroundColor: `${themeGlobalHoverBackgroundColor}` //needs to be referenced in ``
+            }, 
+          }
+        },
+      }
+    }
+  })
 
 
   //ON SERVER INIT & ON WALLPAPER/THEME UPDATE
@@ -62,19 +70,23 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
         break
 
       case "Blue":
-        globalColor = "#9665ff"
-        globalColorHover = "#6a3ad1"
-        globalHoverBorderColor = "rgba(106, 64, 197, 0.5)"
-        globalHoverBackgroundColor = "rgba(44, 24, 87, 0.5)"
+        globalColor = "#3a62d1"
+        globalColorHover = "#3a77d1"
+        globalHoverBorderColor = "rgba(58, 81, 209, 0.5)"
+        globalHoverBackgroundColor = "rgba(33, 41, 85, 0.5)"
         break
 
       case "Green":
-        globalColor = "#c31c1c"
-        globalColorHover = "#d13a3a"
-        globalHoverBorderColor = "rgba(197, 64, 64, 0.5)"
-        globalHoverBackgroundColor = "rgba(87, 24, 24, 0.5)"
+        globalColor = "#23af62"
+        globalColorHover = "#29cc72"
+        globalHoverBorderColor = "rgba(38, 167, 96, 0.5)"
+        globalHoverBackgroundColor = "rgba(20, 80, 47, 0.5)"
         break
     }
+
+    //set theme colors
+    setThemeGlobalBackgroundColor(globalColor)
+    setThemeGlobalHoverBackgroundColor(globalColorHover)
 
     rootStyle.setProperty("--desktopWallpaper", `url("${wallpaper}")`)
     rootStyle.setProperty("--globalColor", globalColor)
@@ -154,7 +166,7 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
 
   return (
     <>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={settingsTheme}>
         <div className={styles.grid}>
 
           <section className={styles.section}>
@@ -187,7 +199,7 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
                 value={parseFloat(brightnessValue)}
                 sx={{margin: "14px", padding: 0, width: "100%"}}
                 onChange={e => updateBrightness("slider", e.target.value)}
-                color="error"
+                color="themeGlobal"
                 valueLabelDisplay="off"
                 shiftStep={1}
                 step={1}

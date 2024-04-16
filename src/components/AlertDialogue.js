@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 
 export default function AlertDialogue({ setClose, errorDescription }) {
     const [alertDescription, setAlertDescription] = useState()
+    const [themeGlobalColor, setThemeGlobalColor] = useState("#c31c1c")
     var description = `${errorDescription}`
 
     //--THEME--//
@@ -14,8 +15,8 @@ export default function AlertDialogue({ setClose, errorDescription }) {
         fontFamily: 'eightbitFortress'
       },
       palette: {
-        retroPurple: { 
-          main: '#9665ff',
+        themeGlobal: { 
+          main: `${themeGlobalColor}`,
           contrastText: '#000',
         }
       },
@@ -30,21 +31,23 @@ export default function AlertDialogue({ setClose, errorDescription }) {
             }
           },
           defaultProps: {
-            color: "retroPurple",
+            color: "themeGlobal",
           }
         },
       }
     })
 
     function handleClose(){
-        setClose()
+      setClose()
     }
 
     useEffect(() => {
+      setThemeGlobalColor(localStorage.getItem("globalColor")) //set theme color
       setAlertDescription(description)
     }, [description])
 
     if(alertDescription == "undefined"){ setAlertDescription("Access Denied") }
+
 
     return(
         <ThemeProvider theme={theme}>

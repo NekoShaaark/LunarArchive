@@ -67,6 +67,10 @@
   border-inline: 4px solid var(--globalColor);
   border-radius: 0;
 }
+.icon:hover {
+  display: flex;
+  background: var(--globalColorHover);
+}
 
 .isolatedButton {
   display: flex;
