@@ -18,6 +18,9 @@ const theme = createTheme({
           textTransform: 'none',
           padding: 0,
           minWidth: '32px',
+          borderRadius: 0,
+          borderInline: '4px solid #c31c1c',
+          backgroundColor: '#c31c1c',
           '&:hover': {
             backgroundColor: '#d13a3a'
           }, 
@@ -105,18 +108,23 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
     }
   }, [brightnessValue])
 
+  const openWallpaper = () => {
+    console.log("redirecting to wallpapers")
+    router.push(`/Wallpapers/Wallpaper-${selectedWallpaper}.webp`)
+  }
+
 
   function cycleArray(array, direction){
     //determine array direction
     var newArrayIndex
     if(direction == "upwards"){ newArrayIndex = currentArrayIndex + 1 }
     if(direction == "downwards"){ newArrayIndex = currentArrayIndex - 1 }
-    
+
     //go to the other side of the array, if goes outside of array length
+    if(newArrayIndex < 0){ newArrayIndex = array.length - 1 }
     if(newArrayIndex >= array.length){ newArrayIndex = 0 }
-    if(newArrayIndex < 0){ newArrayIndex = wallpaperArray.length - 1 }
     setCurrentArrayIndex(newArrayIndex)
-    // console.log("array: " + newArrayIndex)
+    // console.log("newArray: " + newArrayIndex)
 
     //update selection
     switch(array){
@@ -131,18 +139,16 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
   }
 
   function updateBrightness(sliderOrNum, value){
-    if(sliderOrNum == "slider"){ setBrightnessValue(value); return }
+    //NOTE: everything here is being converted to a float due to something being a string and messing everything up
+    if(sliderOrNum == "slider"){ setBrightnessValue(parseFloat(value)); return }
 
     //change by one value
-    var newValue = brightnessValue + value
+    var newValue = parseFloat(brightnessValue) + parseFloat(value)
+    console.log("newValue: " + newValue)
+    
     if(newValue > 100){ return }
     if(newValue < 0){ return }
     setBrightnessValue(newValue)
-  }
-
-  const openWallpaper = () => {
-    console.log("redirecting to wallpapers")
-    router.push(`/Wallpapers/Wallpaper-${selectedWallpaper}.webp`)
   }
 
 
@@ -178,7 +184,7 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
 
               <Slider
                 defaultValue={100}
-                value={brightnessValue}
+                value={parseFloat(brightnessValue)}
                 sx={{margin: "14px", padding: 0, width: "100%"}}
                 onChange={e => updateBrightness("slider", e.target.value)}
                 color="error"

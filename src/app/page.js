@@ -97,8 +97,8 @@ export default function Home() {
   //--DESKTOP SETTINGS HANDLING--//
   const handleSelectedWallpaper = async (e) => {
     if(!e){ console.log("woahhhhhh selectedWallpaper undefined"); return }
-    console.log("currentWallpaper: " + selectedWallpaper)
-    console.log("passingWallpaper: " + e)
+    // console.log("currentWallpaper: " + selectedWallpaper)
+    // console.log("passingWallpaper: " + e)
     setSelectedWallpaper(e)
   }
 
@@ -108,12 +108,16 @@ export default function Home() {
   }
 
   const handleCurrentArrayIndex = async (e) => {
-    if(!e){ console.log("woahhhhhh currentArrayIndex undefined"); return }
+    if(!e){ console.log("woahhhhhh currentArrayIndex undefined"); e = 0 }
+    // console.log("currentArrayIndex: " + currentArrayIndex)
+    // console.log("passingArrayIndex: " + e)
     setCurrentArrayIndex(e)
   }
 
   const handleBrightnessValue = async (e) => {
-    if(!e){ console.log("woahhhhhh brightnessValue undefined"); return }
+    if(!e){ console.log("woahhhhhh brightnessValue undefined"); e = 0 }
+    console.log("currentBrightness: " + brightnessValue)
+    console.log("passingBrightness: " + e)
     setBrightnessValue(e)
   }
 

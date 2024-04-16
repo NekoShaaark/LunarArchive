@@ -21,19 +21,19 @@ export default function AlertDialogue({ setClose, errorDescription }) {
       },
       components: {
         MuiButton: {
-            styleOverrides: {
-              root: {
-                textTransform: "none",
-                '&:hover': {
-                  color: "#fff"
-                }, 
-              }
-            },
-            defaultProps: {
-              color: "retroPurple",
+          styleOverrides: {
+            root: {
+              textTransform: "none",
+              '&:hover': {
+                color: "#fff"
+              }, 
             }
           },
-        }
+          defaultProps: {
+            color: "retroPurple",
+          }
+        },
+      }
     })
 
     function handleClose(){
@@ -41,7 +41,7 @@ export default function AlertDialogue({ setClose, errorDescription }) {
     }
 
     useEffect(() => {
-        setAlertDescription(description)
+      setAlertDescription(description)
     }, [description])
 
     if(alertDescription == "undefined"){ setAlertDescription("Access Denied") }
