@@ -88,6 +88,7 @@ export default function Home() {
   const [ivyImageHeight, setIvyImageHeight] = useState()
   const [ivyImageDescription, setIvyImageDescription] = useState()
   const [ivyHeaderName, setIvyImageHeaderName] = useState("Image Viewer")
+  const [ivyArrayIndex, setIvyArrayIndex] = useState()
 
   //text editor (notus) states
   const [currentNotusText, setCurrentNotusText] = useState()
@@ -157,6 +158,13 @@ export default function Home() {
     // console.log("currentIvyHeaderName: " + ivyImageHeaderName)
     // console.log("passingIvyHeaderName: " + e)
     setIvyImageHeaderName(e)
+  }
+
+  const handleIvyArrayIndex = async (e) => {
+    if(!e){ console.log("woahhhhhh ivyArrayIndex undefined"); e = 0 }
+    // console.log("currentIvyArrayIndex: " + ivyArrayIndex)
+    // console.log("passingIvyArrayIndex: " + e)
+    setIvyArrayIndex(e)
   }
 
 
@@ -1079,9 +1087,9 @@ export default function Home() {
   return (
     <div className="layout">
       <div className="layout-content"> 
-        {/* background video */}
+        {/* background image/video */}
         {/* <video className="backgroundVideo" src="videoLoop.webm" autoPlay loop muted preload="auto"/> */}
-        <Image className="backgroundVideo" src={`Wallpapers/Wallpaper-${selectedWallpaper}.webp`} loading="lazy" width={100} height={100}/>
+        <Image className="backgroundVideo" src={`Wallpapers/Wallpaper-${selectedWallpaper}.webp`} priority alt="wallpaper" width={100} height={100}/>
 
         <ThemeProvider theme={theme}>
 
@@ -1286,6 +1294,7 @@ export default function Home() {
                     setIvyImageHeight={handleIvyImageHeight}
                     setIvyImageDescription={handleIvyImageDescription}
                     setIvyImageHeaderName={handleIvyHeaderName}
+                    setIvyImageArrayIndex={handleIvyArrayIndex}
                     setHeaderName={handleWindowHeaderName}
                     setErrorDescription={handleAlertDescription}
                     setNotusOpen={textEditorHandleOpen}
@@ -1351,6 +1360,7 @@ export default function Home() {
                     imageWidth={ivyImageWidth} 
                     imageHeight={ivyImageHeight} 
                     imageDescription={ivyImageDescription}
+                    imageArrayIndex={ivyArrayIndex}
                   />
                 </div>
               </motion.div>

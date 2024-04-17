@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import TypewriterEffect from '@/components/TypewriterEffect'
 
 
-export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
+export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setIvyImageArrayIndex, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
   const [sysFolderOpen, setSysFolderOpen] = useState(false)
     const [documentsFolderOpen, setDocumentsFolderOpen] = useState(true) //default open
       
@@ -459,21 +459,27 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         
         //image files
         if(fileType == "Image"){
+          var currentFilesInDir = getFilesInCurrentDirectory(file, "Image")
+          var fileNamesArray = convertFileArray(currentFilesInDir)
+          var fileNamesArrayIndex = fileNamesArray.findIndex((name) => name == file.textContent)
+          var webpFileNamesArray = renameFileExtensions(fileNamesArray, ".webp")
+          // console.log(fileNamesArrayIndex)
+          
           switch(file.textContent){ //TODO: dynamically handle images
             case "Niko5.png":
               handleIvyImage("niko5.png", 200, 200, fileDescription, headerName)
               break
 
             case "Beach.png":
-              handleIvyImage("beach.webp", 480, 270, fileDescription, headerName)
+              handleIvyImage(webpFileNamesArray, 480, 270, fileDescription, headerName, fileNamesArrayIndex)
               break
 
             case "Sunset.jpeg":
-              handleIvyImage("sunset.webp", 720, 400, fileDescription, "Sunset")
+              handleIvyImage(webpFileNamesArray, 720, 400, fileDescription, "Sunset", fileNamesArrayIndex)
               break
 
             case "worldMachine.png":
-              handleIvyImage("worldMachine.webp", 500, 500, fileDescription, headerName)
+              handleIvyImage(webpFileNamesArray, 500, 500, fileDescription, "eRrOR", fileNamesArrayIndex)
               // changeHeaderName("eRrOR")
               break
 
@@ -751,6 +757,97 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
     if(!dir.files){ return "file"}
     return "folder"
   }
+  
+  function getFilesInCurrentDirectory(file, fileTypeToFind){
+
+    //slice the fileID into its seperate array indices (used to find where the user is in the system/documents)
+    var folderId = file.id.slice(0, file.id.length - 1)
+    const folderIdArray = folderId.split("")
+    // console.log(`folderId: ${folderId}`)
+    // console.log(`folderIdArray: [${folderIdArray}]`)
+
+    var currentIdString = ""
+    var layer0
+    var layer1
+    var layer2
+    var layer3
+    var layer4
+    var layer5 //not used yet (as of current the furtherest the user can go from Sys to Heomework)
+    var filesFound
+
+    //arrays are handled in ascending order according to what layer the user is on
+    //layer0 handler
+    if(folderIdArray){
+      layer0 = sysFolder
+      filesFound = layer0.filter((file) => file.fileType == fileTypeToFind)
+    }
+
+    //layer1 handler
+    if(folderIdArray[0]){ 
+      currentIdString += `${folderIdArray[0]}`
+      layer1 = sysFolder.filter((folder) => folder.id == folderIdArray[0])
+      filesFound = layer1[0].files.filter((file) => file.fileType == fileTypeToFind)
+    }
+    
+    //layer2 handler
+    if(folderIdArray[1]){ 
+      currentIdString += `${folderIdArray[1]}`
+      layer2 = layer1[0].files.filter((folder) => folder.id == currentIdString)
+      filesFound = layer2[0].files.filter((file) => file.fileType == fileTypeToFind)
+    }
+
+    //layer3 handler
+    if(folderIdArray[2]){ 
+      currentIdString += `${folderIdArray[2]}`
+      layer3 = layer2[0].files.filter((folder) => folder.id == currentIdString)
+      filesFound = layer3[0].files.filter((file) => file.fileType == fileTypeToFind)
+    }
+
+    //layer4 handler
+    if(folderIdArray[3]){ 
+      currentIdString += `${folderIdArray[3]}`
+      layer4 = layer3[0].files.filter((folder) => folder.id == currentIdString)
+      filesFound = layer4[0].files.filter((file) => file.fileType == fileTypeToFind)
+    }
+
+    //layer5 handler
+    if(folderIdArray[4]){ 
+      currentIdString += `${folderIdArray[4]}`
+      layer5 = layer4[0].files.filter((folder) => folder.id == currentIdString)
+      filesFound = layer5[0].files.filter((file) => file.fileType == fileTypeToFind)
+    }
+
+    // console.log(`currentIdString: ${currentIdString}`)
+    // console.log(`CWD Name: ${layer4[0].name}`)
+    // console.log(filesFound)
+    
+    return filesFound
+  }
+  
+  function convertFileArray(array){
+    let id
+    var names = []
+
+    for(id in array){
+      names.push(array[id].name)
+    }
+    
+    // console.log(names)
+    return names
+  }
+
+  function renameFileExtensions(array, extension){
+    let index
+    var newArray = []
+    
+    for(index in array){
+      if(array[index].includes(".png")){ newArray.push(`${array[index].slice(0, -4)}${extension}`) }
+      if(array[index].includes(".jpeg")){ newArray.push(`${array[index].slice(0, -5)}${extension}`) }
+    }
+
+    // console.log(newArray)
+    return newArray
+  }
 
 
   //--HANDLERS & METHODS--
@@ -766,12 +863,13 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
     setIvyOpen()
   }
 
-  function handleIvyImage(imageLocation, imageWidth, imageHeight, imageDescription, imageName){
+  function handleIvyImage(imageLocation, imageWidth, imageHeight, imageDescription, imageName, imageArrayIndex){
     setIvyImage(imageLocation)
     setIvyImageWidth(imageWidth)
     setIvyImageHeight(imageHeight)
     setIvyImageDescription(imageDescription)
     setIvyImageHeaderName(imageName)
+    setIvyImageArrayIndex(imageArrayIndex)
   }
 
   function changeHeaderName(e){

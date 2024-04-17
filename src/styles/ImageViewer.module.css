@@ -27,6 +27,17 @@
   text-align: center;
 }
 
+.icon {
+  display: flex;
+  background: var(--globalColor);
+  border-inline: 4px solid var(--globalColor);
+  border-radius: 0;
+}
+.icon:hover {
+  display: flex;
+  background: var(--globalColorHover);
+}
+
 /* MOBILE OVERRIDES */
 @media only screen and (max-width: 920px) {
   .imageViewerBody {

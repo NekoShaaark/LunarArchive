@@ -465,17 +465,16 @@ body {
 
     .desktop-layout {
         grid-template-areas: 
-        "IconA1 IconB1 IconC1"
-        "IconA2 IconB2 IconC2"
-        "IconA3 IconB3 IconC3"
-        "IconA4 IconB4 IconC4"
-        "IconA5 IconB5 IconC5"; 
+        "IconA1 IconB1"
+        "IconA2 IconB2"
+        "IconA3 IconB3"; 
     }
-    .icon-tutorial{ grid-area: IconA5; }
+    .icon-settings{ grid-area: IconA3; }
+    .icon-tutorial{ grid-area: IconB2; }
 
     #window-archive, 
     #window-logs, 
-    #window-moon, 
+    #window-settings, 
     #window-documents, 
     #window-portfolio,
     #window-imageViewer,
@@ -508,11 +507,12 @@ body {
         "IconA2 IconB2 IconC2"
         "IconA3 IconB3 IconC3"; 
     }
-    .icon-tutorial{ grid-area: IconA3; }
+    .icon-tutorial{ grid-area: IconB3; }
+    .icon-settings{ grid-area: IconA3; }
 
     #window-archive, 
     #window-logs, 
-    #window-moon, 
+    #window-settings, 
     #window-documents, 
     #window-portfolio,
     #window-imageViewer,
