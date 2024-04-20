@@ -6,31 +6,45 @@ import styles from "@/styles/ImageViewer.module.css"
 import { Button } from "@mui/material"
 import { LeftIcon, RightIcon } from "./SvgHandler"
 
-export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageHeight, imageDescription, imageArrayIndex }) {
+export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageHeight, imageDescription, imageArrayIndex, imageHeader, setHeaderName }) {
     const [imageUsing, setImageUsing] = useState()
     const [imageUsingWidth, setImageUsingWidth] = useState()
     const [imageUsingHeight, setImageUsingHeight] = useState()
     const [imageUsingDescription, setImageUsingDescription] = useState()
+    const [imageUsingHeader, setImageUsingHeader] = useState()
 
     const [usingArray, setUsingArray] = useState(true)
     const [imageArray, setImageArray] = useState([])
+    const [descriptionArray, setDescriptionArray] = useState([])
+    const [heightArray, setHeightArray] = useState([])
+    const [widthArray, setWidthArray] = useState([])
+    const [headerArray, setHeaderArray] = useState([])
     const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
     var selectedImageHeight = `${imageHeight}`
     var selectedImageDescription = `${imageDescription}`
+    var selectedImageHeader = `${imageHeader}`
     
 
     useEffect(() => {
-        if(selectedImage instanceof Array){ 
+        if(selectedImage instanceof Array && selectedImage[1]){ 
             // console.log("yup array")
             // console.log(selectedImage)
             // console.log("arrayIndex: " + imageArrayIndex)
             if(imageArrayIndex == undefined){ imageArrayIndex = 0 }
             selectedImageLocation = selectedImage[imageArrayIndex]
-            setImageArray(selectedImage)
+            selectedImageDescription = imageDescription[imageArrayIndex]
+            selectedImageHeight = imageHeight[imageArrayIndex]
+            selectedImageWidth = imageWidth[imageArrayIndex]
+            selectedImageHeader = imageHeader[imageArrayIndex]
             setUsingArray(true)
+            setImageArray(selectedImage)
+            setDescriptionArray(imageDescription)
+            setHeightArray(imageHeight)
+            setWidthArray(imageWidth)
+            setHeaderArray(imageHeader)
         }
         else{ setUsingArray(false) }
 
@@ -40,26 +54,33 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
         setImageUsingWidth(selectedImageWidth)
         setImageUsingHeight(selectedImageHeight)
         setImageUsingDescription(selectedImageDescription)
+        setImageUsingHeader(selectedImageHeader)
+        setHeaderName(selectedImageHeader) //setting default header due to it - by default - being set as the passed array
     }, [selectedImageLocation, selectedImageWidth, selectedImageHeight, selectedImageDescription, imageArrayIndex])
     
     // console.log("isOpen: " + isOpen)
     // console.log("ultimate: " + imageUsing)
     // console.log(selectedImageWidth)
 
-    function cycleArray(array, direction){
+    function cycleArrays(direction){
         //determine array direction
         var newArrayIndex
         if(direction == "upwards"){ newArrayIndex = currentArrayIndex + 1 }
         if(direction == "downwards"){ newArrayIndex = currentArrayIndex - 1 }
     
         //go to the other side of the array, if goes outside of array length
-        if(newArrayIndex < 0){ newArrayIndex = array.length - 1 }
-        if(newArrayIndex >= array.length){ newArrayIndex = 0 }
+        //using imageArray because all arrays will always be the same length
+        if(newArrayIndex < 0){ newArrayIndex = imageArray.length - 1 }
+        if(newArrayIndex >= imageArray.length){ newArrayIndex = 0 }
         setCurrentArrayIndex(newArrayIndex)
         // console.log("newArray: " + newArrayIndex)
     
         //update selection
-        setImageUsing(array[newArrayIndex])
+        setImageUsing(imageArray[newArrayIndex])
+        setImageUsingDescription(descriptionArray[newArrayIndex])
+        setImageUsingHeight(heightArray[newArrayIndex])
+        setImageUsingWidth(widthArray[newArrayIndex])
+        setHeaderName(headerArray[newArrayIndex])
         // console.log(array[newArrayIndex])
     }
 
@@ -75,15 +96,17 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
         isOpen ?
             //true / in Image Viewer
             <>
-                { usingArray && <Button className={styles.icon} disableRipple onClick={() => cycleArray(imageArray, "downwards")}>
-                  <LeftIcon width="3vh" height="3vh"/>
-                </Button> }
+                <div className={styles.image}>
+                    { usingArray && <Button className={styles.icon} style={{left:15}} disableRipple onClick={() => cycleArrays("downwards")}>
+                      <LeftIcon width="3vh" height="3vh"/>
+                    </Button> }
 
-                <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/> 
-                
-                { usingArray && <Button className={styles.icon} disableRipple onClick={() => cycleArray(imageArray, "upwards")}>
-                    <RightIcon width="3vh" height="3vh"/>
-                </Button> }
+                    <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/> 
+
+                    { usingArray && <Button className={styles.icon} style={{right:15}} disableRipple onClick={() => cycleArrays("upwards")}>
+                        <RightIcon width="3vh" height="3vh"/>
+                    </Button> }
+                </div>
 
                 <h1 className={styles.text}>{imageUsingDescription}</h1>
             </>

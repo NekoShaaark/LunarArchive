@@ -115,9 +115,12 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
               id: "010",
               name: "Niko5.png",
               nameColor: "#e4c525",
+              headerName: "Niko5",
               fileType: "Image",
               description: "Niko",
-              icon: <Image unoptimized src="/niko5.png" alt="niko5" width={48} height={48}/>
+              height: 200,
+              width: 200,
+              icon: <Image unoptimized src="/Niko5.webp" alt="niko5" width={48} height={48}/>
             },
             {
               id: "011",
@@ -139,8 +142,11 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
                 {
                   id: "0112",
                   name: "HomeWwo.png",
+                  headerName: "HomeWwo",
                   fileType: "Image",
                   description: `"I always used to hate algebra..."`,
+                  height: 380,
+                  width: 420,
                   icon: <ImageIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
@@ -191,9 +197,12 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
                 {
                   id: "0121",
                   name: "alula7.png",
+                  headerName: "alula7",
                   fileType: "Image",
                   description: "Hehehhehehehehe hi there~",
-                  icon: <Image unoptimized src="/alula7.png" alt="niko5" width={48} height={48}/>
+                  height: 160,
+                  width: 160,
+                  icon: <Image unoptimized src="/alula7.webp" alt="niko5" width={48} height={48}/>
                 }
               ]
             },
@@ -306,22 +315,31 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         {
           id: "10",
           name: "Beach.png",
+          headerName: "Beach",
           fileType: "Image",
           description: `"Our time at the Beach."`,
+          height: 480,
+          width: 270,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
           id: "11",
           name: "Sunset.jpeg",
+          headerName: "Sunset",
           fileType: "Image",
           description: `"I love this Sunset.."`,
+          height: 720,
+          width: 400,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
           id: "12",
           name: "worldMachine.png",
+          headerName: "eRrOR",
           fileType: "Image",
           description: `"Wonder how The Machine was made..."`,
+          height: 500,
+          width: 500,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         }
       ]
@@ -337,8 +355,11 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
       id: "3",
       name: "missing.png",
       nameColor: "#9c9c9c",
+      headerName: "Swimming",
       fileType: "Image",
       description: `"I wonder what happened to her.."`,
+      height: 380,
+      width: 480,
       icon: <ImageIcon fill="#9c9c9c" width={48} height={48}/>
     }
   ]
@@ -460,41 +481,26 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         //image files
         if(fileType == "Image"){
           var currentFilesInDir = getFilesInCurrentDirectory(file, "Image")
-          var fileNamesArray = convertFileArray(currentFilesInDir)
+          var fileNamesArray = convertFileArray(currentFilesInDir, "Names")
+          var fileHeaderNamesArray = convertFileArray(currentFilesInDir, "HeaderNames")
+          var fileDescriptionsArray = convertFileArray(currentFilesInDir, "Descriptions")
+          var fileHeightArray = convertFileArray(currentFilesInDir, "Heights")
+          var fileWidthArray = convertFileArray(currentFilesInDir, "Widths")
+
           var fileNamesArrayIndex = fileNamesArray.findIndex((name) => name == file.textContent)
           var webpFileNamesArray = renameFileExtensions(fileNamesArray, ".webp")
-          // console.log(fileNamesArrayIndex)
           
-          switch(file.textContent){ //TODO: dynamically handle images
-            case "Niko5.png":
-              handleIvyImage("niko5.png", 200, 200, fileDescription, headerName)
-              break
-
-            case "Beach.png":
-              handleIvyImage(webpFileNamesArray, 480, 270, fileDescription, headerName, fileNamesArrayIndex)
-              break
-
-            case "Sunset.jpeg":
-              handleIvyImage(webpFileNamesArray, 720, 400, fileDescription, "Sunset", fileNamesArrayIndex)
-              break
-
-            case "worldMachine.png":
-              handleIvyImage(webpFileNamesArray, 500, 500, fileDescription, "eRrOR", fileNamesArrayIndex)
-              // changeHeaderName("eRrOR")
-              break
-
-            case "HomeWwo.png":
-              handleIvyImage("homework.webp", 380, 420, fileDescription, headerName)
-              break
-
-            case "alula7.png":
-              handleIvyImage("alula7.png", 160, 160, fileDescription, headerName)
-              break
-
-            case "missing.png":
-              handleIvyImage("missingPersonPoster.webp", 380, 480, fileDescription, "Swimming")
-              break
-          }
+          var imagesObject = {}
+          imagesObject.webp = webpFileNamesArray
+          imagesObject.header = fileHeaderNamesArray
+          imagesObject.descriptions = fileDescriptionsArray
+          imagesObject.height = fileHeightArray
+          imagesObject.width = fileWidthArray
+          imagesObject.index = fileNamesArrayIndex
+          console.log(imagesObject)
+          
+          //set ivy settings, and open
+          handleIvyImage(imagesObject.webp, imagesObject.height, imagesObject.width, imagesObject.descriptions, imagesObject.header, fileNamesArrayIndex)
           handleIvyOpen()
         }
 
@@ -824,16 +830,20 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
     return filesFound
   }
   
-  function convertFileArray(array){
-    let id
-    var names = []
+  function convertFileArray(array, convertTo){
+    let index
+    var newArray = []
 
-    for(id in array){
-      names.push(array[id].name)
+    for(index in array){
+      if(convertTo == "Names"){ newArray.push(array[index].name) }
+      if(convertTo == "HeaderNames"){ newArray.push(array[index].headerName) }
+      if(convertTo == "Descriptions"){ newArray.push(array[index].description) }
+      if(convertTo == "Heights"){ newArray.push(array[index].height) }
+      if(convertTo == "Widths"){ newArray.push(array[index].width) }
     }
     
-    // console.log(names)
-    return names
+    // console.log(newArray)
+    return newArray
   }
 
   function renameFileExtensions(array, extension){

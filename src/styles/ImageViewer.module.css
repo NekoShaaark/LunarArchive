@@ -27,8 +27,16 @@
   text-align: center;
 }
 
+.image { 
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
 .icon {
   display: flex;
+  position: absolute;
+  height: 3vh;
   background: var(--globalColor);
   border-inline: 4px solid var(--globalColor);
   border-radius: 0;

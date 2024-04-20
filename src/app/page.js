@@ -1361,6 +1361,8 @@ export default function Home() {
                     imageHeight={ivyImageHeight} 
                     imageDescription={ivyImageDescription}
                     imageArrayIndex={ivyArrayIndex}
+                    setHeaderName={handleIvyHeaderName}
+                    imageHeader={ivyHeaderName}
                   />
                 </div>
               </motion.div>
