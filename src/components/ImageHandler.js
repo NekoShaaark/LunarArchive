@@ -6,7 +6,7 @@ import styles from "@/styles/ImageViewer.module.css"
 import { Button } from "@mui/material"
 import { LeftIcon, RightIcon } from "./SvgHandler"
 
-export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageHeight, imageDescription, imageArrayIndex, imageHeader, setHeaderName }) {
+export default function ImageHandler({ selectedImage, isOpen, isMaximized, imageWidth, imageHeight, imageDescription, imageArrayIndex, imageHeader, setHeaderName }) {
     const [imageUsing, setImageUsing] = useState()
     const [imageUsingWidth, setImageUsingWidth] = useState()
     const [imageUsingHeight, setImageUsingHeight] = useState()
@@ -29,6 +29,8 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
     
 
     useEffect(() => {
+
+        //set states/variables based on current array index
         if(selectedImage instanceof Array && selectedImage[1]){ 
             // console.log("yup array")
             // console.log(selectedImage)
@@ -47,7 +49,8 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
             setHeaderArray(imageHeader)
         }
         else{ setUsingArray(false) }
-
+        
+        //set image states
         // console.log("useEffect")
         // console.log(selectedImageLocation)
         setImageUsing(selectedImageLocation)
@@ -80,8 +83,8 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
         setImageUsingDescription(descriptionArray[newArrayIndex])
         setImageUsingHeight(heightArray[newArrayIndex])
         setImageUsingWidth(widthArray[newArrayIndex])
+        setImageUsingHeader(headerArray[newArrayIndex])
         setHeaderName(headerArray[newArrayIndex])
-        // console.log(array[newArrayIndex])
     }
 
 
@@ -101,7 +104,12 @@ export default function ImageHandler({ selectedImage, isOpen, imageWidth, imageH
                       <LeftIcon width="3vh" height="3vh"/>
                     </Button> }
 
-                    <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/> 
+                    { !isMaximized && <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/> }
+                    { isMaximized && 
+                        <div className={styles.maximizedImage}>
+                            <Image src={imageUsing} style={{objectFit:"contain"}} fill={true} alt="img"/>
+                        </div>
+                    }
 
                     { usingArray && <Button className={styles.icon} style={{right:15}} disableRipple onClick={() => cycleArrays("upwards")}>
                         <RightIcon width="3vh" height="3vh"/>

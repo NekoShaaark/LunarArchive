@@ -1,10 +1,11 @@
 "use client"
 
 import styles from '@/styles/WindowHeader.module.css'
-import { AlertIcon, ArchiveIcon, CloseIcon, FolderIcon, ImageViewerIcon, LogsIcon, MinimizeIcon, MoonStarIcon, NoteIcon, PortfolioIcon, RestoreIcon } from './SvgHandler'
+import { AlertIcon, ArchiveIcon, CloseIcon, FolderIcon, ImageViewerIcon, LogsIcon, MaximizeIcon, MinimizeIcon, MoonStarIcon, NoteIcon, 
+  PortfolioIcon, RestoreIcon } from './SvgHandler'
 import { useEffect, useState } from 'react'
 
-export default function WindowHeader({headerName, selectedIcon, setClose, setMinimize, newHeaderName, removeMinimize, keepMaximize}) {
+export default function WindowHeader({headerName, selectedIcon, setClose, setMinimize, setMaximize, newHeaderName, removeMinimize, keepMaximize, maximized}) {
   const [windowHeaderName, setWindowHeaderName] = useState()
 
   function handleClose(){
@@ -13,6 +14,10 @@ export default function WindowHeader({headerName, selectedIcon, setClose, setMin
 
   function handleMinimize(){
     setMinimize()
+  }
+
+  function handleMaximize(){
+    setMaximize()
   }
 
   useEffect(() => {
@@ -39,7 +44,8 @@ export default function WindowHeader({headerName, selectedIcon, setClose, setMin
       
       <div className={styles.systemIcons}>
         {!removeMinimize && <MinimizeIcon className={styles.minimizeIcon} alt="Minimize" width={24} height={24} onClick={handleMinimize}/>}
-        {keepMaximize && <RestoreIcon className={styles.maximizeIcon} alt="Close" width={24} height={24}/>}
+        {(keepMaximize && !maximized) && <MaximizeIcon className={styles.maximizeIcon} alt="Maximize" width={24} height={24} onClick={handleMaximize}/>}
+        {(keepMaximize && maximized) && <RestoreIcon className={styles.maximizeIcon} alt="Restore" width={24} height={24} onClick={handleMaximize}/>}
         <CloseIcon className={styles.closeIcon} alt="Close" width={24} height={24} onClick={handleClose}/>
       </div>
     </div>

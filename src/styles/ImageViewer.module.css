@@ -29,8 +29,18 @@
 
 .image { 
   display: flex;
+  width: 100%;
+  height: 100%;
   align-items: center;
   flex-direction: row;
+}
+.maximizedImage{
+  display: flex;
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  margin: 5%;
+  background: #000;
 }
 
 .icon {
@@ -40,6 +50,7 @@
   background: var(--globalColor);
   border-inline: 4px solid var(--globalColor);
   border-radius: 0;
+  z-index: 1;
 }
 .icon:hover {
   display: flex;

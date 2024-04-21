@@ -38,14 +38,14 @@ export default function Home() {
   const amORpm = date.getHours() >= 12 ? "PM" : "AM"
   const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
 
-  //minimize animation states
-  const [archiveMinimize, archiveAnimate] = useAnimate()
-  const [logsMinimize, logsAnimate] = useAnimate()
-  const [settingsMinimize, settingsAnimate] = useAnimate()
-  const [documentsMinimize, documentsAnimate] = useAnimate()
-  const [portfolioMinimize, portfolioAnimate] = useAnimate()
-  const [imageViewerMinimize, imageViewerAnimate] = useAnimate()
-  const [textEditorMinimize, textEditorAnimate] = useAnimate()
+  //window animation states
+  const [archiveWindowAnimation, archiveAnimate] = useAnimate()
+  const [logsWindowAnimation, logsAnimate] = useAnimate()
+  const [settingsWindowAnimation, settingsAnimate] = useAnimate()
+  const [documentsWindowAnimation, documentsAnimate] = useAnimate()
+  const [portfolioWindowAnimation, portfolioAnimate] = useAnimate()
+  const [imageViewerWindowAnimation, imageViewerAnimate] = useAnimate()
+  const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
 
   //desktop settings states
   const [selectedWallpaper, setSelectedWallpaper] = useState("Starry")
@@ -72,6 +72,9 @@ export default function Home() {
   const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
   const [textEditorWindowMinimized, setTextEditorWindowMinimized] = useState(false)
 
+  //window maximized states
+  const [imageViewerWindowMaximized, setImageViewerWindowMaximized] = useState(false)
+
   //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
@@ -87,7 +90,7 @@ export default function Home() {
   const [ivyImageWidth, setIvyImageWidth] = useState()
   const [ivyImageHeight, setIvyImageHeight] = useState()
   const [ivyImageDescription, setIvyImageDescription] = useState()
-  const [ivyHeaderName, setIvyImageHeaderName] = useState("Image Viewer")
+  const [ivyImageHeaderName, setIvyImageHeaderName] = useState("Image Viewer")
   const [ivyArrayIndex, setIvyArrayIndex] = useState()
 
   //text editor (notus) states
@@ -215,63 +218,80 @@ export default function Home() {
   const dropWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "archive":
-        await archiveAnimate(archiveMinimize.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
+        await archiveAnimate(archiveWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "logs":
-        await logsAnimate(logsMinimize.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
+        await logsAnimate(logsWindowAnimation.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "settings":
-        await settingsAnimate(settingsMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await settingsAnimate(settingsWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "documents":
-        await documentsAnimate(documentsMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await documentsAnimate(documentsWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "portfolio":
-        await portfolioAnimate(portfolioMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await portfolioAnimate(portfolioWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "imageViewer":
-        await imageViewerAnimate(imageViewerMinimize.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "textEditor":
-        await textEditorAnimate(textEditorMinimize.current, { y: "650%" }, { duration: 0.6, delay: 0.12 })
+        await textEditorAnimate(textEditorWindowAnimation.current, { y: "650%" }, { duration: 0.6, delay: 0.12 })
         break
     }
   }
 
-  const pullWindowAnimation = async (animationItem) => {
+  const pullUpWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "archive":
-        await archiveAnimate(archiveMinimize.current, { y: 0 }, { duration: 0.4 })
+        await archiveAnimate(archiveWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "logs":
-        await logsAnimate(logsMinimize.current, { y: 0 }, { duration: 0.4 })
+        await logsAnimate(logsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "settings":
-        await settingsAnimate(settingsMinimize.current, { y: 0 }, { duration: 0.4 })
+        await settingsAnimate(settingsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "documents":
-        await documentsAnimate(documentsMinimize.current, { y: 0 }, { duration: 0.4 })
+        await documentsAnimate(documentsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "portfolio":
-        await portfolioAnimate(portfolioMinimize.current, { y: 0 }, { duration: 0.4 })
+        await portfolioAnimate(portfolioWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "imageViewer":
-        await imageViewerAnimate(imageViewerMinimize.current, { y: 0 }, { duration: 0.4 })
+        await imageViewerAnimate(imageViewerWindowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "textEditor":
-        await textEditorAnimate(textEditorMinimize.current, { y: 0 }, { duration: 0.4 })
+        await textEditorAnimate(textEditorWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+    }
+  }
+
+
+  //--MAXIMIZE ANIMATIONS--//
+  const enlargeWindowAnimation = async (animationItem) => {
+    switch(animationItem){
+      case "imageViewer":
+        // await imageViewerAnimate(imageViewerWindowAnimation.current, { x: 100 }, { duration: 2.6, delay: 0 })
+        break
+    }
+  }
+  const shrinkWindowAnimation = async (animationItem) => {
+    switch(animationItem){
+      case "imageViewer":
+        // await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
+        break
     }
   }
 
@@ -291,7 +311,7 @@ export default function Home() {
     
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(archiveWindowMinimized){
-      pullWindowAnimation("archive")
+      pullUpWindowAnimation("archive")
       setArchiveWindowMinimized(false)
     }
     
@@ -335,7 +355,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(logsWindowMinimized){
-      pullWindowAnimation("logs")
+      pullUpWindowAnimation("logs")
       setLogsWindowMinimized(false)
     }
 
@@ -374,7 +394,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(settingsWindowMinimized){
-      pullWindowAnimation("settings")
+      pullUpWindowAnimation("settings")
       setSettingsWindowMinimized(false)
     }
 
@@ -413,7 +433,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(documentsWindowMinimized){
-      pullWindowAnimation("documents")
+      pullUpWindowAnimation("documents")
       setDocumentsWindowMinimized(false)
     }
 
@@ -452,7 +472,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(portfolioWindowMinimized){
-      pullWindowAnimation("portfolio")
+      pullUpWindowAnimation("portfolio")
       setPortfolioWindowMinimized(false)
     }
 
@@ -491,7 +511,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(imageViewerWindowMinimized){
-      pullWindowAnimation("imageViewer")
+      pullUpWindowAnimation("imageViewer")
       setImageViewerWindowMinimized(false)
     }
 
@@ -508,6 +528,7 @@ export default function Home() {
 
     setChangeFocusedWindow(true) 
     setImageViewerWindowOpen(false) 
+    setImageViewerWindowMaximized(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
@@ -519,6 +540,14 @@ export default function Home() {
     setChangeFocusedWindow(true) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+  }
+  const imageViewerHandleMaximize = () => {
+    //if alert dialogue is open, allow nothing to be maximized
+    if(alertWindowOpen){ return }
+
+    if(!imageViewerWindowMaximized){ setImageViewerWindowMaximized(true) }
+    else{ setImageViewerWindowMaximized(false) }
+    setChangeFocusedWindow(true)
   }
 
   const alertHandleOpen = () => { 
@@ -548,7 +577,7 @@ export default function Home() {
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(textEditorWindowMinimized){
-      pullWindowAnimation("textEditor")
+      pullUpWindowAnimation("textEditor")
       setTextEditorWindowMinimized(false)
     }
 
@@ -948,6 +977,21 @@ export default function Home() {
   }, [archiveWindowMinimized, logsWindowMinimized, settingsWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
       imageViewerWindowMinimized, textEditorWindowMinimized])
 
+  
+  //--ON SERVER INIT & WHEN WINDOWS MAXIMIZE--//
+  useEffect(() => {
+
+    //play animation to maximize window
+    if(imageViewerWindowMaximized){
+      enlargeWindowAnimation("imageViewer")
+      document.getElementById("window-imageViewer").setAttribute("style", "width:100%; height:100%; top:0; left:0; border-width:0")
+    }
+    else if(!imageViewerWindowMaximized && imageViewerWindowOpen){
+      shrinkWindowAnimation("imageViewer")
+      document.getElementById("window-imageViewer").setAttribute("style", "width:fit-content; height:fit-content; top:140px; left:360px; border-width:4px")
+    }
+  }, [imageViewerWindowMaximized])
+
 
   //--ON SERVER INIT & WHEN DRAGGING WINDOWS--//
   useEffect(() => {
@@ -1186,7 +1230,7 @@ export default function Home() {
               <motion.div 
                 id="window-archive"
                 className="draggable"
-                ref={archiveMinimize}
+                ref={archiveWindowAnimation}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
@@ -1215,7 +1259,7 @@ export default function Home() {
               <motion.div 
                 id="window-logs" 
                 className="draggable"
-                ref={logsMinimize}
+                ref={logsWindowAnimation}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
@@ -1239,7 +1283,7 @@ export default function Home() {
               <motion.div 
                 id="window-settings" 
                 className="draggable"
-                ref={settingsMinimize}
+                ref={settingsWindowAnimation}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
@@ -1272,7 +1316,7 @@ export default function Home() {
               <motion.div 
                 id="window-documents" 
                 className="draggable"
-                ref={documentsMinimize}
+                ref={documentsWindowAnimation}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
@@ -1312,7 +1356,7 @@ export default function Home() {
             {portfolioWindowOpen &&
               <motion.div 
                 id="window-portfolio"
-                ref={portfolioMinimize}
+                ref={portfolioWindowAnimation}
                 initial={{ opacity: 0, y: 20, scale: 0.75 }} //TODO: add little animation here to open the window a little more nicely
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 16, scale: 0.75 }}
@@ -1342,7 +1386,7 @@ export default function Home() {
               <motion.div 
                 id="window-imageViewer" 
                 className="draggable"
-                ref={imageViewerMinimize}
+                ref={imageViewerWindowAnimation}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
@@ -1350,19 +1394,28 @@ export default function Home() {
               >
                 {/* false window header */}
                 <div id="draggable-header">
-                  <WindowHeader headerName={`Ivy - ${ivyHeaderName}`} selectedIcon="imageViewerIcon" setClose={imageViewerHandleClose} setMinimize={imageViewerHandleMinimize}/>
+                  <WindowHeader 
+                    headerName={`Ivy - ${ivyImageHeaderName}`} 
+                    selectedIcon="imageViewerIcon" 
+                    setClose={imageViewerHandleClose} 
+                    setMinimize={imageViewerHandleMinimize} 
+                    setMaximize={imageViewerHandleMaximize} 
+                    keepMaximize={true}
+                    maximized={imageViewerWindowMaximized}
+                  />
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
                   <ImageHandler 
                     selectedImage={currentIvyImage} 
                     isOpen={imageViewerWindowOpen} 
+                    isMaximized={imageViewerWindowMaximized}
                     imageWidth={ivyImageWidth} 
                     imageHeight={ivyImageHeight} 
                     imageDescription={ivyImageDescription}
                     imageArrayIndex={ivyArrayIndex}
                     setHeaderName={handleIvyHeaderName}
-                    imageHeader={ivyHeaderName}
+                    imageHeader={ivyImageHeaderName}
                   />
                 </div>
               </motion.div>
@@ -1397,7 +1450,7 @@ export default function Home() {
               <motion.div 
                 id="window-textEditor" 
                 className="draggable"
-                ref={textEditorMinimize}
+                ref={textEditorWindowAnimation}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
