@@ -33,10 +33,7 @@ export default function Home() {
   //--VARIABLE & STATES--//
 
   //date and time variables, handling and state
-  const date = new Date()
-  const now = date.toLocaleTimeString("en-US", { hour12:false, hour:"2-digit", minute:"2-digit" })
-  const amORpm = date.getHours() >= 12 ? "PM" : "AM"
-  const [currentTime, setCurrentTime] = useState(now + ` ${amORpm}`)
+  const [currentTime, setCurrentTime] = useState("Getting Time Data...")
 
   //window animation states
   const [archiveWindowAnimation, archiveAnimate] = useAnimate()
@@ -638,10 +635,10 @@ export default function Home() {
 
   //--FUNCTIONS & STATE HANDLING--//
   function updateTime() {
-    const date = new Date()
-    const amORpm = date.getHours() >= 12 ? "PM" : "AM"
+    let date = new Date()
+    let amORpm = date.getHours() >= 12 ? "PM" : "AM"
 
-    const newTime = date.toLocaleTimeString('en-US', { hour12:false, hour:"2-digit", minute:"2-digit" })
+    let newTime = date.toLocaleTimeString('en-US', { hour12:false, hour:"2-digit", minute:"2-digit" })
     setCurrentTime(newTime + ` ${amORpm}`)
   }
   setInterval(updateTime, 1000)
