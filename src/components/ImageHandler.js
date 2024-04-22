@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import styles from "@/styles/ImageViewer.module.css"
 import { LeftIcon, RightIcon } from "./SvgHandler"
+import { AnimatePresence, motion, useAnimate } from "framer-motion"
 
 export default function ImageHandler({ selectedImage, isOpen, isMaximized, imageWidth, imageHeight, imageDescription, imageArrayIndex, imageHeader, setHeaderName }) {
     const [imageUsing, setImageUsing] = useState()
@@ -23,6 +24,13 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const [showPreviewImages, setShowPreviewImages] = useState(true)
     const [rightImage, setRightImage] = useState("placeholderImage.webp")
     const [leftImage, setLeftImage] = useState("placeholderImage.webp")
+
+    const [leftImageAnimation, leftImageAnimate] = useAnimate()
+    const [middleImageAnimation, middleImageAnimate] = useAnimate()
+    const [rightImageAnimation, rightImageAnimate] = useAnimate()
+    const [mainImageAnimation, mainImageAnimate] = useAnimate()
+    const [timesAnimatedRight, setTimesAnimatedRight] = useState(0)
+    const [timesAnimatedLeft, setTimesAnimatedLeft] = useState(0)
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
@@ -51,7 +59,6 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
             setWidthArray(imageWidth)
             setHeaderArray(imageHeader)
             setCurrentArrayIndex(imageArrayIndex)
-            console.log("initIndex: " + imageArrayIndex)
         }
         else{ 
             setUsingArray(false)
@@ -89,6 +96,220 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         }
     })
 
+
+    const scrollRightAnimation = async () => {
+        if(timesAnimatedLeft == 1){
+            switch(timesAnimatedRight){
+                case 0:
+                    console.log("right alternate animation 0")
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(1)
+                    break
+                
+                case 1:
+                    console.log("right alternate animation 1")
+                    middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: 14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: -218 }, { duration: 0.0, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: -204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(2)
+                    break
+
+                case 2:
+                    console.log("right alternate animation 2")
+                    rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.6, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: 116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: -116 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: -102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(0)
+                    break
+            }
+            return
+        }
+
+        if(timesAnimatedLeft == 2){
+            switch(timesAnimatedRight){
+                case 0:
+                    console.log("right alternate2 animation 0")
+                    rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.6, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: 116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: -116 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: -102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(1)
+                    break
+
+                case 1:
+                    console.log("right alternate2 animation 1")
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(2)
+                    break
+
+                case 2:
+                    console.log("right alternate2 animation 2")
+                    middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: 14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: -218 }, { duration: 0.0, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: -204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedRight(0)
+                    break
+            }
+            return
+        }
+
+        switch(timesAnimatedRight){
+            case 0:
+                console.log("right animation 0")
+                leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.6, delay: 0 })
+                await rightImageAnimate(rightImageAnimation.current, { x: 14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await rightImageAnimate(rightImageAnimation.current, { x: -218 }, { duration: 0.0, delay: 0 })
+                rightImageAnimate(rightImageAnimation.current, { x: -204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedRight(1)
+                break
+
+            case 1:
+                console.log("right animation 1")
+                leftImageAnimate(leftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.6, delay: 0 })
+                rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6, delay: 0 })
+                await middleImageAnimate(middleImageAnimation.current, { x: 116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await middleImageAnimate(middleImageAnimation.current, { x: -116 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: -102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedRight(2)
+                break
+
+            case 2:
+                console.log("right animation 2")
+                middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                await leftImageAnimate(leftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await leftImageAnimate(leftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+                leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedRight(0)
+                break
+        }
+    }
+
+
+    //TODO: merge these animations (some are the same animations, just with different conditions (eg. case1 === case2 === case0))
+    //STUB: the animation looks so nice, but it would be so much better if it was with five (like the concept art)
+    //REVIEW: this system doesn't work (it moves the images, which in-turn causes the images to display incorrectly), 
+    // maybe instead: the animation can play out, then be set back to its original co-ords
+    const scrollLeftAnimation = async () => {
+        if(timesAnimatedRight == 1){
+            switch(timesAnimatedLeft){
+                case 0: 
+                    console.log("left alternate animation 0")
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(1)
+                    break
+
+                case 1:
+                    console.log("left alternate animation 1")
+                    rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6 , delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.6, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: -14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: 218 }, { duration: 0.0, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(2)
+                    break
+
+                case 2:
+                    console.log("left alternate animation 2")
+                    rightImageAnimate(rightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: -116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: 116 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: 102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(0)
+                    break
+            }
+            return
+        }
+
+        if(timesAnimatedRight == 2){
+            switch(timesAnimatedLeft){
+                case 0:
+                    console.log("left alternate2 animation 0")
+                    rightImageAnimate(rightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: -116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await middleImageAnimate(middleImageAnimation.current, { x: 116 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: 102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(1)
+                    break
+
+                case 1:
+                    console.log("left alternate2 animation 1")
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await rightImageAnimate(rightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+                    rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(2)
+                    break
+
+                case 2:
+                    console.log("left alternate2 animation 2")
+                    rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6 , delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.6, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: -14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                    await leftImageAnimate(leftImageAnimation.current, { x: 218 }, { duration: 0.0, delay: 0 })
+                    leftImageAnimate(leftImageAnimation.current, { x: 204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                    setTimesAnimatedLeft(0)
+                    break
+            }
+            return
+        }
+
+        switch(timesAnimatedLeft){
+            case 0:
+                console.log("left animation 0")
+                rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.6 , delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.6, delay: 0 })
+                await leftImageAnimate(leftImageAnimation.current, { x: -14, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await leftImageAnimate(leftImageAnimation.current, { x: 218 }, { duration: 0.0, delay: 0 })
+                leftImageAnimate(leftImageAnimation.current, { x: 204, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedLeft(1)
+                break
+
+            case 1:
+                console.log("left animation 1")
+                rightImageAnimate(rightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.6, delay: 0 })
+                leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.6, delay: 0 })
+                await middleImageAnimate(middleImageAnimation.current, { x: -116, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await middleImageAnimate(middleImageAnimation.current, { x: 116 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 102, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedLeft(2)
+                break
+
+            case 2:
+                console.log("left animation 2")
+                middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+                await rightImageAnimate(rightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
+                await rightImageAnimate(rightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+                rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+                setTimesAnimatedLeft(0)
+                break
+        }
+    }
+
     
     // console.log("isOpen: " + isOpen)
     // console.log("ultimate: " + imageUsing)
@@ -114,8 +335,12 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingWidth(widthArray[newArrayIndex])
         setImageUsingHeader(headerArray[newArrayIndex])
         setHeaderName(headerArray[newArrayIndex])
+
         getRightImage(direction, imageArray)
         getLeftImage(direction, imageArray)
+
+        if(direction == "upwards"){ scrollRightAnimation() }
+        if(direction == "downwards"){ scrollLeftAnimation() }
     }
 
     function getRightImage(direction, array, initIndex){
@@ -190,13 +415,41 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                     {/* normal image */}
                     { !isMaximized && 
                         <div className={styles.image}>
-                            <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/>
+                            <AnimatePresence>
+                                <motion.section ref={mainImageAnimation}>
+                                    <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/>
+                                </motion.section>
+                            </AnimatePresence>
                             { showPreviewImages && 
-                                <div className={styles.previewImages}>
-                                    <Image src={leftImage} width={80} height={80} alt="prevImg"/>
-                                    <Image src={imageUsing} width={80} height={80} alt="currImg"/>
-                                    <Image src={rightImage} width={80} height={80} alt="nextImg"/>
-                                </div> 
+                                <AnimatePresence>
+                                    <motion.div 
+                                        className={styles.previewImages}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4 }}
+                                    >
+                                        <motion.section
+                                            ref={leftImageAnimation}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 1 }}
+                                        ><Image src={leftImage} width={90} height={60} alt="prevImg"/></motion.section>
+                                        
+                                        <motion.section
+                                            ref={middleImageAnimation}
+                                            initial={{ opacity: 0, y: 0 }}
+                                            animate={{ opacity: 1, y: -14 }}
+                                            transition={{ duration: 0.8 }}
+                                        ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
+
+                                        <motion.section
+                                            ref={rightImageAnimation}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 1 }}
+                                        ><Image src={rightImage} width={90} height={60} alt="nextImg"/></motion.section>
+                                    </motion.div> 
+                                </AnimatePresence>
                             }
                         </div>
                     }
@@ -207,9 +460,35 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                             <Image src={imageUsing} style={{objectFit:"contain"}} fill={true} alt="img"/>
                             { showPreviewImages && 
                                 <div className={styles.previewImages}>
-                                    <Image src={leftImage} width={80} height={80} alt="prevImg"/>
-                                    <Image src={imageUsing} width={80} height={80} alt="currImg"/>
-                                    <Image src={rightImage} width={80} height={80} alt="nextImg"/>
+                                    <AnimatePresence>
+                                        <motion.div 
+                                            className={styles.previewImages}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.4 }}
+                                        >
+                                            <motion.section
+                                                ref={leftImageAnimation}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 1 }}
+                                            ><Image src={leftImage} width={90} height={60} alt="prevImg"/></motion.section>
+
+                                            <motion.section
+                                                ref={middleImageAnimation}
+                                                initial={{ opacity: 0, y: 0 }}
+                                                animate={{ opacity: 1, y: -14 }}
+                                                transition={{ duration: 0.8 }}
+                                            ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
+
+                                            <motion.section
+                                                ref={rightImageAnimation}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 1 }}
+                                            ><Image src={rightImage} width={90} height={60} alt="nextImg"/></motion.section>
+                                        </motion.div> 
+                                    </AnimatePresence>
                                 </div>
                             }
                         </div>

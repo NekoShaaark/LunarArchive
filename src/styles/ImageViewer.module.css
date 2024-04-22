@@ -68,6 +68,10 @@
   gap: 8px;
   z-index: 1;
 }
+.previewImages section {
+  display: flex;
+  border: 2px solid #fff;
+}
 
 
 /* MOBILE OVERRIDES */
