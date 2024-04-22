@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import styles from "@/styles/ImageViewer.module.css"
-import { Button } from "@mui/material"
 import { LeftIcon, RightIcon } from "./SvgHandler"
 
 export default function ImageHandler({ selectedImage, isOpen, isMaximized, imageWidth, imageHeight, imageDescription, imageArrayIndex, imageHeader, setHeaderName }) {
@@ -20,13 +19,17 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const [widthArray, setWidthArray] = useState([])
     const [headerArray, setHeaderArray] = useState([])
     const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
+
+    const [showPreviewImages, setShowPreviewImages] = useState(true)
+    const [nextImage, setNextImage] = useState()
+    const [previousImage, setPreviousImage] = useState()
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
     var selectedImageHeight = `${imageHeight}`
     var selectedImageDescription = `${imageDescription}`
     var selectedImageHeader = `${imageHeader}`
-    
+
 
     useEffect(() => {
 
@@ -48,7 +51,10 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
             setWidthArray(imageWidth)
             setHeaderArray(imageHeader)
         }
-        else{ setUsingArray(false) }
+        else{ 
+            setUsingArray(false)
+            setShowPreviewImages(false)
+        }
         
         //set image states
         // console.log("useEffect")
@@ -60,6 +66,22 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingHeader(selectedImageHeader)
         setHeaderName(selectedImageHeader) //setting default header due to it - by default - being set as the passed array
     }, [selectedImageLocation, selectedImageWidth, selectedImageHeight, selectedImageDescription, imageArrayIndex])
+
+
+    //handle arrow keys input
+    //NOTE: this is stoped/detatched when closed (handled in imageViewerHandleClose method in home page)
+    useEffect(() => {
+        document.onkeyup = handleKeyUp
+
+        function handleKeyUp(e){
+            e.preventDefault()
+            if(!usingArray){ return }
+            if(!imageUsing){ return }
+            if(e.key == "ArrowLeft"){ cycleArrays("downwards") }
+            if(e.key == "ArrowRight"){ cycleArrays("upwards") }
+        }
+    })
+
     
     // console.log("isOpen: " + isOpen)
     // console.log("ultimate: " + imageUsing)
@@ -85,6 +107,48 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingWidth(widthArray[newArrayIndex])
         setImageUsingHeader(headerArray[newArrayIndex])
         setHeaderName(headerArray[newArrayIndex])
+        getNextImage(direction)
+        getPreviousImage(direction)
+    }
+
+    function getNextImage(direction){
+        //set new array index
+        var newArrayIndex
+        // console.log("currentIndex: " + currentArrayIndex)
+
+        //determine direction
+        //downwards works a bit weirdly, sicne the first if statement overwrites the needed index
+        if(direction == "upwards"){ newArrayIndex = currentArrayIndex + 2 }
+        if(direction == "downwards"){ 
+            setNextImage(imageArray[currentArrayIndex]) 
+            return 
+        }
+
+        //go to the other side of the array, if goes outside of array length
+        if(currentArrayIndex == imageArray.length - 1){ newArrayIndex = 1 }
+        if(newArrayIndex < 0){ newArrayIndex = imageArray.length - 1 }
+        if(newArrayIndex >= imageArray.length){ newArrayIndex = 0 }
+        
+        // console.log("arrayIndex: " + newArrayIndex)
+        // console.log("newImage: " + imageArray[newArrayIndex])
+        setNextImage(imageArray[newArrayIndex])
+    }
+
+    function getPreviousImage(direction){
+        //determine direction
+        var newArrayIndex
+        if(direction == "upwards"){ newArrayIndex = currentArrayIndex }
+        if(direction == "downwards"){ newArrayIndex = currentArrayIndex - 2 }
+
+        //go to the other side of the array, if goes outside of array length
+        if(currentArrayIndex == 0){ newArrayIndex = currentArrayIndex + 1 }
+        if(currentArrayIndex == 0 && direction == "upwards"){ newArrayIndex = currentArrayIndex }
+        if(newArrayIndex < 0){ newArrayIndex = imageArray.length - 1 }
+        if(newArrayIndex >= imageArray.length){ newArrayIndex = 0 }
+        
+        // console.log("endIndex: " + newArrayIndex)
+        // console.log("newImage: " + imageArray[newArrayIndex])
+        setPreviousImage(imageArray[newArrayIndex])
     }
 
 
@@ -100,20 +164,41 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
             //true / in Image Viewer
             <>
                 <div className={styles.image}>
-                    { usingArray && <Button className={styles.icon} style={{left:15}} disableRipple onClick={() => cycleArrays("downwards")}>
+                    { usingArray && <div className={styles.icon} style={{left:15}} onClick={() => cycleArrays("downwards")}>
                       <LeftIcon width="3vh" height="3vh"/>
-                    </Button> }
+                    </div> }
 
-                    { !isMaximized && <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/> }
-                    { isMaximized && 
-                        <div className={styles.maximizedImage}>
-                            <Image src={imageUsing} style={{objectFit:"contain"}} fill={true} alt="img"/>
+                    {/* normal image */}
+                    { !isMaximized && 
+                        <div className={styles.image}>
+                            <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/>
+                            { showPreviewImages && 
+                                <div className={styles.previewImages}>
+                                    <Image src={previousImage} width={80} height={80} alt="prevImg"/>
+                                    <Image src={imageUsing} width={80} height={80} alt="currImg"/>
+                                    <Image src={nextImage} width={80} height={80} alt="nextImg"/>
+                                </div> 
+                            }
                         </div>
                     }
 
-                    { usingArray && <Button className={styles.icon} style={{right:15}} disableRipple onClick={() => cycleArrays("upwards")}>
+                    {/* maximized image */}
+                    { isMaximized && 
+                        <div className={styles.maximizedImage}>
+                            <Image src={imageUsing} style={{objectFit:"contain"}} fill={true} alt="img"/>
+                            { showPreviewImages && 
+                                <div className={styles.previewImages}>
+                                    <Image src={previousImage} width={80} height={80} alt="prevImg"/>
+                                    <Image src={imageUsing} width={80} height={80} alt="currImg"/>
+                                    <Image src={nextImage} width={80} height={80} alt="nextImg"/>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    { usingArray && <div className={styles.icon} style={{right:15}} onClick={() => cycleArrays("upwards")}>
                         <RightIcon width="3vh" height="3vh"/>
-                    </Button> }
+                    </div> }
                 </div>
 
                 <h1 className={styles.text}>{imageUsingDescription}</h1>

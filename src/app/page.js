@@ -528,6 +528,7 @@ export default function Home() {
     setImageViewerWindowMaximized(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+    document.onkeyup = null  //detach onkeyup event listener
   }
   const imageViewerHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized

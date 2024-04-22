@@ -145,8 +145,8 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
                   headerName: "HomeWwo",
                   fileType: "Image",
                   description: `"I always used to hate algebra..."`,
-                  height: 380,
-                  width: 420,
+                  height: 420,
+                  width: 380,
                   icon: <ImageIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
@@ -318,8 +318,8 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           headerName: "Beach",
           fileType: "Image",
           description: `"Our time at the Beach."`,
-          height: 480,
-          width: 270,
+          height: 270,
+          width: 480,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
@@ -328,8 +328,8 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           headerName: "Sunset",
           fileType: "Image",
           description: `"I love this Sunset.."`,
-          height: 720,
-          width: 400,
+          height: 400,
+          width: 720,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         },
         {
@@ -339,6 +339,26 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           fileType: "Image",
           description: `"Wonder how The Machine was made..."`,
           height: 500,
+          width: 500,
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
+        },
+        {
+          id: "13",
+          name: "Waterfall.jpeg",
+          headerName: "Waterfall",
+          fileType: "Image",
+          description: `"I used to love this water... unless it dried up."`,
+          height: 500,
+          width: 400,
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
+        },
+        {
+          id: "14",
+          name: "Forest.jpeg",
+          headerName: "Where are we",
+          fileType: "Image",
+          description: `"How did we get here..."`,
+          height: 400,
           width: 500,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
         }
@@ -358,8 +378,8 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
       headerName: "Swimming",
       fileType: "Image",
       description: `"I wonder what happened to her.."`,
-      height: 380,
-      width: 480,
+      height: 480,
+      width: 380,
       icon: <ImageIcon fill="#9c9c9c" width={48} height={48}/>
     }
   ]
@@ -500,7 +520,7 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           console.log(imagesObject)
           
           //set ivy settings, and open
-          handleIvyImage(imagesObject.webp, imagesObject.height, imagesObject.width, imagesObject.descriptions, imagesObject.header, fileNamesArrayIndex)
+          handleIvyImage(imagesObject.webp, imagesObject.width, imagesObject.height, imagesObject.descriptions, imagesObject.header, fileNamesArrayIndex)
           handleIvyOpen()
         }
 
