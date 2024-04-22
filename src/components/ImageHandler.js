@@ -21,8 +21,8 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
 
     const [showPreviewImages, setShowPreviewImages] = useState(true)
-    const [nextImage, setNextImage] = useState()
-    const [previousImage, setPreviousImage] = useState()
+    const [rightImage, setRightImage] = useState("placeholderImage.webp")
+    const [leftImage, setLeftImage] = useState("placeholderImage.webp")
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
@@ -50,6 +50,8 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
             setHeightArray(imageHeight)
             setWidthArray(imageWidth)
             setHeaderArray(imageHeader)
+            setCurrentArrayIndex(imageArrayIndex)
+            console.log("initIndex: " + imageArrayIndex)
         }
         else{ 
             setUsingArray(false)
@@ -65,6 +67,11 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingDescription(selectedImageDescription)
         setImageUsingHeader(selectedImageHeader)
         setHeaderName(selectedImageHeader) //setting default header due to it - by default - being set as the passed array
+        
+        //set image previews
+        //NOTE: have to pass in initialArrayIndex due to the currentArrayIndex state not being available when this function is run
+        getRightImage("upwards", selectedImage, imageArrayIndex)
+        getLeftImage("upwards", selectedImage, imageArrayIndex)
     }, [selectedImageLocation, selectedImageWidth, selectedImageHeight, selectedImageDescription, imageArrayIndex])
 
 
@@ -107,48 +114,60 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingWidth(widthArray[newArrayIndex])
         setImageUsingHeader(headerArray[newArrayIndex])
         setHeaderName(headerArray[newArrayIndex])
-        getNextImage(direction)
-        getPreviousImage(direction)
+        getRightImage(direction, imageArray)
+        getLeftImage(direction, imageArray)
     }
 
-    function getNextImage(direction){
-        //set new array index
+    function getRightImage(direction, array, initIndex){
+        var oldArrayIndex
         var newArrayIndex
-        // console.log("currentIndex: " + currentArrayIndex)
+        
+        //decide whether to use init value or state
+        if(initIndex || initIndex == 0){ oldArrayIndex = initIndex - 1 }
+        else{ oldArrayIndex = currentArrayIndex }
 
         //determine direction
         //downwards works a bit weirdly, sicne the first if statement overwrites the needed index
-        if(direction == "upwards"){ newArrayIndex = currentArrayIndex + 2 }
+        if(direction == "upwards"){ newArrayIndex = oldArrayIndex + 2 }
         if(direction == "downwards"){ 
-            setNextImage(imageArray[currentArrayIndex]) 
+            setRightImage(array[oldArrayIndex]) 
             return 
         }
 
         //go to the other side of the array, if goes outside of array length
-        if(currentArrayIndex == imageArray.length - 1){ newArrayIndex = 1 }
-        if(newArrayIndex < 0){ newArrayIndex = imageArray.length - 1 }
-        if(newArrayIndex >= imageArray.length){ newArrayIndex = 0 }
+        if(oldArrayIndex == array.length - 1){ newArrayIndex = 1 }
+        if(newArrayIndex < 0){ newArrayIndex = array.length - 1 }
+        if(newArrayIndex >= array.length){ newArrayIndex = 0 }
         
         // console.log("arrayIndex: " + newArrayIndex)
-        // console.log("newImage: " + imageArray[newArrayIndex])
-        setNextImage(imageArray[newArrayIndex])
+        // console.log("newImage: " + array[newArrayIndex])
+        setRightImage(array[newArrayIndex])
     }
 
-    function getPreviousImage(direction){
-        //determine direction
+    function getLeftImage(direction, array, initIndex){
+        var oldArrayIndex
         var newArrayIndex
-        if(direction == "upwards"){ newArrayIndex = currentArrayIndex }
-        if(direction == "downwards"){ newArrayIndex = currentArrayIndex - 2 }
+        
+        //decide whether to use init value or state
+        if(initIndex || initIndex == 0){ oldArrayIndex = initIndex - 1 }
+        else{ oldArrayIndex = currentArrayIndex }
+        
+        //determine direction
+        if(direction == "upwards"){ newArrayIndex = oldArrayIndex }
+        if(direction == "downwards"){ newArrayIndex = oldArrayIndex - 2 }
+        // console.log("currentIndex: " + oldArrayIndex)
+        // console.log("startIndex: " + newArrayIndex)
 
         //go to the other side of the array, if goes outside of array length
-        if(currentArrayIndex == 0){ newArrayIndex = currentArrayIndex + 1 }
-        if(currentArrayIndex == 0 && direction == "upwards"){ newArrayIndex = currentArrayIndex }
-        if(newArrayIndex < 0){ newArrayIndex = imageArray.length - 1 }
-        if(newArrayIndex >= imageArray.length){ newArrayIndex = 0 }
+        // if(oldArrayIndex == 0){ newArrayIndex = oldArrayIndex + 1 }
+        if(oldArrayIndex == 0 && direction == "downwards"){ newArrayIndex = array.length - 2 }
+        if(oldArrayIndex == 0 && direction == "upwards"){ newArrayIndex = oldArrayIndex }
+        if(newArrayIndex < 0){ newArrayIndex = array.length - 1 }
+        if(newArrayIndex >= array.length){ newArrayIndex = 0 }
         
         // console.log("endIndex: " + newArrayIndex)
         // console.log("newImage: " + imageArray[newArrayIndex])
-        setPreviousImage(imageArray[newArrayIndex])
+        setLeftImage(array[newArrayIndex])
     }
 
 
@@ -174,9 +193,9 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                             <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/>
                             { showPreviewImages && 
                                 <div className={styles.previewImages}>
-                                    <Image src={previousImage} width={80} height={80} alt="prevImg"/>
+                                    <Image src={leftImage} width={80} height={80} alt="prevImg"/>
                                     <Image src={imageUsing} width={80} height={80} alt="currImg"/>
-                                    <Image src={nextImage} width={80} height={80} alt="nextImg"/>
+                                    <Image src={rightImage} width={80} height={80} alt="nextImg"/>
                                 </div> 
                             }
                         </div>
@@ -188,9 +207,9 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                             <Image src={imageUsing} style={{objectFit:"contain"}} fill={true} alt="img"/>
                             { showPreviewImages && 
                                 <div className={styles.previewImages}>
-                                    <Image src={previousImage} width={80} height={80} alt="prevImg"/>
+                                    <Image src={leftImage} width={80} height={80} alt="prevImg"/>
                                     <Image src={imageUsing} width={80} height={80} alt="currImg"/>
-                                    <Image src={nextImage} width={80} height={80} alt="nextImg"/>
+                                    <Image src={rightImage} width={80} height={80} alt="nextImg"/>
                                 </div>
                             }
                         </div>

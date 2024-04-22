@@ -347,7 +347,7 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           name: "Waterfall.jpeg",
           headerName: "Waterfall",
           fileType: "Image",
-          description: `"I used to love this water... unless it dried up."`,
+          description: `"I used to love this waterfall... until it dried up."`,
           height: 500,
           width: 400,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
