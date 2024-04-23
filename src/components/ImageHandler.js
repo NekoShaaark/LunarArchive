@@ -28,9 +28,6 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const [leftImageAnimation, leftImageAnimate] = useAnimate()
     const [middleImageAnimation, middleImageAnimate] = useAnimate()
     const [rightImageAnimation, rightImageAnimate] = useAnimate()
-    const [mainImageAnimation, mainImageAnimate] = useAnimate()
-    const [timesAnimatedRight, setTimesAnimatedRight] = useState(0)
-    const [timesAnimatedLeft, setTimesAnimatedLeft] = useState(0)
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
@@ -106,11 +103,11 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+        leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
         await rightImageAnimate(rightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
         await rightImageAnimate(rightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
-        rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+        rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
     }
 
 
@@ -124,11 +121,25 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.6, delay: 0 })
+        rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
         await leftImageAnimate(leftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
         await leftImageAnimate(leftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
-        leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 1 }, { duration: 0.2, delay: 0 })
+        leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+    }
+
+      //--MOTION VARIANTS--//
+    const middleMotion = {
+        initial: { opacity: 0, y: 0 },
+        animate: { opacity: 1, y: -14 },
+        whileHover: { y: -20, scale: 1.08, transition: 0.4 },
+        transition: { duration: 0.2 }
+    }
+    const sidesMotion = {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 0.75, y: 0 },
+        whileHover: { y: -6, scale: 1.05, transition: 0.6 },
+        transition: { duration: 0.4 }
     }
 
     
@@ -229,15 +240,21 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
             //true / in Image Viewer
             <>
                 <div className={styles.image}>
-                    { usingArray && <div className={styles.icon} style={{left:15}} onClick={() => cycleArrays("downwards")}>
-                      <LeftIcon width="3vh" height="3vh"/>
-                    </div> }
+                    { usingArray && 
+                        <motion.div 
+                            className={styles.icon} 
+                            style={{left:15}} 
+                            whileHover={{ x: -4, scale: 1.05 }}
+                            onClick={() => cycleArrays("downwards")}
+                        >
+                            <LeftIcon width="3vh" height="3vh"/>
+                        </motion.div> }
 
                     {/* normal image */}
                     { !isMaximized && 
                         <div className={styles.image}>
                             <AnimatePresence>
-                                <motion.div ref={mainImageAnimation}>
+                                <motion.div>
                                     <Image src={imageUsing} width={imageUsingWidth} height={imageUsingHeight} alt="img"/>
                                 </motion.div>
                             </AnimatePresence>
@@ -251,24 +268,30 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                     >
                                         <motion.section
                                             ref={leftImageAnimation}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 1 }}
-                                        ><Image src={leftImage} width={90} height={60} alt="prevImg"/></motion.section>
+                                            variants={sidesMotion}
+                                            initial="initial"
+                                            animate="animate"
+                                            whileHover="whileHover"
+                                            transition="transition"
+                                        ><Image src={leftImage} width={90} height={60} alt="prevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
                                         
                                         <motion.section
                                             ref={middleImageAnimation}
-                                            initial={{ opacity: 0, y: 0 }}
-                                            animate={{ opacity: 1, y: -14 }}
-                                            transition={{ duration: 0.8 }}
+                                            variants={middleMotion}
+                                            initial="initial"
+                                            animate="animate"
+                                            whileHover="whileHover"
+                                            transition="transition"
                                         ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
 
                                         <motion.section
                                             ref={rightImageAnimation}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 1 }}
-                                        ><Image src={rightImage} width={90} height={60} alt="nextImg"/></motion.section>
+                                            variants={sidesMotion}
+                                            initial="initial"
+                                            animate="animate"
+                                            whileHover="whileHover"
+                                            transition="transition"
+                                        ><Image src={rightImage} width={90} height={60} alt="nextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
                                     </motion.div> 
                                 </AnimatePresence>
                             }
@@ -290,24 +313,30 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                         >
                                             <motion.section
                                                 ref={leftImageAnimation}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 1 }}
-                                            ><Image src={leftImage} width={90} height={60} alt="prevImg"/></motion.section>
+                                                variants={sidesMotion}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="whileHover"
+                                                transition="transition"
+                                            ><Image src={leftImage} width={90} height={60} alt="prevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
 
                                             <motion.section
                                                 ref={middleImageAnimation}
-                                                initial={{ opacity: 0, y: 0 }}
-                                                animate={{ opacity: 1, y: -14 }}
-                                                transition={{ duration: 0.8 }}
+                                                variants={middleMotion}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="whileHover"
+                                                transition="transition"
                                             ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
 
                                             <motion.section
                                                 ref={rightImageAnimation}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 1 }}
-                                            ><Image src={rightImage} width={90} height={60} alt="nextImg"/></motion.section>
+                                                variants={sidesMotion}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="whileHover"
+                                                transition="transition"
+                                            ><Image src={rightImage} width={90} height={60} alt="nextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
                                         </motion.div> 
                                     </AnimatePresence>
                                 </div>
@@ -315,9 +344,15 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                         </div>
                     }
 
-                    { usingArray && <div className={styles.icon} style={{right:15}} onClick={() => cycleArrays("upwards")}>
-                        <RightIcon width="3vh" height="3vh"/>
-                    </div> }
+                    { usingArray && 
+                        <motion.div 
+                            className={styles.icon} 
+                            style={{right:15}} 
+                            whileHover={{ x: 4, scale: 1.05 }}
+                            onClick={() => cycleArrays("upwards")}
+                        >
+                            <RightIcon width="3vh" height="3vh"/>
+                        </motion.div> }
                 </div>
 
                 <h1 className={styles.text}>{imageUsingDescription}</h1>

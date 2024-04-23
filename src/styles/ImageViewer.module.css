@@ -55,7 +55,7 @@
   position: absolute;
   height: 3vh;
   background: var(--globalColor);
-  border-inline: 4px solid var(--globalColor);
+  border: 4px solid var(--globalColor);
   border-radius: 0;
   cursor: pointer;
   z-index: 1;
@@ -63,6 +63,7 @@
 .icon:hover {
   display: flex;
   background: var(--globalColorHover);
+  border: 4px solid var(--globalColorHover);
 }
 
 .previewImages {
@@ -76,6 +77,10 @@
   display: flex;
   margin-inline: 4px;
   border: 2px solid #fff;
+}
+.previewImages section :hover {
+  display: flex;
+  cursor: pointer;
 }
 
 
