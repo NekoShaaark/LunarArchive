@@ -28,14 +28,18 @@
 }
 
 .image { 
-  display: flex;
+  display: grid;
   width: 100%;
   height: 100%;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  justify-items: center;
   z-index: 0;
 }
+.image div {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
 .maximizedImage{
   display: flex;
   position: relative;
@@ -63,13 +67,14 @@
 
 .previewImages {
   display: flex;
-  position: absolute;
-  bottom: 6vh;
-  gap: 8px;
+  position: relative;
+  align-self: flex-end;
+  margin-bottom: 2vh;
   z-index: 1;
 }
 .previewImages section {
   display: flex;
+  margin-inline: 4px;
   border: 2px solid #fff;
 }
 
