@@ -78,10 +78,10 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         
         //set image previews
         //NOTE: have to pass in initialArrayIndex due to the currentArrayIndex state not being available when this function is run
-        getOuterLeftImage("upwards", selectedImage, imageArrayIndex)
-        getInnerLeftImage("upwards", selectedImage, imageArrayIndex)
-        getInnerRightImage("upwards", selectedImage, imageArrayIndex)
-        getOuterRightImage("upwards", selectedImage, imageArrayIndex)
+        updateOuterLeftImage("upwards", selectedImage, imageArrayIndex)
+        updateInnerLeftImage("upwards", selectedImage, imageArrayIndex)
+        updateInnerRightImage("upwards", selectedImage, imageArrayIndex)
+        updateOuterRightImage("upwards", selectedImage, imageArrayIndex)
     }, [selectedImageLocation, selectedImageWidth, selectedImageHeight, selectedImageDescription, imageArrayIndex])
 
 
@@ -103,36 +103,137 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const scrollRightAnimation = async () => {
 
         //first reposition the new image preview
-        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
-        middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
-        await innerRightImageAnimate(innerRightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.0, delay: 0 })
+        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14 }, { duration: 0.0, delay: 0 })
+        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -408, y: 14 }, { duration: 0.0, delay: 0 })
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
-        middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-        await innerRightImageAnimate(innerRightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await innerRightImageAnimate(innerRightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
-        innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -422, opacity: 0 }, { duration: 0.3, delay: 0 })
+        await outerRightImageAnimate(outerRightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+        outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
     }
 
-
-    //STUB: the animation looks so nice, but it would be so much better if it was with five (like the concept art)
     const scrollLeftAnimation = async () => {
 
         //first reposition the new image preview
-        innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
-        middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
-        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.0, delay: 0 })
+        outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -102, y: 14 }, { duration: 0.0, delay: 0 })
+        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 408, y: 14 }, { duration: 0.0, delay: 0 })
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
-        middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
-        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+        outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 422, opacity: 0 }, { duration: 0.3, delay: 0 })
+        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
     }
+
+    const scrollRightTwiceAnimation = async () => {
+        
+        //first reposition the new image preview
+        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 204, y: -14 }, { duration: 0.0, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: 204, y: 14 }, { duration: 0.0, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: -306, y: 14 }, { duration: 0.0, delay: 0 })
+        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -306, y: -14 }, { duration: 0.0, delay: 0 })
+
+        //then animate back to its original position 
+        //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
+        outerLeftAnimate()
+            innerLeftAnimate()
+                middleAnimate()
+            innerRightAnimate()
+        outerRightAnimate()
+
+        async function middleAnimate(){
+            await middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.2, delay: 0 })
+            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function innerLeftAnimate(){
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.2, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function innerRightAnimate(){
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -320, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: 116, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14, opacity: 1 }, { duration: 0.1, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function outerLeftAnimate(){
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0 }, { duration: 0.2, delay: 0 })
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function outerRightAnimate(){
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -408, y: 14 }, { duration: 0.2, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -422, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: 14, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 1 }, { duration: 0.3, delay: 0 })
+        }
+    }
+
+    const scrollLeftTwiceAnimation = async () => {
+
+        //first reposition the new image preview
+        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 306, y: 0 }, { duration: 0.0, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 306, y: 14 }, { duration: 0.0, delay: 0 })
+                middleImageAnimate(middleImageAnimation.current, { x: -204, y: 14 }, { duration: 0.0, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.0, delay: 0 })
+        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -204, y: -14 }, { duration: 0.0, delay: 0 })
+
+        //then animate back to its original position 
+        //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
+        outerLeftAnimate()
+            innerLeftAnimate()
+                middleAnimate()
+            innerRightAnimate()
+        outerRightAnimate()
+
+        async function middleAnimate(){
+            await middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.2, delay: 0 })
+            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function innerRightAnimate(){
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.2, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function innerLeftAnimate(){
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 320, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -118, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -104, y: 14, opacity: 1 }, { duration: 0.1, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function outerRightAnimate(){
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0 }, { duration: 0.2, delay: 0 })
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14 }, { duration: 0.4, delay: 0 })
+        }
+
+        async function outerLeftAnimate(){
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 408, y: 14 }, { duration: 0.2, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 422, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: -14, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 1 }, { duration: 0.3, delay: 0 })
+        }
+    }
+
 
       //--MOTION VARIANTS--//
     const middleMotion = {
@@ -149,7 +250,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     }
     const outerSidesMotion = {
         initial: { opacity: 0, y: 10 },
-        animate: { opacity: 0.5, y: 12 },
+        animate: { opacity: 0.5, y: 14 },
         whileHover: { y: 8, scale: 1.03, transition: 0.8 },
         transition: { duration: 0.6 }
     }
@@ -181,17 +282,54 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setHeaderName(headerArray[newArrayIndex])
 
         //update preview images
-        getOuterLeftImage(direction, imageArray)
-        getInnerLeftImage(direction, imageArray)
-        getInnerRightImage(direction, imageArray)
-        getOuterRightImage(direction, imageArray)
+        updateOuterLeftImage(direction, imageArray)
+        updateInnerLeftImage(direction, imageArray)
+        updateInnerRightImage(direction, imageArray)
+        updateOuterRightImage(direction, imageArray)
 
-        //scroll
+        //play scroll animation
         if(direction == "upwards"){ scrollRightAnimation() }
         if(direction == "downwards"){ scrollLeftAnimation() }
     }
 
-    function getInnerRightImage(direction, array, initIndex){
+    function cycleArraysByTwo(direction){
+        //determine direction and handle array wrapping
+        var newArrayIndex
+        if(direction == "upwards"){ 
+            newArrayIndex = currentArrayIndex + 2
+            newArrayIndex = (newArrayIndex + imageArray.length) % imageArray.length
+        }
+        if(direction == "downwards"){ 
+            newArrayIndex = currentArrayIndex - 2
+            if(newArrayIndex < 0){ newArrayIndex = imageArray.length + newArrayIndex }
+        }
+
+        //set new current arrayIndex
+        setCurrentArrayIndex(newArrayIndex)
+        // console.log("currentArrayIndex: " + currentArrayIndex)
+        // console.log("newArrayIndex: " + newArrayIndex)
+
+        //update selection
+        setImageUsing(imageArray[newArrayIndex])
+        setImageUsingDescription(descriptionArray[newArrayIndex])
+        setImageUsingHeight(heightArray[newArrayIndex])
+        setImageUsingWidth(widthArray[newArrayIndex])
+        setImageUsingHeader(headerArray[newArrayIndex])
+        setHeaderName(headerArray[newArrayIndex])
+
+        //update preview images
+        updateOuterLeftImage("upwards", imageArray, newArrayIndex)
+        updateInnerLeftImage("upwards", imageArray, newArrayIndex)
+        updateInnerRightImage("upwards", imageArray, newArrayIndex)
+        updateOuterRightImage("upwards", imageArray, newArrayIndex)
+
+        //play scroll animation
+        if(direction == "upwards"){ scrollRightTwiceAnimation() }
+        if(direction == "downwards"){ scrollLeftTwiceAnimation() }
+    }
+
+
+    function updateInnerRightImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
@@ -217,7 +355,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setInnerRightImage(array[newArrayIndex])
     }
 
-    function getInnerLeftImage(direction, array, initIndex){
+    function updateInnerLeftImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
@@ -243,7 +381,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setInnerLeftImage(array[newArrayIndex])
     }
 
-    function getOuterRightImage(direction, array, initIndex){
+    function updateOuterRightImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
@@ -268,27 +406,26 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         }
     }
 
-    function getOuterLeftImage(direction, array, initIndex){
+    function updateOuterLeftImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
         //decide whether to use init value or state
         if(initIndex || initIndex == 0){ oldArrayIndex = initIndex - 1 }
         else{ oldArrayIndex = currentArrayIndex }
-        // console.log("oldArrayIndex: " + oldArrayIndex)
         
         //determine direction
+        if(direction == "upwards"){ 
+            newArrayIndex = oldArrayIndex - 1 
+            //go to the other side of the array, if goes outside of array length
+            if(oldArrayIndex <= 0){ newArrayIndex = (array.length + oldArrayIndex) - 1 }
+            setOuterLeftImage(array[newArrayIndex])
+        }
+
         if(direction == "downwards"){ 
             newArrayIndex = oldArrayIndex - 3
             //go to the other side of the array, if goes outside of array length
             if(newArrayIndex < 0){ newArrayIndex = array.length + newArrayIndex }
-            setOuterLeftImage(array[newArrayIndex])
-        }
-        
-        if(direction == "upwards"){ 
-            newArrayIndex = oldArrayIndex - 1 
-            //go to the other side of the array, if goes outside of array length
-            if(oldArrayIndex == 0){ newArrayIndex = array.length - 1 }
             setOuterLeftImage(array[newArrayIndex])
         }
     }
@@ -384,7 +521,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                                 animate="animate"
                                                 whileHover="whileHover"
                                                 transition="transition"
-                                            ><Image src={outerLeftImage} width={90} height={60} alt="outerPrevImg"/></motion.section>
+                                            ><Image src={outerLeftImage} width={90} height={60} alt="outerPrevImg" onClick={() => cycleArraysByTwo("downwards", 2)}/></motion.section>
 
                                             <motion.section
                                                 ref={innerLeftImageAnimation}
@@ -420,7 +557,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                                 animate="animate"
                                                 whileHover="whileHover"
                                                 transition="transition"
-                                            ><Image src={outerRightImage} width={90} height={60} alt="outerNextImg"/></motion.section>
+                                            ><Image src={outerRightImage} width={90} height={60} alt="outerNextImg" onClick={() => cycleArraysByTwo("upwards", 2)}/></motion.section>
                                         </motion.div> 
                                     </AnimatePresence>
                                 </div>
