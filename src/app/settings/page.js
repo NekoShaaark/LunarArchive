@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCurrentArrayIndex, setBrightnessValue, selectedWallpaper, selectedTheme, currentArrayIndex, brightnessValue }) {
   const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
-  const themeArray = ["Purple", "Red", "Blue", "Green"]
+  const themeArray = ["Purple", "Red", "Blue", "Green", "White"]
   const [themeGlobalBackgroundColor, setThemeGlobalBackgroundColor] = useState("#c31c1c")
   const [themeGlobalHoverBackgroundColor, setThemeGlobalHoverBackgroundColor] = useState("#d13a3a")
 
@@ -81,6 +81,13 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
         globalColorHover = "#29cc72"
         globalHoverBorderColor = "rgba(38, 167, 96, 0.5)"
         globalHoverBackgroundColor = "rgba(20, 80, 47, 0.5)"
+        break
+
+      case "White":
+        globalColor = "#fff"
+        globalColorHover = "#bbb"
+        globalHoverBorderColor = "rgba(204, 204, 204, 0.5)"
+        globalHoverBackgroundColor = "rgba(139, 139, 139, 0.5)"
         break
     }
 

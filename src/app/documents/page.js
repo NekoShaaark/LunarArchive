@@ -361,7 +361,37 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
           height: 400,
           width: 500,
           icon: <ImageIcon fill={globalColor} width={48} height={48}/>
-        }
+        },
+        {
+          id: "15",
+          name: "MyCat.jpeg",
+          headerName: "My Cat",
+          fileType: "Image",
+          description: `"I love kats."`,
+          height: 500,
+          width: 750,
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
+        },
+        {
+          id: "16",
+          name: "waiting.png",
+          headerName: "waiting",
+          fileType: "Image",
+          description: `"Waiting for something to happen?"`,
+          height: 400,
+          width: 320,
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
+        },
+        {
+          id: "17",
+          name: "Another.png",
+          headerName: "Another",
+          fileType: "Image",
+          description: `"..."`,
+          height: 350,
+          width: 400,
+          icon: <ImageIcon fill={globalColor} width={48} height={48}/>
+        },
       ]
     },
     {

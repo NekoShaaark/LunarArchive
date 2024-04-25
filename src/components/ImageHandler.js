@@ -21,13 +21,17 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const [headerArray, setHeaderArray] = useState([])
     const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
 
+    const [outerRightImage, setOuterRightImage] = useState("placeholderImage.webp")
+    const [innerRightImage, setInnerRightImage] = useState("placeholderImage.webp")
     const [showPreviewImages, setShowPreviewImages] = useState(true)
-    const [rightImage, setRightImage] = useState("placeholderImage.webp")
-    const [leftImage, setLeftImage] = useState("placeholderImage.webp")
+    const [innerLeftImage, setInnerLeftImage] = useState("placeholderImage.webp")
+    const [outerLeftImage, setOuterLeftImage] = useState("placeholderImage.webp")
 
-    const [leftImageAnimation, leftImageAnimate] = useAnimate()
+    const [outerLeftImageAnimation, outerLeftImageAnimate] = useAnimate()
+    const [innerLeftImageAnimation, innerLeftImageAnimate] = useAnimate()
     const [middleImageAnimation, middleImageAnimate] = useAnimate()
-    const [rightImageAnimation, rightImageAnimate] = useAnimate()
+    const [innerRightImageAnimation, innerRightImageAnimate] = useAnimate()
+    const [outerRightImageAnimation, outerRightImageAnimate] = useAnimate()
     
     var selectedImageLocation = `${selectedImage}`
     var selectedImageWidth = `${imageWidth}`
@@ -74,8 +78,10 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         
         //set image previews
         //NOTE: have to pass in initialArrayIndex due to the currentArrayIndex state not being available when this function is run
-        getRightImage("upwards", selectedImage, imageArrayIndex)
-        getLeftImage("upwards", selectedImage, imageArrayIndex)
+        getOuterLeftImage("upwards", selectedImage, imageArrayIndex)
+        getInnerLeftImage("upwards", selectedImage, imageArrayIndex)
+        getInnerRightImage("upwards", selectedImage, imageArrayIndex)
+        getOuterRightImage("upwards", selectedImage, imageArrayIndex)
     }, [selectedImageLocation, selectedImageWidth, selectedImageHeight, selectedImageDescription, imageArrayIndex])
 
 
@@ -97,17 +103,17 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const scrollRightAnimation = async () => {
 
         //first reposition the new image preview
-        leftImageAnimate(leftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
+        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
-        await rightImageAnimate(rightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.0, delay: 0 })
+        await innerRightImageAnimate(innerRightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.0, delay: 0 })
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        leftImageAnimate(leftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-        await rightImageAnimate(rightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await rightImageAnimate(rightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
-        rightImageAnimate(rightImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+        await innerRightImageAnimate(innerRightImageAnimation.current, { x: -218, opacity: 0 }, { duration: 0.3, delay: 0 })
+        await innerRightImageAnimate(innerRightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+        innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
     }
 
 
@@ -115,17 +121,17 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
     const scrollLeftAnimation = async () => {
 
         //first reposition the new image preview
-        rightImageAnimate(rightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
+        innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
-        await leftImageAnimate(leftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.0, delay: 0 })
+        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.0, delay: 0 })
 
         //then animate back to its original position 
         //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        rightImageAnimate(rightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+        innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
         middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-        await leftImageAnimate(leftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await leftImageAnimate(leftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
-        leftImageAnimate(leftImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 218, opacity: 0 }, { duration: 0.3, delay: 0 })
+        await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+        innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
     }
 
       //--MOTION VARIANTS--//
@@ -135,11 +141,17 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         whileHover: { y: -20, scale: 1.08, transition: 0.4 },
         transition: { duration: 0.2 }
     }
-    const sidesMotion = {
+    const innerSidesMotion = {
         initial: { opacity: 0, y: 10 },
         animate: { opacity: 0.75, y: 0 },
         whileHover: { y: -6, scale: 1.05, transition: 0.6 },
         transition: { duration: 0.4 }
+    }
+    const outerSidesMotion = {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 0.5, y: 12 },
+        whileHover: { y: 8, scale: 1.03, transition: 0.8 },
+        transition: { duration: 0.6 }
     }
 
     
@@ -168,14 +180,18 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         setImageUsingHeader(headerArray[newArrayIndex])
         setHeaderName(headerArray[newArrayIndex])
 
-        getRightImage(direction, imageArray)
-        getLeftImage(direction, imageArray)
+        //update preview images
+        getOuterLeftImage(direction, imageArray)
+        getInnerLeftImage(direction, imageArray)
+        getInnerRightImage(direction, imageArray)
+        getOuterRightImage(direction, imageArray)
 
+        //scroll
         if(direction == "upwards"){ scrollRightAnimation() }
         if(direction == "downwards"){ scrollLeftAnimation() }
     }
 
-    function getRightImage(direction, array, initIndex){
+    function getInnerRightImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
@@ -184,10 +200,10 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         else{ oldArrayIndex = currentArrayIndex }
 
         //determine direction
-        //downwards works a bit weirdly, sicne the first if statement overwrites the needed index
+        //downwards works a bit weirdly, since the first if statement overwrites the needed index
         if(direction == "upwards"){ newArrayIndex = oldArrayIndex + 2 }
         if(direction == "downwards"){ 
-            setRightImage(array[oldArrayIndex]) 
+            setInnerRightImage(array[oldArrayIndex]) 
             return 
         }
 
@@ -198,10 +214,10 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         
         // console.log("arrayIndex: " + newArrayIndex)
         // console.log("newImage: " + array[newArrayIndex])
-        setRightImage(array[newArrayIndex])
+        setInnerRightImage(array[newArrayIndex])
     }
 
-    function getLeftImage(direction, array, initIndex){
+    function getInnerLeftImage(direction, array, initIndex){
         var oldArrayIndex
         var newArrayIndex
         
@@ -224,7 +240,57 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         
         // console.log("endIndex: " + newArrayIndex)
         // console.log("newImage: " + imageArray[newArrayIndex])
-        setLeftImage(array[newArrayIndex])
+        setInnerLeftImage(array[newArrayIndex])
+    }
+
+    function getOuterRightImage(direction, array, initIndex){
+        var oldArrayIndex
+        var newArrayIndex
+        
+        //decide whether to use init value or state
+        if(initIndex || initIndex == 0){ oldArrayIndex = initIndex - 1 }
+        else{ oldArrayIndex = currentArrayIndex }
+        // console.log("oldArrayIndex: " + oldArrayIndex)
+
+        //determine direction
+        if(direction == "upwards"){ 
+            newArrayIndex = oldArrayIndex + 3 
+            //go to the other side of the array, if goes outside of array length
+            newArrayIndex = (newArrayIndex + array.length) % array.length
+            setOuterRightImage(array[newArrayIndex])
+        }
+        
+        if(direction == "downwards"){ 
+            newArrayIndex = oldArrayIndex + 1
+            //go to the other side of the array, if goes outside of array length
+            if(oldArrayIndex == array.length - 1){ newArrayIndex = 0 }
+            setOuterRightImage(array[newArrayIndex])
+        }
+    }
+
+    function getOuterLeftImage(direction, array, initIndex){
+        var oldArrayIndex
+        var newArrayIndex
+        
+        //decide whether to use init value or state
+        if(initIndex || initIndex == 0){ oldArrayIndex = initIndex - 1 }
+        else{ oldArrayIndex = currentArrayIndex }
+        // console.log("oldArrayIndex: " + oldArrayIndex)
+        
+        //determine direction
+        if(direction == "downwards"){ 
+            newArrayIndex = oldArrayIndex - 3
+            //go to the other side of the array, if goes outside of array length
+            if(newArrayIndex < 0){ newArrayIndex = array.length + newArrayIndex }
+            setOuterLeftImage(array[newArrayIndex])
+        }
+        
+        if(direction == "upwards"){ 
+            newArrayIndex = oldArrayIndex - 1 
+            //go to the other side of the array, if goes outside of array length
+            if(oldArrayIndex == 0){ newArrayIndex = array.length - 1 }
+            setOuterLeftImage(array[newArrayIndex])
+        }
     }
 
 
@@ -267,13 +333,13 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                         transition={{ duration: 0.4 }}
                                     >
                                         <motion.section
-                                            ref={leftImageAnimation}
-                                            variants={sidesMotion}
+                                            ref={innerLeftImageAnimation}
+                                            variants={innerSidesMotion}
                                             initial="initial"
                                             animate="animate"
                                             whileHover="whileHover"
                                             transition="transition"
-                                        ><Image src={leftImage} width={90} height={60} alt="prevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
+                                        ><Image src={innerLeftImage} width={90} height={60} alt="prevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
                                         
                                         <motion.section
                                             ref={middleImageAnimation}
@@ -285,13 +351,13 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                         ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
 
                                         <motion.section
-                                            ref={rightImageAnimation}
-                                            variants={sidesMotion}
+                                            ref={innerRightImageAnimation}
+                                            variants={innerSidesMotion}
                                             initial="initial"
                                             animate="animate"
                                             whileHover="whileHover"
                                             transition="transition"
-                                        ><Image src={rightImage} width={90} height={60} alt="nextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
+                                        ><Image src={innerRightImage} width={90} height={60} alt="nextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
                                     </motion.div> 
                                 </AnimatePresence>
                             }
@@ -312,13 +378,22 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                             transition={{ duration: 0.4 }}
                                         >
                                             <motion.section
-                                                ref={leftImageAnimation}
-                                                variants={sidesMotion}
+                                                ref={outerLeftImageAnimation}
+                                                variants={outerSidesMotion}
                                                 initial="initial"
                                                 animate="animate"
                                                 whileHover="whileHover"
                                                 transition="transition"
-                                            ><Image src={leftImage} width={90} height={60} alt="prevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
+                                            ><Image src={outerLeftImage} width={90} height={60} alt="outerPrevImg"/></motion.section>
+
+                                            <motion.section
+                                                ref={innerLeftImageAnimation}
+                                                variants={innerSidesMotion}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="whileHover"
+                                                transition="transition"
+                                            ><Image src={innerLeftImage} width={90} height={60} alt="innerPrevImg" onClick={() => cycleArrays("downwards")}/></motion.section>
 
                                             <motion.section
                                                 ref={middleImageAnimation}
@@ -330,13 +405,22 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                                             ><Image src={imageUsing} width={90} height={60} alt="currImg"/></motion.section>
 
                                             <motion.section
-                                                ref={rightImageAnimation}
-                                                variants={sidesMotion}
+                                                ref={innerRightImageAnimation}
+                                                variants={innerSidesMotion}
                                                 initial="initial"
                                                 animate="animate"
                                                 whileHover="whileHover"
                                                 transition="transition"
-                                            ><Image src={rightImage} width={90} height={60} alt="nextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
+                                            ><Image src={innerRightImage} width={90} height={60} alt="innerNextImg" onClick={() => cycleArrays("upwards")}/></motion.section>
+
+                                            <motion.section
+                                                ref={outerRightImageAnimation}
+                                                variants={outerSidesMotion}
+                                                initial="initial"
+                                                animate="animate"
+                                                whileHover="whileHover"
+                                                transition="transition"
+                                            ><Image src={outerRightImage} width={90} height={60} alt="outerNextImg"/></motion.section>
                                         </motion.div> 
                                     </AnimatePresence>
                                 </div>
