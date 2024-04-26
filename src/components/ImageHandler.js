@@ -102,42 +102,73 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
 
     const scrollRightAnimation = async () => {
 
-        //first reposition the new image preview
-        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
+        if(!isMaximized){
+            //first reposition the new image preview
             innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
                 middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
-            innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14 }, { duration: 0.0, delay: 0 })
-        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -408, y: 14 }, { duration: 0.0, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -204, y: 0 }, { duration: 0.0, delay: 0 })
 
-        //then animate back to its original position 
-        //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+            //then animate back to its original position 
+            //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
             innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
                 middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
-        await outerRightImageAnimate(outerRightImageAnimation.current, { x: -422, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await outerRightImageAnimate(outerRightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
-        outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -218, y: 0, opacity: 0 }, { duration: 0.2, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: 14, y: 0 }, { duration: 0.0, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
+        }
+        else{
+            //first reposition the new image preview
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
+                innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.0, delay: 0 })
+                innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14 }, { duration: 0.0, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -408, y: 14 }, { duration: 0.0, delay: 0 })     
+            //then animate back to its original position 
+            //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+                innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -422, opacity: 0 }, { duration: 0.3, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: 14 }, { duration: 0.0, delay: 0 })
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+        }
     }
 
     const scrollLeftAnimation = async () => {
 
-        //first reposition the new image preview
-        outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
+        if(!isMaximized){
+            //first reposition the new image preview
             innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
                 middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
-            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -102, y: 14 }, { duration: 0.0, delay: 0 })
-        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 408, y: 14 }, { duration: 0.0, delay: 0 })
-
-        //then animate back to its original position 
-        //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
-        outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 204, y: 0 }, { duration: 0.0, delay: 0 })
+        
+            //then animate back to its original position 
+            //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
             innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
                 middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
-            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
-        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 422, opacity: 0 }, { duration: 0.3, delay: 0 })
-        await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
-        outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 218, y: 0, opacity: 0 }, { duration: 0.2, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -14, y: 0 }, { duration: 0.0, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
+        }
+        else{
+            //first reposition the new image preview
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
+                innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.0, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.0, delay: 0 })
+                innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -102, y: 14 }, { duration: 0.0, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 408, y: 14 }, { duration: 0.0, delay: 0 })
+
+            //then animate back to its original position 
+            //NOTE: (this prevents the image previews from getting mixed up, and keeps it dynamic)
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.6, delay: 0 })
+                innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+                    middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.6, delay: 0 })
+                innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.6, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 422, opacity: 0 }, { duration: 0.3, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: -14 }, { duration: 0.0, delay: 0 })
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+        }
     }
 
     const scrollRightTwiceAnimation = async () => {
