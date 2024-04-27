@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 export default function WindowHeader({headerName, selectedIcon, setClose, setMinimize, setMaximize, newHeaderName, removeMinimize, keepMaximize, maximized}) {
   const [windowHeaderName, setWindowHeaderName] = useState()
+  const [haveMaximize, setHaveMaximize] = useState(false)
 
   function handleClose(){
     setClose()
@@ -25,6 +26,9 @@ export default function WindowHeader({headerName, selectedIcon, setClose, setMin
     // console.log("new: " + newHeaderName)
     if(!newHeaderName){ setWindowHeaderName(headerName) }
     if(newHeaderName){ setWindowHeaderName(newHeaderName) }
+    
+    if(window.screen.width < 768 && keepMaximize || !keepMaximize){ setHaveMaximize(false) }
+    else{ setHaveMaximize(true) }
   })
 
   return ( 
@@ -44,8 +48,8 @@ export default function WindowHeader({headerName, selectedIcon, setClose, setMin
       
       <div className={styles.systemIcons}>
         {!removeMinimize && <MinimizeIcon className={styles.minimizeIcon} alt="Minimize" width={24} height={24} onClick={handleMinimize}/>}
-        {(keepMaximize && !maximized) && <MaximizeIcon className={styles.maximizeIcon} alt="Maximize" width={24} height={24} onClick={handleMaximize}/>}
-        {(keepMaximize && maximized) && <RestoreIcon className={styles.maximizeIcon} alt="Restore" width={24} height={24} onClick={handleMaximize}/>}
+        {(haveMaximize && !maximized) && <MaximizeIcon className={styles.maximizeIcon} alt="Maximize" width={24} height={24} onClick={handleMaximize}/>}
+        {(haveMaximize && maximized) && <RestoreIcon className={styles.maximizeIcon} alt="Restore" width={24} height={24} onClick={handleMaximize}/>}
         <CloseIcon className={styles.closeIcon} alt="Close" width={24} height={24} onClick={handleClose}/>
       </div>
     </div>

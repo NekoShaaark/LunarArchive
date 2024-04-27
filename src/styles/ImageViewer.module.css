@@ -25,6 +25,7 @@
   border-top: 6px solid var(--globalColor);
   user-select: none;
   text-align: center;
+  z-index: 0;
 }
 
 .image { 
@@ -85,10 +86,59 @@
 
 
 /* MOBILE OVERRIDES */
-@media only screen and (max-width: 920px) {
+@media only screen and (max-width: 700px) {
   .imageViewerBody {
-    height: 10%;
+    height: auto;
+    width: 100%;
+    max-width: 100vw;
+    align-self: center;
+    overflow: hidden;
+  }
+
+  .image {
+    height: auto;
     width: auto;
-    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .text {
+    padding: 0;
+    font-size: 0;
+    border: 0;
+    background: transparent;
+    z-index: -1;
+  }
+
+  .previewImages {
+    z-index: -1;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .imageViewerBody {
+    height: 100%;
+    width: 100%;
+    max-width: 100vw;
+    align-self: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .image {
+    height: 100%;
+    width: auto;
+    overflow: hidden;
+  }
+
+  .text {
+    padding: 8px 0;
+    font-size: larger;
+    border-top: 6px solid var(--globalColor);
+    background: #000;
+    z-index: 0;
+  }
+
+  .previewImages {
+    z-index: 1;
   }
 }

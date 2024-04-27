@@ -1140,14 +1140,14 @@ export default function Home() {
             <AnimatePresence>
               {/* <div id="icon" className="icon-archive">
               <Button disableRipple onClick={archiveHandleOpen}>
-                <ArchiveIcon width="6vh" height="6vh"/>
+                <ArchiveIcon width={56} height={56}/>
                 <h1>Archive</h1>
               </Button>
               </div> */}
 
               {/* <div id="icon" className="icon-logs">
               <Button disableRipple onClick={logsHandleOpen}>
-                <LogsIcon width="6vh" height="6vh"/>
+                <LogsIcon width={56} height={56}/>
                 <h1>Data Logs</h1>
               </Button>
               </div> */}
@@ -1162,7 +1162,7 @@ export default function Home() {
                 transition={{ duration: 0.4 }}
               >
                 <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() }}>
-                  <FolderIcon width="6vh" height="6vh"/>
+                  <FolderIcon width={56} height={56}/>
                   <h1>Documents</h1>
                 </Button>
               </motion.div>
@@ -1177,7 +1177,7 @@ export default function Home() {
                 transition={{ duration: 0.8 }}
               >
                 <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
-                  <ImagesIcon width="6vh" height="6vh"/>
+                  <ImagesIcon width={56} height={56}/>
                   <h1>Pictures</h1>
                 </Button>
               </motion.div>
@@ -1192,14 +1192,14 @@ export default function Home() {
                 transition={{ duration: 0.6 }}
               >
                 <Button disableRipple onClick={settingsHandleOpen}>
-                  <MoonStarIcon width="6vh" height="6vh"/>
+                  <MoonStarIcon width={56} height={56}/>
                   <h1>Settings</h1>
                 </Button>
               </motion.div>
 
               {/* <div id="icon" className="icon-portfolio">
               <Button disableRipple onClick={portfolioHandleOpen}>
-                <PortfolioIcon width="6vh" height="6vh"/>
+                <PortfolioIcon width={56} height={56}/>
                 <h1>Portfolio</h1>
               </Button>
               </div> */}
@@ -1214,7 +1214,7 @@ export default function Home() {
                 transition={{ duration: 1.0 }}
               >
                 <Button disableRipple onClick={() => { handleAlertDescription("Coming soon"); alertHandleOpen() }}>
-                  <ImageIcon width="6vh" height="6vh"/>
+                  <ImageIcon width={56} height={56}/>
                   <h1>tutorial.png</h1>
                 </Button>
               </motion.div>
