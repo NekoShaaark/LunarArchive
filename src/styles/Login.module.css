@@ -1,0 +1,199 @@
+.loginBody {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background: var(--archive-background-gradient);
+  background-blend-mode: overlay, overlay, overlay, normal;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+
+/* #region <===grid===> */
+.grid {
+  display: grid; 
+  width: inherit;
+  height: inherit;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1.5fr 0.3fr 1.2fr;
+  grid-template-rows: 1.3fr 0.2fr 2fr;
+  gap: 20px 16px; 
+  grid-template-areas: 
+    "Dialogue Users Users"
+    "Password Users Users"
+    "Password Blank Profiles";
+}
+
+/* #region ---dialogue--- */
+.dialogue {
+  display: flex;
+  margin: 20px;
+  align-items: center;
+  justify-content: center;
+  font-family: eightBitFortress;
+  font-weight: 400;
+  background: #000;
+  grid-area: Dialogue;
+}
+/* #endregion ------ */
+
+/* #region ---users--- */
+.users {
+  display: flex;
+  margin: 18px;
+  padding: 10px;
+  max-height: 36vh;
+  border: 6px solid #9665ff;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow-y: scroll;
+  background: #000;
+  grid-area: Users;
+}
+
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user {
+  display: flex;
+  padding: 8px;
+  flex-direction: row;
+  border: 4px solid transparent;
+  user-select: none;
+}
+.user:hover {
+  display: flex;
+  cursor: pointer;
+  border: 4px solid #9665ff;
+  background-color: rgba(44, 24, 87, 0.5);
+}
+
+.userNames {
+  display: flex;
+  margin-inline: 14px;
+  padding: 4px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  font-family: eightBitFortress;
+  font-weight: 400;
+  font-size: large;
+  color: #9665ff;
+  gap: 10px;
+}
+/* #endregion <------> */
+
+/* #region ---password--- */
+.password {
+  display: flex;
+  margin: 28px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: x-large;
+  border: 6px solid #9665ff;
+  background: #000;
+  grid-area: Password;
+}
+.passwordInput {
+  display: flex;
+  width: 60%;
+  margin: 24px;
+  padding-block: 16px;
+  justify-content: center;
+  color: #fff;
+  font-family: eightBitFortress;
+  font-weight: 400;
+  border: 4px solid #9665ff;
+}
+/* #endregion ------ */
+
+/* #region ---profiles--- */
+.profiles {
+  display: grid;
+  margin: 28px;
+  padding: 28px;
+  border: 6px solid #9665ff;
+  background: #000;
+  gap: 12px;
+  grid-area: Profiles;
+}
+
+.profileTop {
+  display: flex;
+  height: fit-content;
+  width: fit-content;
+  padding: 14px;
+  flex-direction: row;
+  gap: 42px;
+  border: 4px solid #9665ff;
+}
+
+.profileBottom {
+  display: flex;
+  height: fit-content;
+  width: fit-content;
+  padding: 8px;
+  align-items: center;
+  flex-direction: row;
+  border: 4px solid #9665ff;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  font-size: large;
+  gap: 8px;
+}
+.profileReputation {
+  display: flex;
+  margin-left: 16px;
+  margin-right: 28px;
+  flex-direction: column;
+  font-size: large;
+  gap: 8px;
+}
+
+.profileText {
+  display: flex;
+  font-family: eightBitFortress;
+  color: #9665ff;
+}
+.profileAltText {
+  display: flex;
+  font-family: eightBitFortress;
+  margin-inline: 8px;
+  color: #fff;
+}
+/* #endregion ------ */
+
+/* #region ---blank--- */
+.blank {
+  /* background: blueviolet; */
+  grid-area: Blank;
+}
+/* #endregion ------ */
+/* #endregion <======> */
+
+
+
+.title {
+  margin: 0;
+  margin-bottom: 20px;
+  color: #9665ff;
+  font-family: eightBitFortress;
+  font-weight: 400;
+  text-shadow: 2px 3px rgba(106, 64, 197, 0.3);
+}
+.text {
+  margin: 0;
+  color: #9665ff;
+  font-family: eightBitFortress;
+  font-weight: 400;
+}

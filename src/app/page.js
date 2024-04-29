@@ -25,6 +25,7 @@ import Portfolio from './portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
+import Login from './login/page'
 
 
 
@@ -81,6 +82,7 @@ export default function Home() {
   const [alertDescription, setAlertDescription] = useState()
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
+  const [loginOpen, setLoginOpen] = useState(true)
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -95,6 +97,11 @@ export default function Home() {
   const [notusHeaderName, setNotusHeaderName] = useState("Text Editor")
   const [currentNotusFile, setCurrentNotusFile] = useState("Text Editor")
 
+
+  const handleLoginOpen = async (e) => {
+    console.log("opening/closing login")
+    setLoginOpen(e)
+  }
 
   //--DESKTOP SETTINGS HANDLING--//
   const handleSelectedWallpaper = async (e) => {
@@ -277,6 +284,7 @@ export default function Home() {
 
 
   //--MAXIMIZE ANIMATIONS--//
+  //TODO: add maximize animations
   const enlargeWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "imageViewer":
@@ -1128,7 +1136,15 @@ export default function Home() {
 
   return (
     <div className="layout">
-      <div className="layout-content"> 
+
+      {loginOpen &&
+        <div className="layout-content">
+          <Login setLoginOpen={handleLoginOpen}/>
+        </div>
+      }
+
+      {!loginOpen &&
+        <div className="layout-content"> 
         {/* background image/video */}
         {/* <video className="backgroundVideo" src="videoLoop.webm" autoPlay loop muted preload="auto"/> */}
         <Image className="backgroundVideo" src={`Wallpapers/Wallpaper-${selectedWallpaper}.webp`} priority alt="wallpaper" width={100} height={100}/>
@@ -1471,8 +1487,10 @@ export default function Home() {
           </AnimatePresence>
         </ThemeProvider>
       </div>
+      }
 
       {/* NAVBAR */}
+      {!loginOpen &&
       <div className="layout-nav">
         <nav id="navbar" className="navigation">
 
@@ -1655,7 +1673,8 @@ export default function Home() {
             <ul>
               <li className="time">{currentTime}</li>
               <li className="something">
-                <div onClick={() => { textEditorHandleOpen(); handleNotusHeaderName("Secret?"); handleCurrentNotusFile("Navbar.txt") }}>
+                {/* <div onClick={() => { textEditorHandleOpen(); handleNotusHeaderName("Secret?"); handleCurrentNotusFile("Navbar.txt") }}> */}
+                <div onClick={() => handleLoginOpen(true)}>
                   <NoteIcon alt="???" width={24} height={24}/>
                 </div>
               </li>
@@ -1663,6 +1682,7 @@ export default function Home() {
           </div>
         </nav>
       </div>
+      }
     </div>
   )
 }
