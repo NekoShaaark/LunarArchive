@@ -189,32 +189,32 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         outerRightAnimate()
 
         async function middleAnimate(){
-            await middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0 }, { duration: 0.2, delay: 0 })
-            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.4, delay: 0 })
+            await middleImageAnimate(middleImageAnimation.current, { x: 102, y: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14, opacity: 1 }, { duration: 0.4, delay: 0 })
         }
 
         async function innerLeftAnimate(){
-            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14 }, { duration: 0.2, delay: 0 })
-            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 102, y: -14, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
         }
 
         async function innerRightAnimate(){
             await innerRightImageAnimate(innerRightImageAnimation.current, { x: -320, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
             await innerRightImageAnimate(innerRightImageAnimation.current, { x: 116, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
-            await innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14, opacity: 1 }, { duration: 0.1, delay: 0 })
-            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: 102, y: 14, opacity: 0.5 }, { duration: 0.1, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
         }
 
         async function outerLeftAnimate(){
-            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0 }, { duration: 0.2, delay: 0 })
-            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14 }, { duration: 0.4, delay: 0 })
+            await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 102, y: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.4, delay: 0 })
         }
 
         async function outerRightAnimate(){
             await outerRightImageAnimate(outerRightImageAnimation.current, { x: -408, y: 14 }, { duration: 0.2, delay: 0 })
             await outerRightImageAnimate(outerRightImageAnimation.current, { x: -422, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
             await outerRightImageAnimate(outerRightImageAnimation.current, { x: 14, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
-            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 1 }, { duration: 0.3, delay: 0 })
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.3, delay: 0 })
         }
     }
 
@@ -236,32 +236,32 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         outerRightAnimate()
 
         async function middleAnimate(){
-            await middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0 }, { duration: 0.2, delay: 0 })
-            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14 }, { duration: 0.4, delay: 0 })
+            await middleImageAnimate(middleImageAnimation.current, { x: -102, y: 0, opacity: 0.75 }, { duration: 0.2, delay: 0 })
+            middleImageAnimate(middleImageAnimation.current, { x: 0, y: -14, opacity: 1 }, { duration: 0.4, delay: 0 })
         }
 
         async function innerRightAnimate(){
-            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14 }, { duration: 0.2, delay: 0 })
-            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+            await innerRightImageAnimate(innerRightImageAnimation.current, { x: -102, y: -14, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+            innerRightImageAnimate(innerRightImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
         }
 
         async function innerLeftAnimate(){
             await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 320, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
             await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -118, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
-            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -104, y: 14, opacity: 1 }, { duration: 0.1, delay: 0 })
-            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0 }, { duration: 0.4, delay: 0 })
+            await innerLeftImageAnimate(innerLeftImageAnimation.current, { x: -104, y: 14, opacity: 0.5 }, { duration: 0.1, delay: 0 })
+            innerLeftImageAnimate(innerLeftImageAnimation.current, { x: 0, y: 0, opacity: 0.75 }, { duration: 0.4, delay: 0 })
         }
 
         async function outerRightAnimate(){
-            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0 }, { duration: 0.2, delay: 0 })
-            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14 }, { duration: 0.4, delay: 0 })
+            await outerRightImageAnimate(outerRightImageAnimation.current, { x: -102, y: 0, opacity: 0.5 }, { duration: 0.2, delay: 0 })
+            outerRightImageAnimate(outerRightImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.4, delay: 0 })
         }
 
         async function outerLeftAnimate(){
             await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 408, y: 14 }, { duration: 0.2, delay: 0 })
             await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 422, y: 14, opacity: 0 }, { duration: 0.1, delay: 0 })
             await outerLeftImageAnimate(outerLeftImageAnimation.current, { x: -14, y: 14, opacity: 0 }, { duration: 0.0, delay: 0 })
-            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 1 }, { duration: 0.3, delay: 0 })
+            outerLeftImageAnimate(outerLeftImageAnimation.current, { x: 0, y: 14, opacity: 0.5 }, { duration: 0.3, delay: 0 })
         }
     }
 
