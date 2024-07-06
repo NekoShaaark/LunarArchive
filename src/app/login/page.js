@@ -1,34 +1,109 @@
+"use client"
+
 import styles from '@/styles/Login.module.css'
 import TypewriterEffect from '@/components/TypewriterEffect'
-import { Button, ThemeProvider, createTheme } from '@mui/material'
+import { Button, IconButton, InputAdornment, TextField, ThemeProvider, createTheme } from '@mui/material'
 import Image from 'next/image'
+import { useState } from 'react'
 
 
 export default function Login({ setLoginOpen }) {
+  const [nikoFace, setNikoFace] = useState("notNiko6.webp")
+  const [needsBlink, setNeedsBlink] = useState(false)
+  const [selectedUser, setSelectedUser] = useState("Neko")
+  const [userProfile, setUserProfile] = useState(createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "NotNiko7.webp"))
+  const [passwordTextValue, setPasswordTextValue] = useState("")
+  const [passwordTextPreviewValue, setPasswordTextPreviewValue] = useState()
+
 
   //--THEME--//
   const theme = createTheme({
     typography: {
       fontFamily: 'eightbitFortress'
     },
+    palette: {
+      retroPurple: { 
+        main: '#9665ff',
+        contrastText: '#000',
+      }
+    },
     components: {
       MuiButton: {
-          styleOverrides: {
-            root: {
-              textTransform: 'none',
-              padding: 0,
-              '&:hover': {
-                backgroundColor: 'transparent'
-              }, 
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            padding: 0,
+            '&:hover': {
+              backgroundColor: 'transparent'
+            }, 
+          }
+        },
+        defaultProps: {
+          color: "retroPurple",
+        }
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            color: '#fff',
+            '&.Mui-focused': {
+              color: '#9665ff'
             }
-          },
+          }
+        }
+      },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+            color: '#fff', 
+            '&:hover': {
+              color: '#ddd',
+            }, 
+            '&.Mui-focused': {
+              color: '#bbb',
+            },
+            input: {
+              fontSize: "14px"
+            }
+          }
+        }
       },
     }
   })
 
+
+  //FIXME: this runs multiple times, not sure why
+  // function notNikoBlink() {
+  //   if(!needsBlink){
+  //     setNikoFace("notNikoNeutral.webp")
+  //     setNeedsBlink(true)
+  //   }
+  //   else{
+  //     setNikoFace("notNikoBlink.webp")
+  //     setNeedsBlink(false)
+  //     console.log("blinked")
+  //   }
+  //   console.log("ran")
+  // }
+  // setInterval(notNikoBlink, 5000)
+
+  const handleSelectedUser = async (user) => {
+    switch(user){
+      case "Neko":
+        setUserProfile(createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "notNiko7.webp"))
+        setSelectedUser("Neko")
+        break
+
+      case "Alula":
+        setUserProfile(createProfileSection("alula7.webp", "Alula", "421 Hours", "14/03/2019", `My big brother's name!`, "Safe", "User", "Glen Zone", "notNiko6.webp"))
+        setSelectedUser("Alula")
+        break
+    }
+  }
+
   function createUserSection(profilePictureLink, userName, lastLoginDate, lastLoginTime, previousSessionLength){
     return(
-      <section className={styles.user}>
+      <section className={styles.user} onClick={() => handleSelectedUser(userName)}>
         <Image src={profilePictureLink} style={{ border:"4px solid #7158a5" }} width={96} height={96}/>
         <div className={styles.userNames}>
           <span style={{fontSize:"x-large" }}>{userName}</span>
@@ -91,6 +166,32 @@ export default function Login({ setLoginOpen }) {
     )
   }
 
+  function isTextEmpty(value){
+    return (value == null || (typeof value === "string" && value.trim().length === 0))
+  }
+
+  function updatePasswordText(newText){
+    console.log(newText)
+
+    setPasswordTextPreviewValue(newText)
+    if(isTextEmpty(newText)){
+      setPasswordTextValue("")
+      return
+    }
+
+    setPasswordTextValue(newText)
+  }
+
+  function handleUserLogin(user, password){
+    switch(user){
+      case "Neko":
+        break
+
+      case "Alula":
+        break
+    }
+  }
+
 
   return (
     <div className={styles.loginBody}>
@@ -100,10 +201,10 @@ export default function Login({ setLoginOpen }) {
           {/* --Dialogue Section-- */}
           <div className={styles.dialogue}>
             <div style={{ display:"flex", gap:"10px", margin:"10px", padding:"8px", border:"4px solid #524a64", background:"#000" }}>
-              <div style={{ display:"flex", width:"fit-content", border:"6px solid #7158a5" }}><Image src="notNiko6.webp" width={128} height={128}/></div>
+              <div style={{ display:"flex", width:"fit-content", border:"6px solid #7158a5" }}><Image src={nikoFace} width={128} height={128} alt="niko"/></div>
               <div style={{ display:"flex", flexDirection:"column", justifyContent:"flex-end" }}>
                   <div style={{ display:"flex", marginBottom:"auto", marginTop:"10px", color:"#7158a5", fontSize:"x-large" }}>Welcome [USER]</div>
-                  <div style={{ display:"flex", color:"transparent", userSelect:"none" }}>"Please select an account to log-in to."</div> {/* invisible placeholder for border */}
+                  <div style={{ display:"flex", color:"transparent", userSelect:"none" }}>Please select an account to log-in to.</div> {/* invisible placeholder for border */}
                   <div style={{ display:"flex", color: "#7158a5" }}><TypewriterEffect text={`Please select an account to log-in to.`} delay={40}/></div>
               </div>
             </div>
@@ -123,13 +224,35 @@ export default function Login({ setLoginOpen }) {
           {/* --Password Section-- */}
           <div className={styles.password}>
             <h1 className={styles.text}>Password</h1>
-            <span className={styles.passwordInput}>Input here</span>
+            <TextField
+              required
+              multiline
+              variant="standard"
+              placeholder="Input here"
+              className={styles.passwordInput}
+              value={passwordTextPreviewValue}
+              InputProps={{
+                disableUnderline: true,
+                startAdornment: <InputAdornment id="adornment" position="start"/>,
+                endAdornment: 
+                  <InputAdornment id="adornment" position="end">
+                    {/* <IconButton
+                      onClick={() => onReadTextFromClipboard("name")}
+                    >
+                      <DuplicateIcon alt="duplicateIcon" width={24} height={24}/>
+                    </IconButton> */}
+                  </InputAdornment>
+              }}
+              onChange={e => updatePasswordText(e.currentTarget.value)}
+              onKeyUp={() => updatePasswordText(passwordTextPreviewValue)} //passing in the previewed name (the value cannot be null)
+            />
             <Button onClick={() => setLoginOpen(false)}>Login</Button>
           </div>
 
           {/* --Profiles Section--  */}
           <div className={styles.profiles}>
-            {createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "NotNiko7.webp")}
+            {/* {createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "NotNiko7.webp")} */}
+            {userProfile}
           </div>
 
           {/* --Blank Section-- */}

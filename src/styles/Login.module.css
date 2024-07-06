@@ -4,7 +4,7 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-  background: var(--archive-background-gradient);
+  background: var(--logs-background-gradient);
   background-blend-mode: overlay, overlay, overlay, normal;
   background-size: auto;
   background-repeat: no-repeat;
@@ -33,7 +33,6 @@
   justify-content: center;
   font-family: eightBitFortress;
   font-weight: 400;
-  background: #000;
   grid-area: Dialogue;
 }
 /* #endregion ------ */

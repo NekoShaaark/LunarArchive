@@ -82,7 +82,7 @@ export default function Home() {
   const [alertDescription, setAlertDescription] = useState()
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
-  const [loginOpen, setLoginOpen] = useState(true)
+  const [loginOpen, setLoginOpen] = useState(false)
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -1154,19 +1154,6 @@ export default function Home() {
           {/* desktop/icons layout */}
           <div className="desktop-layout">
             <AnimatePresence>
-              {/* <div id="icon" className="icon-archive">
-              <Button disableRipple onClick={archiveHandleOpen}>
-                <ArchiveIcon width={56} height={56}/>
-                <h1>Archive</h1>
-              </Button>
-              </div> */}
-
-              {/* <div id="icon" className="icon-logs">
-              <Button disableRipple onClick={logsHandleOpen}>
-                <LogsIcon width={56} height={56}/>
-                <h1>Data Logs</h1>
-              </Button>
-              </div> */}
 
               <motion.div 
                 id="icon" 
@@ -1213,13 +1200,6 @@ export default function Home() {
                 </Button>
               </motion.div>
 
-              {/* <div id="icon" className="icon-portfolio">
-              <Button disableRipple onClick={portfolioHandleOpen}>
-                <PortfolioIcon width={56} height={56}/>
-                <h1>Portfolio</h1>
-              </Button>
-              </div> */}
-
               <motion.div 
                 id="icon" 
                 key={4}
@@ -1234,6 +1214,21 @@ export default function Home() {
                   <h1>tutorial.png</h1>
                 </Button>
               </motion.div>
+
+              {/* <motion.div 
+                id="icon" 
+                key={5}
+                className="icon-portfolio"
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 1.0 }}
+              >
+                <Button disableRipple onClick={portfolioHandleOpen}>
+                  <PortfolioIcon width={56} height={56}/>
+                  <h1>Portfolio.exe</h1>
+                </Button>
+              </motion.div> */}
             </AnimatePresence>
           </div>
 
