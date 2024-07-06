@@ -52,26 +52,32 @@ export default function Home() {
   const [brightnessValue, setBrightnessValue] = useState(100)
   
   //window open states
-  const [archiveWindowOpen, setArchiveWindowOpen] = useState(false)
-  const [logsWindowOpen, setLogsWindowOpen] = useState(false)
-  const [settingsWindowOpen, setSettingsWindowOpen] = useState(false)
-  const [documentsWindowOpen, setDocumentsWindowOpen] = useState(false)
-  const [portfolioWindowOpen, setPortfolioWindowOpen] = useState(false)
-  const [imageViewerWindowOpen, setImageViewerWindowOpen] = useState(false)
-  const [alertWindowOpen, setAlertWindowOpen] = useState(false)
-  const [textEditorWindowOpen, setTextEditorWindowOpen] = useState(false)
+  const [windowsOpen, setWindowsOpen] = useState({
+    archive: false,
+    logs: false,
+    settings: false,
+    documents: false,
+    portfolio: false,
+    imageViewer: false,
+    alert: false,
+    textEditor: false
+  })
 
   //window minimized states
-  const [archiveWindowMinimized, setArchiveWindowMinimized] = useState(false)
-  const [logsWindowMinimized, setLogsWindowMinimized] = useState(false)
-  const [settingsWindowMinimized, setSettingsWindowMinimized] = useState(false)
-  const [documentsWindowMinimized, setDocumentsWindowMinimized] = useState(false)
-  const [portfolioWindowMinimized, setPortfolioWindowMinimized] = useState(false)
-  const [imageViewerWindowMinimized, setImageViewerWindowMinimized] = useState(false)
-  const [textEditorWindowMinimized, setTextEditorWindowMinimized] = useState(false)
+  const [windowsMinimized, setWindowsMinimized] = useState({
+    archive: false,
+    logs: false,
+    settings: false,
+    documents: false,
+    portfolio: false,
+    imageViewer: false,
+    textEditor: false
+  })
 
   //window maximized states
-  const [imageViewerWindowMaximized, setImageViewerWindowMaximized] = useState(false)
+  const [windowsMaximized, setWindowsMaximized] = useState({
+    imageViewer: false
+  })
 
   //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
@@ -91,17 +97,25 @@ export default function Home() {
   const [ivyImageDescription, setIvyImageDescription] = useState()
   const [ivyImageHeaderName, setIvyImageHeaderName] = useState("Image Viewer")
   const [ivyArrayIndex, setIvyArrayIndex] = useState()
+  const [ivyHandlers, setIvyHandlers] = useState({
+    setIvyImage: null,
+    setIvyImageWidth: null,
+    setIvyImageHeight: null,
+    setIvyImageDescription: null,
+    setIvyImageHeaderName: null,
+    setIvyImageArrayIndex: null
+  })
 
   //text editor (notus) states
   const [currentNotusText, setCurrentNotusText] = useState()
   const [notusHeaderName, setNotusHeaderName] = useState("Text Editor")
   const [currentNotusFile, setCurrentNotusFile] = useState("Text Editor")
+  const [notusHandlers, setNotusHandlers] = useState({
+    setNotusHeaderName: null,
+    setNotusText: null,
+    setNotusFile: null
+  })
 
-
-  const handleLoginOpen = async (e) => {
-    console.log("opening/closing login")
-    setLoginOpen(e)
-  }
 
   //--DESKTOP SETTINGS HANDLING--//
   const handleSelectedWallpaper = async (e) => {
@@ -113,6 +127,8 @@ export default function Home() {
 
   const handleSelectedTheme = async (e) => {
     if(!e){ console.log("woahhhhhh selectedTheme undefined"); return }
+    // console.log("currentTheme: " + selectedTheme)
+    // console.log("passingTheme: " + e)
     setSelectedTheme(e)
   }
 
@@ -217,6 +233,13 @@ export default function Home() {
     setDocumentsDirToOpen(e)
   }
 
+  //--LOGIN OPENING HANDLING--//
+  const handleLoginOpen = async (e) => {
+    if(!e){ console.log("woahhhhhh loginOpen undefined"); return }
+    console.log("opening/closing login")
+    setLoginOpen(e)
+  }
+
 
   //--MINIMIZE ANIMATIONS--//
   const dropWindowAnimation = async (animationItem) => {
@@ -301,23 +324,23 @@ export default function Home() {
   }
 
 
-  //--WINDOW OPEN/CLOSE/MINIMIZE HANDLERS--//
+  //--WINDOW OPEN/CLOSE/MINIMIZE/MAXIMIZE HANDLERS--//
   const archiveHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     // if(denyAccess){
     //   alertHandleOpen()
     //   return
     // }
 
-    setArchiveWindowOpen(true) 
     setCurrentFocusedWindow("archive")
+    setWindowsOpen({ ...windowsOpen, archive: true })
     
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(archiveWindowMinimized){
+    if(windowsMinimized.archive){
       pullUpWindowAnimation("archive")
-      setArchiveWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, archive: false })
     }
     
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -329,39 +352,39 @@ export default function Home() {
   }
   const archiveHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setArchiveWindowOpen(false) 
     setChangeFocusedWindow(true) 
+    setWindowsOpen({ ...windowsOpen, archive: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
   const archiveHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setArchiveWindowMinimized(true)
+    setWindowsMinimized({ ...windowsMinimized, archive: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
 
   const logsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     if(denyAccess){
       alertHandleOpen()
       return
     }
 
-    setLogsWindowOpen(true) 
     setCurrentFocusedWindow("logs") 
+    setWindowsOpen({ ...windowsOpen, logs: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(logsWindowMinimized){
+    if(windowsMinimized.logs){
       pullUpWindowAnimation("logs")
-      setLogsWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, logs: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -373,34 +396,34 @@ export default function Home() {
   }
   const logsHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setLogsWindowOpen(false) 
     setChangeFocusedWindow(true) 
+    setWindowsOpen({ ...windowsOpen, logs: false }) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   const logsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setLogsWindowMinimized(true)
+    setWindowsMinimized({ ...windowsMinimized, logs: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   
   const settingsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setSettingsWindowOpen(true) 
     setCurrentFocusedWindow("settings") 
+    setWindowsOpen({ ...windowsOpen, settings: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(settingsWindowMinimized){
+    if(windowsMinimized.settings){
       pullUpWindowAnimation("settings")
-      setSettingsWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, settings: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -412,34 +435,34 @@ export default function Home() {
   }
   const settingsHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setSettingsWindowOpen(false) 
     setChangeFocusedWindow(true) 
+    setWindowsOpen({ ...windowsOpen, settings: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
   const settingsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setSettingsWindowMinimized(true)
+    setWindowsMinimized({ ...windowsMinimized, settings: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
 
   const documentsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setDocumentsWindowOpen(true) 
     setCurrentFocusedWindow("documents") 
+    setWindowsOpen({ ...windowsOpen, documents: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(documentsWindowMinimized){
+    if(windowsMinimized.documents){
       pullUpWindowAnimation("documents")
-      setDocumentsWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, documents: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -451,34 +474,34 @@ export default function Home() {
   }
   const documentsHandleClose = () => {
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
     
     setChangeFocusedWindow(true) 
-    setDocumentsWindowOpen(false) 
+    setWindowsOpen({ ...windowsOpen, documents: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
   const documentsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setDocumentsWindowMinimized(true)
     setChangeFocusedWindow(true) 
+    setWindowsMinimized({ ...windowsMinimized, documents: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
 
   const portfolioHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setPortfolioWindowOpen(true) 
     setCurrentFocusedWindow("portfolio") 
+    setWindowsOpen({ ...windowsOpen, portfolio: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(portfolioWindowMinimized){
+    if(windowsMinimized.portfolio){
       pullUpWindowAnimation("portfolio")
-      setPortfolioWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, portfolio: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -490,34 +513,34 @@ export default function Home() {
   }
   const portfolioHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setPortfolioWindowOpen(false) 
+    setWindowsOpen({ ...windowsOpen, portfolio: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
   const portfolioHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setPortfolioWindowMinimized(true)
     setChangeFocusedWindow(true) 
+    setWindowsMinimized({ ...windowsMinimized, portfolio: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
 
   const imageViewerHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setImageViewerWindowOpen(true) 
     setCurrentFocusedWindow("imageViewer") 
+    setWindowsOpen({ ...windowsOpen, imageViewer: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(imageViewerWindowMinimized){
+    if(windowsMinimized.imageViewer){
       pullUpWindowAnimation("imageViewer")
-      setImageViewerWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, imageViewer: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -529,36 +552,36 @@ export default function Home() {
   }
   const imageViewerHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setImageViewerWindowOpen(false) 
-    setImageViewerWindowMaximized(false)
+    setWindowsOpen({ ...windowsOpen, imageViewer: false })
+    setWindowsMaximized({ ...windowsMaximized, imageViewer: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
     document.onkeyup = null  //detach onkeyup event listener
   }
   const imageViewerHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setImageViewerWindowMinimized(true)
     setChangeFocusedWindow(true) 
+    setWindowsMinimized({ ...windowsMinimized, imageViewer: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
   const imageViewerHandleMaximize = () => {
     //if alert dialogue is open, allow nothing to be maximized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    if(!imageViewerWindowMaximized){ setImageViewerWindowMaximized(true) }
-    else{ setImageViewerWindowMaximized(false) }
+    if(!windowsMaximized.imageViewer){ setWindowsMaximized({ ...windowsMaximized, imageViewer: true }) }
+    else{ setWindowsMaximized({ ...windowsMaximized, imageViewer: false }) }
     setChangeFocusedWindow(true)
   }
 
   const alertHandleOpen = () => { 
-    setAlertWindowOpen(true) 
     setCurrentFocusedWindow("alert") 
+    setWindowsOpen({ ...windowsOpen, alert: true })
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
     if(currentWindowsOpen.indexOf("alert") == -1){
@@ -568,23 +591,23 @@ export default function Home() {
     }
   }
   const alertHandleClose = () => { 
-    setAlertWindowOpen(false) 
     setChangeFocusedWindow(true) 
+    setWindowsOpen({ ...windowsOpen, alert: false }) 
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "alert")) //remove "alert" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
   }
 
   const textEditorHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setTextEditorWindowOpen(true) 
     setCurrentFocusedWindow("textEditor") 
+    setWindowsOpen({ ...windowsOpen, textEditor: true })
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(textEditorWindowMinimized){
+    if(windowsMinimized.textEditor){
       pullUpWindowAnimation("textEditor")
-      setTextEditorWindowMinimized(false)
+      setWindowsMinimized({ ...windowsMinimized, textEditor: false })
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -596,19 +619,19 @@ export default function Home() {
   }
   const textEditorHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setTextEditorWindowOpen(false) 
+    setWindowsOpen({ ...windowsOpen, textEditor: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
   const textEditorHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(alertWindowOpen){ return }
+    if(windowsOpen.alert){ return }
 
-    setTextEditorWindowMinimized(true)
     setChangeFocusedWindow(true) 
+    setWindowsMinimized({ ...windowsMinimized, textEditor: true })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
@@ -900,6 +923,28 @@ export default function Home() {
   }
 
 
+  //--ONCE ON SERVER INIT FOR HANDLER SETTING--//
+  useEffect(() => {
+
+    //ivy handlers
+    setIvyHandlers({
+      setIvyImage: handleIvyImage,
+      setIvyImageWidth: handleIvyImageWidth,
+      setIvyImageHeight: handleIvyImageHeight,
+      setIvyImageDescription: handleIvyImageDescription,
+      setIvyImageHeaderName: handleIvyHeaderName,
+      setIvyImageArrayIndex: handleIvyArrayIndex
+    })
+    
+    //notus handlers
+    setNotusHandlers({
+      setNotusHeaderName: handleNotusHeaderName,
+      setNotusText: handleNotusText,
+      setNotusFile: handleCurrentNotusFile
+    })
+  }, [])
+
+
   //--ONCE ON SERVER INIT FOR LOCAL STORAGE SETTING--//
   useEffect(() => {
 
@@ -945,6 +990,7 @@ export default function Home() {
     }
   }, [])
 
+
   //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
     
@@ -965,38 +1011,37 @@ export default function Home() {
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
     }
-  }, [archiveWindowOpen, logsWindowOpen, settingsWindowOpen, documentsWindowOpen, portfolioWindowOpen, imageViewerWindowOpen, 
-      alertWindowOpen, textEditorWindowOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
+  }, [windowsOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
   //--ON SERVER INIT & WHEN WINDOWS MINIMIZE--//
   useEffect(() => {
 
+    //convert all windows into an array to be filtered through below
+    const windows = Object.keys(windowsMinimized)
+
     //play animation to drop window below navbar
-    if(archiveWindowMinimized){ dropWindowAnimation("archive") }
-    if(logsWindowMinimized){ dropWindowAnimation("logs") }
-    if(settingsWindowMinimized){ dropWindowAnimation("settings") }
-    if(documentsWindowMinimized){ dropWindowAnimation("documents") }
-    if(portfolioWindowMinimized){ dropWindowAnimation("portfolio") }
-    if(imageViewerWindowMinimized){ dropWindowAnimation("imageViewer") }
-    if(textEditorWindowMinimized){ dropWindowAnimation("textEditor") }
-  }, [archiveWindowMinimized, logsWindowMinimized, settingsWindowMinimized, documentsWindowMinimized, portfolioWindowMinimized,
-      imageViewerWindowMinimized, textEditorWindowMinimized])
+    windows.forEach(window => {
+      if(windowsMinimized[window]){ 
+        dropWindowAnimation(window) 
+      }
+    })
+  }, [windowsMinimized])
 
   
   //--ON SERVER INIT & WHEN WINDOWS MAXIMIZE--//
   useEffect(() => {
 
     //play animation to maximize window
-    if(imageViewerWindowMaximized){
+    if(windowsMaximized.imageViewer){
       enlargeWindowAnimation("imageViewer")
       document.getElementById("window-imageViewer").setAttribute("style", "width:100%; height:100%; top:0; left:0; border-width:0")
     }
-    else if(!imageViewerWindowMaximized && imageViewerWindowOpen){
+    else if(!windowsMaximized.imageViewer && windowsOpen.imageViewer){
       shrinkWindowAnimation("imageViewer")
       document.getElementById("window-imageViewer").setAttribute("style", "width:fit-content; height:fit-content; top:140px; left:360px; border-width:4px")
     }
-  }, [imageViewerWindowMaximized])
+  }, [windowsMaximized])
 
 
   //--ON SERVER INIT & WHEN DRAGGING WINDOWS--//
@@ -1021,7 +1066,7 @@ export default function Home() {
         e.preventDefault()
 
         //if alert dialogue is open, allow nothing to be dragged
-        if(alertWindowOpen){
+        if(windowsOpen.alert){
           // console.log("hor hor hor")
           return
         }
@@ -1155,6 +1200,7 @@ export default function Home() {
           <div className="desktop-layout">
             <AnimatePresence>
 
+              {/* archive icon */}
               <motion.div 
                 id="icon" 
                 key={1}
@@ -1170,6 +1216,7 @@ export default function Home() {
                 </Button>
               </motion.div>
 
+              {/* pictures icon */}
               <motion.div 
                 id="icon" 
                 key={2}
@@ -1185,6 +1232,7 @@ export default function Home() {
                 </Button>
               </motion.div>
 
+              {/* settings icon */}
               <motion.div 
                 id="icon" 
                 key={3}
@@ -1200,6 +1248,7 @@ export default function Home() {
                 </Button>
               </motion.div>
 
+              {/* tutorial icon */}
               <motion.div 
                 id="icon" 
                 key={4}
@@ -1215,6 +1264,7 @@ export default function Home() {
                 </Button>
               </motion.div>
 
+              {/* portfolio icon */}
               {/* <motion.div 
                 id="icon" 
                 key={5}
@@ -1235,7 +1285,7 @@ export default function Home() {
 
           {/* archive window */}
           <AnimatePresence>
-            {archiveWindowOpen &&
+            {windowsOpen.archive &&
               <motion.div 
                 id="window-archive"
                 className="draggable"
@@ -1264,7 +1314,7 @@ export default function Home() {
 
           {/* data logs window */}
           <AnimatePresence>
-            {logsWindowOpen &&
+            {windowsOpen.logs &&
               <motion.div 
                 id="window-logs" 
                 className="draggable"
@@ -1288,7 +1338,7 @@ export default function Home() {
 
           {/* settings window */}
           <AnimatePresence>
-            {settingsWindowOpen &&
+            {windowsOpen.settings &&
               <motion.div 
                 id="window-settings" 
                 className="draggable"
@@ -1321,7 +1371,7 @@ export default function Home() {
 
           {/* documents window */}
           <AnimatePresence>
-            {documentsWindowOpen &&
+            {windowsOpen.documents &&
               <motion.div 
                 id="window-documents" 
                 className="draggable"
@@ -1339,21 +1389,14 @@ export default function Home() {
                 <div className={documentsStyles.documentsBody}>
                   <Documents 
                     currentOpenDir={documentsDirToOpen}
-                    archiveOpen={archiveHandleOpen} 
-                    alertOpen={alertHandleOpen}
-                    setIvyOpen={imageViewerHandleOpen} 
-                    setIvyImage={handleIvyImage} 
-                    setIvyImageWidth={handleIvyImageWidth} 
-                    setIvyImageHeight={handleIvyImageHeight}
-                    setIvyImageDescription={handleIvyImageDescription}
-                    setIvyImageHeaderName={handleIvyHeaderName}
-                    setIvyImageArrayIndex={handleIvyArrayIndex}
+                    ivyHandlers={ivyHandlers}
+                    notusHandlers={notusHandlers}
                     setHeaderName={handleWindowHeaderName}
-                    setErrorDescription={handleAlertDescription}
+                    setArchiveOpen={archiveHandleOpen} 
+                    setAlertOpen={alertHandleOpen}
+                    setIvyOpen={imageViewerHandleOpen}
                     setNotusOpen={textEditorHandleOpen}
-                    setNotusText={handleNotusText}
-                    setNotusHeaderName={handleNotusHeaderName}
-                    setNotusFile={handleCurrentNotusFile}
+                    setErrorDescription={handleAlertDescription}
                   />
                 </div>
               </motion.div>
@@ -1362,7 +1405,7 @@ export default function Home() {
 
           {/* portfolio window */}
           <AnimatePresence>
-            {portfolioWindowOpen &&
+            {windowsOpen.portfolio &&
               <motion.div 
                 id="window-portfolio"
                 ref={portfolioWindowAnimation}
@@ -1391,7 +1434,7 @@ export default function Home() {
 
           {/* image viewer window */}
           <AnimatePresence>
-            {imageViewerWindowOpen &&
+            {windowsOpen.imageViewer &&
               <motion.div 
                 id="window-imageViewer" 
                 className="draggable"
@@ -1410,15 +1453,15 @@ export default function Home() {
                     setMinimize={imageViewerHandleMinimize} 
                     setMaximize={imageViewerHandleMaximize} 
                     keepMaximize={true}
-                    maximized={imageViewerWindowMaximized}
+                    maximized={windowsMaximized.imageViewer}
                   />
                 </div>
 
                 <div className={imageViewerStyles.imageViewerBody}>
                   <ImageHandler 
                     selectedImage={currentIvyImage} 
-                    isOpen={imageViewerWindowOpen} 
-                    isMaximized={imageViewerWindowMaximized}
+                    isOpen={windowsOpen.imageViewer} 
+                    isMaximized={windowsMaximized.imageViewer}
                     imageWidth={ivyImageWidth} 
                     imageHeight={ivyImageHeight} 
                     imageDescription={ivyImageDescription}
@@ -1433,7 +1476,7 @@ export default function Home() {
 
           {/* alert dialogue window */}
           <AnimatePresence>
-            {alertWindowOpen &&
+            {windowsOpen.alert &&
               <motion.div 
                 id="window-alert"
                 initial={{ opacity: 0, y: 20 }}
@@ -1455,7 +1498,7 @@ export default function Home() {
 
           {/* text editor window */}
           <AnimatePresence>
-            {textEditorWindowOpen &&
+            {windowsOpen.textEditor &&
               <motion.div 
                 id="window-textEditor" 
                 className="draggable"
@@ -1472,7 +1515,7 @@ export default function Home() {
 
                 <div className={textEditorStyles.textEditorBody}>
                   <TextEditor 
-                    isOpen={textEditorWindowOpen}
+                    isOpen={windowsOpen.textEditor}
                     selectedText={currentNotusText}
                     selectedMdxFile={currentNotusFile} 
                   />
@@ -1494,7 +1537,7 @@ export default function Home() {
             <ul>
               {/* archive navbar icon */}
               <AnimatePresence>
-                {archiveWindowOpen &&
+                {windowsOpen.archive &&
                   <motion.li 
                     className="archive"
                     initial={{ opacity: 0, x: -16 }}
@@ -1514,7 +1557,7 @@ export default function Home() {
               
               {/* logs navbar icon */}
               <AnimatePresence>
-                {logsWindowOpen &&
+                {windowsOpen.logs &&
                   <motion.li 
                     className="logs"
                     initial={{ opacity: 0, x: -10 }}
@@ -1534,7 +1577,7 @@ export default function Home() {
 
               {/* settings navbar icon */}
               <AnimatePresence>
-                {settingsWindowOpen &&
+                {windowsOpen.settings &&
                   <motion.li 
                     className="settings"
                     initial={{ opacity: 0, x: -10 }}
@@ -1554,7 +1597,7 @@ export default function Home() {
 
               {/* docuemnts navbar icon */}
               <AnimatePresence>
-                {documentsWindowOpen &&
+                {windowsOpen.documents &&
                   <motion.li 
                     className="documents"
                     initial={{ opacity: 0, x: -10 }}
@@ -1574,7 +1617,7 @@ export default function Home() {
 
               {/* portfolio navbar icon */}
               <AnimatePresence>
-                {portfolioWindowOpen &&
+                {windowsOpen.portfolio &&
                   <motion.li 
                     className="portfolio"
                     initial={{ opacity: 0, x: -10 }}
@@ -1594,7 +1637,7 @@ export default function Home() {
 
               {/* image viewer navbar icon */}
               <AnimatePresence>
-                {imageViewerWindowOpen &&
+                {windowsOpen.imageViewer &&
                   <motion.li 
                     className="imageViewer"
                     initial={{ opacity: 0, x: -10 }}
@@ -1614,7 +1657,7 @@ export default function Home() {
 
               {/* alert navbar icon */}
               <AnimatePresence>
-                {alertWindowOpen &&
+                {windowsOpen.alert &&
                   <motion.li 
                     className="alert"
                     initial={{ opacity: 0, x: -10 }}
@@ -1634,7 +1677,7 @@ export default function Home() {
 
               {/* text editor navbar icon */}
               <AnimatePresence>
-                {textEditorWindowOpen &&
+                {windowsOpen.textEditor &&
                   <motion.li 
                     className="textEditor"
                     initial={{ opacity: 0, x: -10 }}

@@ -9,7 +9,18 @@ import { AnimatePresence, motion } from 'framer-motion'
 import TypewriterEffect from '@/components/TypewriterEffect'
 
 
-export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setIvyOpen, setIvyImage, setIvyImageWidth, setIvyImageHeight, setIvyImageDescription, setIvyImageHeaderName, setIvyImageArrayIndex, setHeaderName, setErrorDescription, setNotusOpen, setNotusText, setNotusHeaderName, setNotusFile }) {
+export default function Documents({ 
+  currentOpenDir, 
+  ivyHandlers,
+  notusHandlers,
+  setHeaderName, 
+  setArchiveOpen, 
+  setAlertOpen, 
+  setIvyOpen,
+  setNotusOpen,
+  setErrorDescription
+}) {
+  
   const [sysFolderOpen, setSysFolderOpen] = useState(false)
     const [documentsFolderOpen, setDocumentsFolderOpen] = useState(true) //default open
       
@@ -28,10 +39,21 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
 
     const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
+  // const [foldersOpen, setFoldersOpen] = useState({
+  //   sys: {
+  //     documents: {
+  //       archives,
+  //       games,
+  //       realArchive
+  //     },
+  //     pictures
+  //   }
+  // })
+
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
   const [typewriterDelay, setTypewriterDelay] = useState(20)
   const [globalColor, setGlobalColor] = useState()
-  var dirToOpen = `${currentOpenDir}`
+  const dirToOpen = `${currentOpenDir}`
 
 
   useEffect(() => {
@@ -530,24 +552,25 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
         
         //image files
         if(fileType == "Image"){
-          var currentFilesInDir = getFilesInCurrentDirectory(file, "Image")
-          var fileNamesArray = convertFileArray(currentFilesInDir, "Names")
-          var fileHeaderNamesArray = convertFileArray(currentFilesInDir, "HeaderNames")
-          var fileDescriptionsArray = convertFileArray(currentFilesInDir, "Descriptions")
-          var fileHeightArray = convertFileArray(currentFilesInDir, "Heights")
-          var fileWidthArray = convertFileArray(currentFilesInDir, "Widths")
+          const currentFilesInDir = getFilesInCurrentDirectory(file, "Image")
+          const fileNamesArray = convertFileArray(currentFilesInDir, "Names")
+          const fileHeaderNamesArray = convertFileArray(currentFilesInDir, "HeaderNames")
+          const fileDescriptionsArray = convertFileArray(currentFilesInDir, "Descriptions")
+          const fileHeightArray = convertFileArray(currentFilesInDir, "Heights")
+          const fileWidthArray = convertFileArray(currentFilesInDir, "Widths")
 
-          var fileNamesArrayIndex = fileNamesArray.findIndex((name) => name == file.textContent)
-          var webpFileNamesArray = renameFileExtensions(fileNamesArray, ".webp")
+          const fileNamesArrayIndex = fileNamesArray.findIndex((name) => name == file.textContent)
+          const webpFileNamesArray = renameFileExtensions(fileNamesArray, ".webp")
           
-          var imagesObject = {}
-          imagesObject.webp = webpFileNamesArray
-          imagesObject.header = fileHeaderNamesArray
-          imagesObject.descriptions = fileDescriptionsArray
-          imagesObject.height = fileHeightArray
-          imagesObject.width = fileWidthArray
-          imagesObject.index = fileNamesArrayIndex
-          console.log(imagesObject)
+          const imagesObject = {
+            webp: webpFileNamesArray,
+            header: fileHeaderNamesArray,
+            descriptions: fileDescriptionsArray,
+            height: fileHeightArray,
+            width: fileWidthArray,
+            index: fileNamesArrayIndex
+          }
+          // console.log(imagesObject)
           
           //set ivy settings, and open
           handleIvyImage(imagesObject.webp, imagesObject.width, imagesObject.height, imagesObject.descriptions, imagesObject.header, fileNamesArrayIndex)
@@ -912,11 +935,11 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
 
   //--HANDLERS & METHODS--
   function handleArchiveOpen(){
-    archiveOpen()
+    setArchiveOpen()
   }
 
   function handleAlertOpen(){
-    alertOpen()
+    setAlertOpen()
   }
 
   function handleIvyOpen(){
@@ -924,12 +947,12 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
   }
 
   function handleIvyImage(imageLocation, imageWidth, imageHeight, imageDescription, imageName, imageArrayIndex){
-    setIvyImage(imageLocation)
-    setIvyImageWidth(imageWidth)
-    setIvyImageHeight(imageHeight)
-    setIvyImageDescription(imageDescription)
-    setIvyImageHeaderName(imageName)
-    setIvyImageArrayIndex(imageArrayIndex)
+    ivyHandlers.setIvyImage(imageLocation)
+    ivyHandlers.setIvyImageWidth(imageWidth)
+    ivyHandlers.setIvyImageHeight(imageHeight)
+    ivyHandlers.setIvyImageDescription(imageDescription)
+    ivyHandlers.setIvyImageHeaderName(imageName)
+    ivyHandlers.setIvyImageArrayIndex(imageArrayIndex)
   }
 
   function changeHeaderName(e){
@@ -945,9 +968,9 @@ export default function Documents({ currentOpenDir, archiveOpen, alertOpen, setI
   }
 
   function handleNotusText(txtName, txtText, txtFile){
-    setNotusHeaderName(txtName)
-    setNotusText(txtText)
-    setNotusFile(txtFile)
+    notusHandlers.setNotusHeaderName(txtName)
+    notusHandlers.setNotusText(txtText)
+    notusHandlers.setNotusFile(txtFile)
   }
 
   //TODO: function to put in a dynamic/specific directory path
