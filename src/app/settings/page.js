@@ -11,8 +11,10 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
   const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
   const themeArray = ["Purple", "Red", "Blue", "Green", "White"]
+  const mysteryArray = ["Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "What are you doing", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "Why are you here", "Leave now", "Hi", "Hey", "Woah", "Heya", "Hi", "Hey", "hoaW", "ayeH", "Help me", "yeH", "hoaW", "ayeH", "ih", "Hey", "Woah", "Heya", "Heeeeeyyyyyyyyyyyy", "Woah", "Heya", "Hi", "Bye Bye", "Woah", "Hi", "Hey", "Woah", "Heya", "Stop this"]
   const [themeGlobalBackgroundColor, setThemeGlobalBackgroundColor] = useState("#c31c1c")
   const [themeGlobalHoverBackgroundColor, setThemeGlobalHoverBackgroundColor] = useState("#d13a3a")
+  const [mysterySetting, setMysterySetting] = useState("Hi")
 
   //--THEME--//
   const settingsTheme = createTheme({
@@ -154,6 +156,10 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
       case themeArray:
         setSelectedTheme(themeArray[newArrayIndex])
         break
+
+      case mysteryArray:
+        setMysterySetting(mysteryArray[newArrayIndex])
+        break
     }
   }
 
@@ -194,7 +200,7 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
           </section>
 
           <section className={styles.section}>
-            <h1 className={styles.name}>Brightness: {brightnessValue}%</h1>
+            <h1 className={styles.name}>Brightness [WIP]: {brightnessValue}%</h1>
             <div className={styles.button}>
 
               <Button className={styles.icon} disableRipple onClick={() => updateBrightness("num", -1)}>
@@ -239,7 +245,20 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
           </section>
 
           <section className={styles.section}>
-            <h1 className={styles.name}>Music Volume</h1>
+            <h1 className={styles.name}>???</h1>
+            <div className={styles.button}>
+
+              <Button className={styles.icon} disableRipple onClick={() => cycleArray(mysteryArray, "downwards")}>
+                <LeftIcon width="3vh" height="3vh"/>
+              </Button>
+
+              <h2 className={styles.name}>{mysterySetting}</h2>
+
+              <Button className={styles.icon} disableRipple onClick={() => cycleArray(mysteryArray, "upwards")}>
+                <RightIcon width="3vh" height="3vh"/>
+              </Button>
+
+            </div>
           </section>
 
           <section className={styles.section}>
@@ -249,7 +268,7 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
           </section>
 
           <section className={styles.section}>
-            <h1 className={styles.name}>Sound Volume</h1>
+            <span className={styles.version}>OS Version 0.3.2</span>
           </section>
 
         </div>

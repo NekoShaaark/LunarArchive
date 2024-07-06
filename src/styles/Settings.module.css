@@ -89,3 +89,16 @@
   cursor: pointer;
   background-color: var(--globalColor);
 }
+
+.version {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0px 4px; /* top and bottom | left and right */
+  align-self: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+  font-weight: 400;
+  user-select: none;
+  color: var(--globalColor);
+}
