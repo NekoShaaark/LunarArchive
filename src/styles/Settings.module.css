@@ -17,7 +17,7 @@
   height: inherit;
   width: inherit;
   grid-auto-rows: 1fr;
-  grid-template-columns: repeat(2, 50%);
+  grid-template-columns: repeat(2, auto-fit);
   grid-template-rows: repeat(3, auto-fit);
   grid-template-areas: 
     "IconA1 IconB1"

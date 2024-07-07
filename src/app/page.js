@@ -1359,6 +1359,8 @@ export default function Home() {
                     setSelectedTheme={handleSelectedTheme}
                     setCurrentArrayIndex={handleCurrentArrayIndex}
                     setBrightnessValue={handleBrightnessValue}
+                    setNotusOpen={textEditorHandleOpen}
+                    notusHandlers={notusHandlers}
                     selectedWallpaper={selectedWallpaper}
                     selectedTheme={selectedTheme}
                     currentArrayIndex={currentArrayIndex}

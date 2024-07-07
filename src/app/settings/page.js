@@ -7,7 +7,19 @@ import styles from '@/styles/Settings.module.css'
 import { useRouter } from 'next/navigation'
 
 
-export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCurrentArrayIndex, setBrightnessValue, selectedWallpaper, selectedTheme, currentArrayIndex, brightnessValue }) {
+export default function Settings({ 
+  setSelectedWallpaper, 
+  setSelectedTheme, 
+  setCurrentArrayIndex, 
+  setBrightnessValue,
+  setNotusOpen, 
+  notusHandlers,
+  selectedWallpaper, 
+  selectedTheme, 
+  currentArrayIndex, 
+  brightnessValue
+}) {
+
   const router = useRouter()
   const wallpaperArray = ["Asteroid", "Starry", "WorldMachine"]
   const themeArray = ["Purple", "Red", "Blue", "Green", "White"]
@@ -130,8 +142,13 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
   }, [brightnessValue])
 
   const openWallpaper = () => {
-    console.log("redirecting to wallpapers")
+    // console.log("redirecting to wallpapers")
     router.push(`/Wallpapers/Wallpaper-${selectedWallpaper}.webp`)
+  }
+
+  const openCredits = () => {
+    handleNotusText("Credits", undefined, "Credits.txt")
+    setNotusOpen()
   }
 
 
@@ -174,6 +191,12 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
     if(newValue > 100){ return }
     if(newValue < 0){ return }
     setBrightnessValue(newValue)
+  }
+
+  function handleNotusText(txtName, txtText, txtFile){
+    notusHandlers.setNotusHeaderName(txtName)
+    notusHandlers.setNotusText(txtText)
+    notusHandlers.setNotusFile(txtFile)
   }
 
 
@@ -268,7 +291,11 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
           </section>
 
           <section className={styles.section}>
+            <div className={styles.isolatedButton} onClick={openCredits}>
+              Credits
+            </div>
           </section>
+
           <span className={styles.version}>OS Version 0.3.3</span>
 
         </div>
