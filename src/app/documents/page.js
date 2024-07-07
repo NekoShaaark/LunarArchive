@@ -39,30 +39,37 @@ export default function Documents({
 
     const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
 
-  // const [foldersOpen, setFoldersOpen] = useState({
-  //   sys: {
-  //     documents: {
-  //       archives,
-  //       games,
-  //       realArchive
-  //     },
-  //     pictures
-  //   }
-  // })
 
+  const dirToOpen = `${currentOpenDir}`
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
   const [typewriterDelay, setTypewriterDelay] = useState(20)
   const [globalColor, setGlobalColor] = useState()
-  const dirToOpen = `${currentOpenDir}`
+  const [folderContent, setFolderContent] = useState({
+    bottomText: "? Misc, ? Images, ? Executables",
+    misc: "?",
+    images: "?",
+    executables: "?", 
+    total: "?",
+    topText: "? Total Items"
+  })
 
 
   useEffect(() => {
     closeAllFolders()
     setGlobalColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor'))
     // console.log("toOpen: " + dirToOpen)
+    
     switch(dirToOpen){
-      case "Documents": setDocumentsFolderOpen(true); setCurrentReadableDirectory("/Users/Neko/Sys/Documents"); break
-      case "Pictures": setPicturesFolderOpen(true); setCurrentReadableDirectory("/Users/Neko/Sys/Pictures"); break
+      case "Documents": 
+        setDocumentsFolderOpen(true)
+        setCurrentReadableDirectory("/Users/Neko/Sys/Documents") 
+        updateFolderContentText(0)
+        break
+      case "Pictures": 
+        setPicturesFolderOpen(true)
+        setCurrentReadableDirectory("/Users/Neko/Sys/Pictures")
+        updateFolderContentText(1)
+        break
     }
   }, [dirToOpen])
 
@@ -73,21 +80,25 @@ export default function Documents({
       id: "0",
       name: "Documents",
       nameColor: "#e4c525",
+      fileType: "Folder",
       icon: <FolderIcon fill="#e4c525" width={48} height={48}/>,
       files: [
         {
           id: "00",
           name: "Archives",
+          fileType: "Folder",
           icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
           files: [
             {
               id: "000",
               name: "Discord Stuffies",
+              fileType: "Folder",
               icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0000",
                   name: "accepted_Ideas",
+                  fileType: "Folder",
                   icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
@@ -107,6 +118,7 @@ export default function Documents({
                 {
                   id: "0001",
                   name: "Rejected_ideas",
+                  fileType: "Folder",
                   icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
@@ -131,6 +143,7 @@ export default function Documents({
           id: "01",
           name: "Games",
           nameColor: "#1e90ff",
+          fileType: "Folder",
           icon: <GamepadIcon fill="#1e90ff" width={48} height={48}/>,
           files: [
             {
@@ -147,18 +160,19 @@ export default function Documents({
             {
               id: "011",
               name: "More Games",
+              fileType: "Folder",
               icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0110",
                   name: "Skadoodle.exe",
-                  fileType: "exe",
+                  fileType: "Executable",
                   icon: <ChessIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
                   id: "0111",
                   name: "ScoobyDoo2.exe",
-                  fileType: "exe",
+                  fileType: "Executable",
                   icon: <BugIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
@@ -174,25 +188,26 @@ export default function Documents({
                 {
                   id: "0113",
                   name: "MathSolver3.2.exe",
-                  fileType: "exe",
+                  fileType: "Executable",
                   icon: <BugIcon fill={globalColor} width={48} height={48}/>,
                 },
                 {
                   id: "0114",
                   name: "Heomework",
+                  fileType: "Folder",
                   icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
                   files: [
                     {
                       id: "01140",
                       name: "Skadoodle2.exe",
-                      fileType: "exe",
+                      fileType: "Executable",
                       icon: <ChessIcon fill={globalColor} width={48} height={48}/>
                     },
                     {
                       id: "01141",
                       name: "Sharkness.exe",
                       nameColor: "#1e59ff",
-                      fileType: "exe",
+                      fileType: "Executable",
                       icon: <BugIcon fill="#1e59ff" width={48} height={48}/>
                     },
                   ]
@@ -200,7 +215,7 @@ export default function Documents({
                 {
                   id: "0115",
                   name: "MathSolver.exe",
-                  fileType: "exe",
+                  fileType: "Executable",
                   icon: <BugIcon fill={globalColor} width={48} height={48}/>,
                 }
               ]
@@ -208,12 +223,13 @@ export default function Documents({
             {
               id: "012",
               name: "N3w fO1d3r",
+              fileType: "Folder",
               icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
               files: [
                 {
                   id: "0120",
                   name: "sakhduh23.exe",
-                  fileType: "exe",
+                  fileType: "Executable",
                   icon: <BugIcon fill={globalColor} width={48} height={48}/>
                 },
                 {
@@ -241,12 +257,14 @@ export default function Documents({
           id: "02",
           name: "Real Archive",
           nameColor: "#c31c1c",
+          fileType: "Folder",
           icon: <FolderIcon fill="#c31c1c" width={48} height={48}/>,
           files: [
             {
               id: "020",
               name: "prototype_07",
               nameColor: "#c31c1c",
+              fileType: "Folder",
               icon: <FolderIcon fill="#c31c1c" width={48} height={48}/>,
               files: [
                 {
@@ -263,58 +281,61 @@ export default function Documents({
             },
             {
               id: "021",
-              name: ""
+              name: "",
+              fileType: "None"
             },
             {
               id: "022",
               name: "pl██s2.txt",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Executable",
               icon: <NoteIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "023",
               name: "plans4.txt",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Executable",
               icon: <AlertIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "024",
               name: "old.jpeg",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Image",
               icon: <ImageIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "025",
-              name: "prototype_04.png",
+              name: "prototype_04.png.exe",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Executable",
               icon: <ImageIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "026",
-              name: ""
+              name: "",
+              fileType: "Something?"
             },
             {
               id: "027",
               name: "exter█al██og█am.exe",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Executable",
               icon: <AlertIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "028",
               name: "01101000_01100101_01111001",
               nameColor: "#c31c1c",
-              fileType: "exe",
+              fileType: "Image",
               icon: <AlertIcon fill="#c31c1c" width={48} height={48}/>
             },
             {
               id: "029",
               name: "pr██ec█Lun█r",
               nameColor: "#c31c1c",
+              fileType: "Folder",
               icon: <FolderIcon fill="#c31c1c" width={48} height={48}/>
             },
           ]
@@ -323,7 +344,7 @@ export default function Documents({
           id: "03",
           name: "Archive.exe",
           nameColor: "#8a2be2",
-          fileType: "exe",
+          fileType: "Executable",
           icon: <ArchiveIcon fill="#8a2be2" width={48} height={48}/>,
         },
       ]
@@ -332,6 +353,7 @@ export default function Documents({
       id: "1",
       name: "Pictures",
       nameColor: "#228b22",
+      fileType: "Folder",
       icon: <ImagesIcon fill="#228b22" width={48} height={48}/>,
       files: [
         {
@@ -475,6 +497,46 @@ export default function Documents({
     
     const picturesFolder = sysFolder[1].files
 
+  const idToFolderTable = {
+    "-1": "Sys",
+      "0": "Documents",
+
+        "00": "Archives",
+          "000": "Discord Stuffies",
+            "0000": "accepted_Ideas",
+            "0001": "Rejected_ideas",
+
+        "01": "Games",
+          "011": "More Games",
+          "012": "N3w fO1d3r",
+            "0114": "Heomework",
+
+        "02": "Real Archive",
+          "020": "protoype_07",
+
+      "1": "Pictures",
+  }
+
+  const folderHandlers = {
+    "Sys": setSysFolderOpen,
+      "Documents": setDocumentsFolderOpen,
+
+        "Archives": setArchivesFolderOpen,
+          "Discord Stuffies": setDiscordStuffiesFolderOpen,
+            "accepted_Ideas": setAcceptedIdeasFolderOpen,
+            "Rejected_ideas": setRejectedIdeasFolderOpen,
+
+        "Games": setGamesFolderOpen,
+          "More Games": setMoreGamesFolderOpen,
+          "N3w fO1d3r": setNewFolderFolderOpen,
+            "Heomework": setHeomeworkFolderOpen,
+              
+        "Real Archive": setRealArchiveFolderOpen,
+          "protoype_07": setPrototype07FolderOpen,
+
+      "Pictures": setPicturesFolderOpen,
+  }
+
 
   function filesInFolder(folder){
     return(
@@ -490,7 +552,7 @@ export default function Documents({
               transition={{ duration: (mapId*0.2) + 0.4 }}
             >
               {/* button to interact with files/folder */}
-              <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType, file.description)}>
+              <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
                 <div className={styles.iconContents}>
                   {/* set custom color for name (icon is done within' the file array) */}
                   {file.icon}
@@ -506,8 +568,9 @@ export default function Documents({
     )
   }
 
-  function openFileOrFolder(file, fileType, fileDescription){
+  function openFileOrFolder(file, fileType){
     setTypewriterDelay(40)
+    // console.log(getFilesInCurrentDirectory(file, "All"))
 
     switch(fileOrFolder(file.id)){
       case "file":
@@ -603,124 +666,24 @@ export default function Documents({
     //set all to false, and set only one to true
     closeAllFolders()
 
-    //open a specific folder
-    //NOTE: if the files start bleeding into each other, you might've missed a break somewhere here
-    switch(folderID){
-      
-      //back
-      case "-1":
-      case "Sys":
-        setSysFolderOpen(true)
-        // console.log("open root")
-        break
-
-      //documents
-      case "0":
-      case "Documents":
-        setDocumentsFolderOpen(true)
-        // console.log("open documents")
-        break
-
-        //archive
-        case "00":
-        case "Archives":
-          setArchivesFolderOpen(true)
-          // console.log("open archives")
-          break
-
-          //discord stuffies
-          case "000":
-          case "Discord Stuffies":
-            setDiscordStuffiesFolderOpen(true)
-            // console.log("open discord stuffies")
-            break
-
-            //accepted ideas
-            case "0000":
-            case "accepted_Ideas":
-              setAcceptedIdeasFolderOpen(true)
-              // console.log("open accepted ideas")
-              break
-
-            case "0001":
-            case "Rejected_ideas":
-              setRejectedIdeasFolderOpen(true)
-              // console.log("open rejected ideas")
-              break
-              
-
-        //games
-        case "01":
-        case "Games":
-          setGamesFolderOpen(true)
-          // console.log("open games")
-          break
-
-          //more games
-          case "011":
-          case "More Games":
-            setMoreGamesFolderOpen(true)
-            // console.log("open more games")
-            break
-          
-              //new folder
-              case "012":
-              case "N3w fO1d3r":
-                setNewFolderFolderOpen(true)
-                // console.log("open N3w fO1d3r")
-                break
-          
-              //heomework
-              case "0114":
-              case "Heomework":
-                setHeomeworkFolderOpen(true)
-                // console.log("open heomework")
-                break
-
-        //real archive
-        case "02":
-        case "Real Archive":
-          setRealArchiveFolderOpen(true)
-          // console.log("open real archive")
-          break
-
-          //protoype_07
-          case "020":
-          case "protoype_07":
-          setPrototype07FolderOpen(true)
-          // console.log("open prototype_07")
-          break
-
-      //pictures
-      case "1":
-      case "Pictures":
-        setPicturesFolderOpen(true)
-        // console.log("open pictures")
-        break
-    }
-
+    //check if is going up or down, and handle accordingly
+    //up = directory (eg. Documents)
+    //down = number  (eg. 001)
+    var folderToOpen = idToFolderTable[folderID]
+    if(folderToOpen == undefined){ folderToOpen = folderID }
+    
+    //actually open the folder
+    const folderOpener = folderHandlers[folderToOpen]
+    folderOpener(true)
+    
     //update navabr directory
     updateCurrentDirectory(folderID)
   }
 
   function closeAllFolders(){
-    setSysFolderOpen(false)
-      setDocumentsFolderOpen(false)
-        
-        setArchivesFolderOpen(false)
-          setDiscordStuffiesFolderOpen(false)
-            setAcceptedIdeasFolderOpen(false)
-            setRejectedIdeasFolderOpen(false)
-        
-        setGamesFolderOpen(false)
-          setMoreGamesFolderOpen(false)
-          setHeomeworkFolderOpen(false)
-          setNewFolderFolderOpen(false)
-
-        setRealArchiveFolderOpen(false)
-          setPrototype07FolderOpen(false)
-    
-      setPicturesFolderOpen(false)
+    Object.values(folderHandlers).forEach(handler => {
+      handler(false)
+    })    
   }
 
   function backOneFolder(){
@@ -758,6 +721,9 @@ export default function Documents({
           if(fileID == "prototype_07"){ return "/Users/Neko/Sys/Documents/Real Archive/prototype_07" }
       
       if(fileID == "Pictures"){ return "/Users/Neko/Sys/Pictures" }
+
+    //when updating the folder properties, id will be -1, so just return the system directory's array
+    if(fileID == -1){ return sysDir }
 
     //slice the fileID into its seperate array indices
     const arrayLayer = fileID.toString().slice("")
@@ -828,6 +794,7 @@ export default function Documents({
 
   function updateCurrentDirectory(fileID){
     setCurrentReadableDirectory(getCurrentDirectory(fileID))
+    updateFolderContentText(fileID)
   }
 
   function fileOrFolder(fileID){
@@ -910,6 +877,7 @@ export default function Documents({
     for(index in array){
       if(convertTo == "Names"){ newArray.push(array[index].name) }
       if(convertTo == "HeaderNames"){ newArray.push(array[index].headerName) }
+      if(convertTo == "FileTypes"){ newArray.push(array[index].fileType) }
       if(convertTo == "Descriptions"){ newArray.push(array[index].description) }
       if(convertTo == "Heights"){ newArray.push(array[index].height) }
       if(convertTo == "Widths"){ newArray.push(array[index].width) }
@@ -930,6 +898,41 @@ export default function Documents({
 
     // console.log(newArray)
     return newArray
+  }
+
+  function updateFolderContentText(fileID){
+
+    //convert the folder name to an id (using the idToFolderTable) 
+    var newFileID = getKeyByValue(idToFolderTable, fileID)
+    if(newFileID == undefined){ newFileID = fileID }
+    
+    //get all files in the current directory (Sys directory doesn't have an array, so we don't get the .files object of it)
+    const filesInCurrentDirectory = getCurrentDirectory(newFileID, "array")
+    var allFiles = filesInCurrentDirectory.files
+    if(!allFiles){ allFiles = filesInCurrentDirectory }
+    
+    //convert above array into an array of fileTypes
+    const fileTypeArray = convertFileArray(allFiles, "FileTypes")
+    // console.log(fileTypeArray)
+
+    //count fileTypes, and set variables accordingly
+    const totalItems = fileTypeArray.filter(x => x != "None").length
+    const contentMisc = fileTypeArray.filter(x => x != undefined && x != "Folder" && x != "Image" && x != "Executable" && x != "None" && x != "Something?").length
+    const contentImages = fileTypeArray.filter(x => x == "Image").length
+    const contentExecutables = fileTypeArray.filter(x => x == "Executable").length
+
+    setFolderContent({ 
+      bottomText: `${contentMisc} Misc, ${contentImages} Images, ${contentExecutables} Executables`,
+      misc: contentMisc,
+      images: contentImages,
+      executables: contentExecutables, 
+      total: totalItems,
+      topText: `${totalItems} Total Items`
+    })
+  }
+
+  function getKeyByValue(object, value){
+    return Object.keys(object).find(key => object[key] === value);
   }
 
 
@@ -1004,6 +1007,10 @@ export default function Documents({
           
           {picturesFolderOpen && filesInFolder(picturesFolder)}
       
+      </div>
+      <div className={styles.folderContent}>
+        <span>{folderContent.topText}</span>
+        <span>{folderContent.bottomText}</span>
       </div>
     </>
   )

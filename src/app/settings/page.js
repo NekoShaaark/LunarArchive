@@ -268,8 +268,8 @@ export default function Settings({ setSelectedWallpaper, setSelectedTheme, setCu
           </section>
 
           <section className={styles.section}>
-            <span className={styles.version}>OS Version 0.3.2</span>
           </section>
+          <span className={styles.version}>OS Version 0.3.3</span>
 
         </div>
       </ThemeProvider>

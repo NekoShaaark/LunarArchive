@@ -8,6 +8,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  /* overflow-y: scroll; */
+  /* overflow-x: hidden; */
 }
 
 .text {
@@ -20,13 +22,35 @@
   font-weight: 400;
 }
 
+.folderContent {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  color: var(--globalColor);
+  /* background-color: #000; */
+  flex-direction: column;
+  margin: 0;
+  padding-right: 12px;
+  padding-bottom: 8px;
+  align-items: flex-end;
+  justify-content: flex-end;
+  font-family: eightBitFortress;
+  font-size: small;
+  font-weight: 400;
+  user-select: none;
+}
+
 .navbar {
   display: flex;
+  position: sticky;
+  top: 0;
   height: 4vh;
   width: 100%;
   flex-direction: row;
   border-bottom: 4px solid var(--globalColor);
   background-color: #000;
+  z-index: 2;
 }
 
 .grid {
