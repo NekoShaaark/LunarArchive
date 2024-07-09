@@ -46,12 +46,17 @@ export default function Documents({
   const [globalColor, setGlobalColor] = useState()
   const [folderContent, setFolderContent] = useState({
     bottomText: "? Misc, ? Images, ? Executables",
-    misc: "?",
-    images: "?",
-    executables: "?", 
-    total: "?",
+    misc: "0",
+    images: "0",
+    executables: "0", 
+    total: "0",
     topText: "? Total Items"
   })
+
+  const typerwriterProps = {
+    delay: 120,
+    effectType: "Number",
+  }
 
 
   useEffect(() => {
@@ -1008,9 +1013,15 @@ export default function Documents({
           {picturesFolderOpen && filesInFolder(picturesFolder)}
       
       </div>
+
       <div className={styles.folderContent}>
-        <span>{folderContent.topText}</span>
-        <span>{folderContent.bottomText}</span>
+        <span><TypewriterEffect text={folderContent.total} {...typerwriterProps}/> Total Items</span>
+        <span>
+          {folderContent.bottomText}
+          {/* <TypewriterEffect text={folderContent.misc} {...typerwriterProps}/> Misc,
+          <TypewriterEffect text={folderContent.images} {...typerwriterProps}/> Images,
+          <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables */}
+        </span>
       </div>
     </>
   )

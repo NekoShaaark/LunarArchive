@@ -55,7 +55,7 @@
 /* https://www.dafont.com/8-bit-fortress.font but i added missing glyphs/characters */
 @font-face {
     font-family: eightBitFortress;
-    src: url('/8bitFortressEdited.woff2') format('woff2');
+    src: url('/pixelFont.woff2') format('woff2');
 }
 
 
