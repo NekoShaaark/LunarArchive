@@ -344,10 +344,10 @@ export default function Home() {
     }
     
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("archive") == -1){
+    if(!windowsOpen.archive){
       setNavbarOrder("open")
-      setCurrentWindowsOpen([...currentWindowsOpen, "archive"]) //add "archive" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "archive"])
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "archive"]) //add "archive" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "archive"])
     }
   }
   const archiveHandleClose = () => { 
@@ -388,10 +388,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("logs") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "logs"]) //add "logs" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "logs"])
+    if(!windowsOpen.logs){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "logs"]) //add "logs" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "logs"])
     }
   }
   const logsHandleClose = () => { 
@@ -427,10 +427,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("settings") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "settings"]) //add "settings" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "settings"])
+    if(!windowsOpen.settings){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "settings"]) //add "settings" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "settings"])
     }
   }
   const settingsHandleClose = () => { 
@@ -466,10 +466,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("documents") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "documents"]) //add "documents" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "documents"])
+    if(!windowsOpen.documents){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "documents"]) //add "documents" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "documents"])
     }
   }
   const documentsHandleClose = () => {
@@ -505,10 +505,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("portfolio") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "portfolio"]) //add "portfolio" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "portfolio"])
+    if(!windowsOpen.portfolio){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "portfolio"]) //add "portfolio" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "portfolio"])
     }
   }
   const portfolioHandleClose = () => { 
@@ -544,10 +544,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("imageViewer") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "imageViewer"]) //add "imageViewer" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "imageViewer"])
+    if(!windowsOpen.imageViewer){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "imageViewer"]) //add "imageViewer" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "imageViewer"])
     }
   }
   const imageViewerHandleClose = () => { 
@@ -584,10 +584,10 @@ export default function Home() {
     setWindowsOpen({ ...windowsOpen, alert: true })
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("alert") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "alert"]) //add "alert" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "alert"])
+    if(!windowsOpen.alert){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "alert"]) //add "alert" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "alert"])
     }
   }
   const alertHandleClose = () => { 
@@ -611,10 +611,10 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(currentWindowsOpen.indexOf("textEditor") == -1){
-      setCurrentWindowsOpen([...currentWindowsOpen, "textEditor"]) //add "textEditor" to the array
-      setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "textEditor"])
+    if(!windowsOpen.textEditor){
       setNavbarOrder("open")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "textEditor"]) //add "textEditor" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "textEditor"])
     }
   }
   const textEditorHandleClose = () => { 
@@ -675,6 +675,7 @@ export default function Home() {
   }
   setInterval(updateTime, 1000)
 
+  //reorganize the window array to represent actual window hierarchy
   function moveElementInArray(arrayToMove, elementToMove){
     let indexToMove = arrayToMove.indexOf(elementToMove)
     arrayToMove.push(arrayToMove.splice(indexToMove, 1)[0])
@@ -682,40 +683,32 @@ export default function Home() {
 
   //set currently active window
   function setActiveWindow(currentActiveWindow){
-    var archiveWindow = document.getElementById("window-archive")
-    var logsWindow = document.getElementById("window-logs")
-    var settingsWindow = document.getElementById("window-settings")
-    var documentsWindow = document.getElementById("window-documents")
-    var portfolioWindow = document.getElementById("window-portfolio")
-    var imageViewerWindow = document.getElementById("window-imageViewer")
-    var alertWindow = document.getElementById("window-alert")
-    var textEditorWindow = document.getElementById("window-textEditor")
+
+    //create array of all windows
+    // var archiveWindow = document.getElementById("window-archive")
+    const allWindowsArray = Object.keys(windowsOpen)
+    const windows = allWindowsArray.reduce((array, id) => {
+      array[id] = document.getElementById(`window-${id}`)
+      return array
+    }, {})
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
     moveElementInArray(currentWindowsOpen, currentActiveWindow)
-    // console.log(currentWindowsOpen)
     
     //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
-    var archiveIndex = currentWindowsOpen.indexOf("archive") + 10
-    var logsIndex = currentWindowsOpen.indexOf("logs") + 10
-    var settingsIndex = currentWindowsOpen.indexOf("settings") + 10
-    var documentsIndex = currentWindowsOpen.indexOf("documents") + 10
-    var portfolioIndex = currentWindowsOpen.indexOf("portfolio") + 10
-    var imageViewerIndex = currentWindowsOpen.indexOf("imageViewer") + 10
-    var alertIndex = currentWindowsOpen.indexOf("alert") + 20  //this is an important window/dialogue so it goes above everything
-    var textEditorIndex = currentWindowsOpen.indexOf("textEditor") + 10
+    //add 20 to alert (is an important window/dialogue, so it goes above everything)
+    const windowsIndexes = allWindowsArray.reduce((acc, id) => {
+      const index = currentWindowsOpen.indexOf(id)
+      acc[id] = index + (id == "alert" ? 20 : 10)
+      return acc
+    }, {})
     
     //check if active window is none
     if(currentActiveWindow == "none"){
-      archiveWindow ? archiveWindow.style.zIndex = 9 : null
-      logsWindow ? logsWindow.style.zIndex = 9 : null
-      settingsWindow ? settingsWindow.style.zIndex = 9 : null
-      documentsWindow ? documentsWindow.style.zIndex = 9 : null
-      portfolioWindow ? portfolioWindow.style.zIndex = 9 : null
-      imageViewerWindow ? imageViewerWindow.style.zIndex = 9 : null
-      alertWindow ? alertWindow.style.zIndex = 9 : null
-      textEditorWindow ? textEditorWindow.style.zIndex = 9 : null
+      Object.values(windows).forEach(window => {
+        if(window){ window.style.zIndex = 9 }
+      })
       
       setNavbarColors("none")
       setCurrentFocusedWindow("none")
@@ -724,58 +717,13 @@ export default function Home() {
 
     //set all windows' zIndex
     //if window exists, set zIndex to above grabbed zIndex, otherwise set to null
-    archiveWindow ? archiveWindow.style.zIndex = archiveIndex : null
-    logsWindow ? logsWindow.style.zIndex = logsIndex : null
-    settingsWindow ? settingsWindow.style.zIndex = settingsIndex : null
-    documentsWindow ? documentsWindow.style.zIndex = documentsIndex : null
-    portfolioWindow ? portfolioWindow.style.zIndex = portfolioIndex : null
-    imageViewerWindow ? imageViewerWindow.style.zIndex = imageViewerIndex : null
-    alertWindow ? alertWindow.style.zIndex = alertIndex : null
-    textEditorWindow ? textEditorWindow.style.zIndex = textEditorIndex : null
+    allWindowsArray.forEach(id => {
+      if(windows[id]){ windows[id].style.zIndex = windowsIndexes[id] }
+    })
 
     //set navbarColors and focusedWindow
-    switch(currentActiveWindow){
-      case "archive":
-        setNavbarColors("archive")
-        setCurrentFocusedWindow("archive")
-        break
-
-      case "logs":
-        setNavbarColors("logs")
-        setCurrentFocusedWindow("logs")
-        break
-
-      case "settings":
-        setNavbarColors("settings")
-        setCurrentFocusedWindow("settings")
-        break
-
-      case "documents":
-        setNavbarColors("documents")
-        setCurrentFocusedWindow("documents")
-        break
-
-      case "portfolio":
-        setNavbarColors("portfolio")
-        setCurrentFocusedWindow("portfolio")
-        break
-
-      case "imageViewer":
-        setNavbarColors("imageViewer")
-        setCurrentFocusedWindow("imageViewer")
-        break
-
-      case "alert":
-        setNavbarColors("alert")
-        setCurrentFocusedWindow("alert")
-        break
-
-      case "textEditor":
-        setNavbarColors("textEditor")
-        setCurrentFocusedWindow("textEditor")
-        break
-    }
-
+    setNavbarColors(currentActiveWindow)
+    setCurrentFocusedWindow(currentActiveWindow)
     setNavbarOrder("open")
   }
 
@@ -1264,21 +1212,6 @@ export default function Home() {
                 </Button>
               </motion.div>
 
-              {/* portfolio icon */}
-              {/* <motion.div 
-                id="icon" 
-                key={5}
-                className="icon-portfolio"
-                variants={fadeIn}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 1.0 }}
-              >
-                <Button disableRipple onClick={portfolioHandleOpen}>
-                  <PortfolioIcon width={56} height={56}/>
-                  <h1>Portfolio.exe</h1>
-                </Button>
-              </motion.div> */}
             </AnimatePresence>
           </div>
 
