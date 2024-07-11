@@ -1,18 +1,18 @@
 "use client"
 
-export default function windowsHandler() {
+export default function WindowsHandler() {
 
-    const [windowHandlers, setWindowHandlers] = useState({
-        archive: {
-            open: null,
-            close: null,
-            minimize: null
-        }
-    })
+    // const [windowHandlers, setWindowHandlers] = useState({
+    //     archive: {
+    //         open: null,
+    //         close: null,
+    //         minimize: null
+    //     }
+    // })
 
 
     //--WINDOW OPEN/CLOSE/MINIMIZE/MAXIMIZE HANDLERS--//
-    const archiveHandleOpen = () => { 
+    // const archiveHandleOpen = () => { 
         //if alert dialogue is open, allow nothing to be opened
         // if(windowsOpen.alert){ return }
 
@@ -36,19 +36,19 @@ export default function windowsHandler() {
         //   setCurrentWindowsOpen([...currentWindowsOpen, "archive"]) //add "archive" to the array
         //   setCurrentNavbarIconsOpen([...currentNavbarIconsOpen, "archive"])
         // }
-    }
+    // }
 
 
     //--ONCE ON SERVER INIT FOR HANDLER SETTING--//
-    useEffect(() => {
+    // useEffect(() => {
 
-      //window handlers
-      setWindowHandlers({
-        archive: {
-            open: archiveHandleOpen,
-            close: null,
-            minimize: null
-        }
-      })
-    }, [])
+    //   //window handlers
+    //   setWindowHandlers({
+    //     archive: {
+    //         // open: archiveHandleOpen,
+    //         close: null,
+    //         minimize: null
+    //     }
+    //   })
+    // }, [])
 }

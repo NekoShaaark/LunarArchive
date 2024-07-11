@@ -1,5 +1,5 @@
 "use client"
 
-export default function desktopHandler() {
+export default function DesktopHandler() {
 
 }
