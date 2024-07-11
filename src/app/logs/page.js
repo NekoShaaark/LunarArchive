@@ -4,7 +4,7 @@ import TypewriterEffect from '@/components/TypewriterEffect'
 
 export default function Logs() {
   return (
-    <>
+    <div className={styles.logsBody}>
       <h1 className={styles.title}>Data Logs</h1>
       <h3 className={styles.text}>Authorized Personnel Only</h3>
       
@@ -56,6 +56,6 @@ export default function Logs() {
       <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
       <p className={styles.text}>Lorem L9hmeZE4ItGuZ0EcYhsr5U9bx2g0BPp6z2NHpukM5</p>
       <p className={styles.text}>Lorem</p>
-    </>
+    </div>
   )
 }

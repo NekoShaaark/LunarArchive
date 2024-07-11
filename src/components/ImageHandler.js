@@ -472,7 +472,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
         //if the image is in the Image Viewer, don't open Image Viewer on click, otherwise, open Image Viewer on click
         isOpen ?
             //true / in Image Viewer
-            <>
+            <div className={styles.imageViewerBody}>
                 <div className={styles.image}>
                     { usingArray && 
                         <motion.div 
@@ -608,7 +608,7 @@ export default function ImageHandler({ selectedImage, isOpen, isMaximized, image
                 </div>
 
                 <h1 className={styles.text}>{imageUsingDescription}</h1>
-            </>
+            </div>
             : 
             //false / outside of Image Viewer  (this is technically never used)
             <Image src={"placeholderImage.webp"} width={imageUsingWidth} height={imageUsingHeight} alt="NULL_IMAGE"/>

@@ -985,7 +985,7 @@ export default function Documents({
   //TODO: when hovering over icons, they should be bordered with a different color
 
   return (
-    <>
+    <div className={styles.documentsBody}>
       <div className={styles.navbar}>
         <Button disableRipple onClick={() => backOneFolder()}>
           <BackIcon className={styles.backButton} width={48} height={48}/>
@@ -1023,6 +1023,6 @@ export default function Documents({
           <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables */}
         </span>
       </div>
-    </>
+    </div>
   )
 }

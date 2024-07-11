@@ -8,15 +8,6 @@ import { AnimatePresence, motion, useAnimate } from 'framer-motion'
 import Image from 'next/image'
 
 import WindowHeader from '@/components/WindowHeader'
-import archiveStyles from '@/styles/Archive.module.css'
-import logsStyles from '@/styles/Logs.module.css'
-import settingsStyles from '@/styles/Settings.module.css'
-import documentsStyles from '@/styles/Documents.module.css'
-import portfolioStyles from '@/styles/Portfolio.module.css'
-import imageViewerStyles from '@/styles/ImageViewer.module.css'
-import alertStyles from '@/styles/AlertDialogue.module.css'
-import textEditorStyles from '@/styles/TextEditor.module.css'
-
 import Archive from './archive/page'
 import Logs from './logs/page'
 import Settings from './settings/page'
@@ -1237,10 +1228,9 @@ export default function Home() {
                     setMinimize={archiveHandleMinimize}
                   /> 
                 </div>
-                
-                <div className={archiveStyles.archiveBody}>
-                  <Archive/>
-                </div>
+
+                {/* actual page reference */}
+                <Archive/>
               </motion.div>
             }
           </AnimatePresence>
@@ -1262,9 +1252,8 @@ export default function Home() {
                   <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose} setMinimize={logsHandleMinimize}/>
                 </div>
 
-                <div className={logsStyles.logsBody}>
-                  <Logs/>
-                </div>
+                {/* actual page reference */}
+                <Logs/>
               </motion.div>
             }
           </AnimatePresence>
@@ -1286,20 +1275,19 @@ export default function Home() {
                   <WindowHeader headerName="Settings" selectedIcon="moonStarIcon" setClose={settingsHandleClose} setMinimize={settingsHandleMinimize}/>
                 </div>
 
-                <div className={settingsStyles.settingsBody}>
-                  <Settings
-                    setSelectedWallpaper={handleSelectedWallpaper}
-                    setSelectedTheme={handleSelectedTheme}
-                    setCurrentArrayIndex={handleCurrentArrayIndex}
-                    setBrightnessValue={handleBrightnessValue}
-                    setNotusOpen={textEditorHandleOpen}
-                    notusHandlers={notusHandlers}
-                    selectedWallpaper={selectedWallpaper}
-                    selectedTheme={selectedTheme}
-                    currentArrayIndex={currentArrayIndex}
-                    brightnessValue={brightnessValue}
-                  />
-                </div>
+                {/* actual page reference */}
+                <Settings
+                  setSelectedWallpaper={handleSelectedWallpaper}
+                  setSelectedTheme={handleSelectedTheme}
+                  setCurrentArrayIndex={handleCurrentArrayIndex}
+                  setBrightnessValue={handleBrightnessValue}
+                  setNotusOpen={textEditorHandleOpen}
+                  notusHandlers={notusHandlers}
+                  selectedWallpaper={selectedWallpaper}
+                  selectedTheme={selectedTheme}
+                  currentArrayIndex={currentArrayIndex}
+                  brightnessValue={brightnessValue}
+                />
               </motion.div>
             }
           </AnimatePresence>
@@ -1321,19 +1309,18 @@ export default function Home() {
                   <WindowHeader headerName="Documents" selectedIcon="folderIcon" setClose={documentsHandleClose} setMinimize={documentsHandleMinimize} newHeaderName={windowHeaderName}/>
                 </div>
 
-                <div className={documentsStyles.documentsBody}>
-                  <Documents 
-                    currentOpenDir={documentsDirToOpen}
-                    ivyHandlers={ivyHandlers}
-                    notusHandlers={notusHandlers}
-                    setHeaderName={handleWindowHeaderName}
-                    setArchiveOpen={archiveHandleOpen} 
-                    setAlertOpen={alertHandleOpen}
-                    setIvyOpen={imageViewerHandleOpen}
-                    setNotusOpen={textEditorHandleOpen}
-                    setErrorDescription={handleAlertDescription}
-                  />
-                </div>
+                {/* actual page reference */}
+                <Documents 
+                  currentOpenDir={documentsDirToOpen}
+                  ivyHandlers={ivyHandlers}
+                  notusHandlers={notusHandlers}
+                  setHeaderName={handleWindowHeaderName}
+                  setArchiveOpen={archiveHandleOpen} 
+                  setAlertOpen={alertHandleOpen}
+                  setIvyOpen={imageViewerHandleOpen}
+                  setNotusOpen={textEditorHandleOpen}
+                  setErrorDescription={handleAlertDescription}
+                />
               </motion.div>
             }
           </AnimatePresence>
@@ -1354,15 +1341,14 @@ export default function Home() {
                   <WindowHeader headerName="Portfolio" selectedIcon="portfolioIcon" setClose={portfolioHandleClose} setMinimize={portfolioHandleMinimize} keepMaximize={true}/>
                 </div>
 
-                <div className={portfolioStyles.portfolioBody}>
-                  <Portfolio 
-                    setIvyOpen={imageViewerHandleOpen} 
-                    setIvyImage={handleIvyImage} 
-                    setIvyImageWidth={handleIvyImageWidth} 
-                    setIvyImageHeight={handleIvyImageHeight}
-                    setIvyImageDescription={handleIvyImageDescription}
-                  />
-                </div>
+                {/* actual page reference */}
+                <Portfolio 
+                  setIvyOpen={imageViewerHandleOpen} 
+                  setIvyImage={handleIvyImage} 
+                  setIvyImageWidth={handleIvyImageWidth} 
+                  setIvyImageHeight={handleIvyImageHeight}
+                  setIvyImageDescription={handleIvyImageDescription}
+                />
               </motion.div>
             }
           </AnimatePresence>
@@ -1392,19 +1378,18 @@ export default function Home() {
                   />
                 </div>
 
-                <div className={imageViewerStyles.imageViewerBody}>
-                  <ImageHandler 
-                    selectedImage={currentIvyImage} 
-                    isOpen={windowsOpen.imageViewer} 
-                    isMaximized={windowsMaximized.imageViewer}
-                    imageWidth={ivyImageWidth} 
-                    imageHeight={ivyImageHeight} 
-                    imageDescription={ivyImageDescription}
-                    imageArrayIndex={ivyArrayIndex}
-                    setHeaderName={handleIvyHeaderName}
-                    imageHeader={ivyImageHeaderName}
-                  />
-                </div>
+                {/* actual page reference */}
+                <ImageHandler 
+                  selectedImage={currentIvyImage} 
+                  isOpen={windowsOpen.imageViewer} 
+                  isMaximized={windowsMaximized.imageViewer}
+                  imageWidth={ivyImageWidth} 
+                  imageHeight={ivyImageHeight} 
+                  imageDescription={ivyImageDescription}
+                  imageArrayIndex={ivyArrayIndex}
+                  setHeaderName={handleIvyHeaderName}
+                  imageHeader={ivyImageHeaderName}
+                />
               </motion.div>
             }
           </AnimatePresence>
@@ -1424,9 +1409,11 @@ export default function Home() {
                   <WindowHeader headerName="Error" selectedIcon="alertIcon" setClose={alertHandleClose} newHeaderName={windowHeaderName} removeMinimize={true}/>
                 </div>
 
-                <div className={alertStyles.alertBody}>
-                  <AlertDialogue setClose={alertHandleClose} errorDescription={alertDescription}/>
-                </div>
+                {/* actual page reference */}
+                <AlertDialogue 
+                  setClose={alertHandleClose} 
+                  errorDescription={alertDescription}
+                />
               </motion.div>
             }
           </AnimatePresence>
@@ -1448,13 +1435,12 @@ export default function Home() {
                   <WindowHeader headerName={`Notus - ${notusHeaderName}`} selectedIcon="noteIcon" setClose={textEditorHandleClose} setMinimize={textEditorHandleMinimize}/>
                 </div>
 
-                <div className={textEditorStyles.textEditorBody}>
-                  <TextEditor 
-                    isOpen={windowsOpen.textEditor}
-                    selectedText={currentNotusText}
-                    selectedMdxFile={currentNotusFile} 
-                  />
-                </div>
+                {/* actual page reference */}
+                <TextEditor 
+                  isOpen={windowsOpen.textEditor}
+                  selectedText={currentNotusText}
+                  selectedMdxFile={currentNotusFile} 
+                />
               </motion.div>
             }
           </AnimatePresence>

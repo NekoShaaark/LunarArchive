@@ -201,7 +201,7 @@ export default function Settings({
 
 
   return (
-    <>
+    <div className={styles.settingsBody}>
       <ThemeProvider theme={settingsTheme}>
         <div className={styles.grid}>
 
@@ -300,6 +300,6 @@ export default function Settings({
 
         </div>
       </ThemeProvider>
-    </>
+    </div>
   )
 }

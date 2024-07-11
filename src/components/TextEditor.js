@@ -47,10 +47,10 @@ export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
 
 
     return(
-        <>
+        <div className={styles.textEditorBody}>
             <p className={styles.text}>
                 {textUsing}
             </p>
-        </>
+        </div>
     )
 }

@@ -31,7 +31,7 @@ export default function Portfolio({ setIvyOpen, setIvyImage, setIvyImageWidth, s
   }
 
   return (
-    <>
+    <div className={styles.portfolioBody}>
       <section className={styles.section1}>
         <section className={styles.section1sub1}>
           <h1 id={styles.title}>The Beginnings of Animation</h1>
@@ -74,6 +74,6 @@ export default function Portfolio({ setIvyOpen, setIvyImage, setIvyImageWidth, s
           </p>
         </section>
       </section>
-    </>
+    </div>
   )
 }

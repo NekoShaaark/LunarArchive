@@ -50,6 +50,7 @@ export default function AlertDialogue({ setClose, errorDescription }) {
 
 
     return(
+      <div className={styles.alertBody}>
         <ThemeProvider theme={theme}>
             <h1 className={styles.text}>{alertDescription}</h1>
             <div className={styles.button}>
@@ -58,5 +59,6 @@ export default function AlertDialogue({ setClose, errorDescription }) {
               </Button>
             </div>
         </ThemeProvider>
+      </div>
     )
 }

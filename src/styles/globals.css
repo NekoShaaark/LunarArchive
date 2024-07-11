@@ -446,6 +446,7 @@ body {
     left: 260px;
     flex-direction: column;
     border: 4px solid var(--globalColor);
+    background: #000;
 }
 /* #endregion ------ */
 /* #endregion <======> */
