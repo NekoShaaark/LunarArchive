@@ -45,12 +45,12 @@ export default function Documents({
   const [typewriterDelay, setTypewriterDelay] = useState(20)
   const [globalColor, setGlobalColor] = useState()
   const [folderContent, setFolderContent] = useState({
-    bottomText: "? Misc, ? Images, ? Executables",
+    bottomText: "0 Misc, 0 Images, 0 Executables",
     misc: "0",
     images: "0",
     executables: "0", 
     total: "0",
-    topText: "? Total Items"
+    topText: "0 Total Items"
   })
 
   const typerwriterProps = {
@@ -60,22 +60,8 @@ export default function Documents({
 
 
   useEffect(() => {
-    closeAllFolders()
     setGlobalColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor'))
-    // console.log("toOpen: " + dirToOpen)
-    
-    switch(dirToOpen){
-      case "Documents": 
-        setDocumentsFolderOpen(true)
-        setCurrentReadableDirectory("/Users/Neko/Sys/Documents") 
-        updateFolderContentText(0)
-        break
-      case "Pictures": 
-        setPicturesFolderOpen(true)
-        setCurrentReadableDirectory("/Users/Neko/Sys/Pictures")
-        updateFolderContentText(1)
-        break
-    }
+    openFolder(dirToOpen)
   }, [dirToOpen])
 
   //--SYSTEM DIRECTORY ARRAY--//
@@ -681,7 +667,7 @@ export default function Documents({
     const folderOpener = folderHandlers[folderToOpen]
     folderOpener(true)
     
-    //update navabr directory
+    //update navbar directory
     updateCurrentDirectory(folderID)
   }
 
