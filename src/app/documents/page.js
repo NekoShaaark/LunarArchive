@@ -1,8 +1,8 @@
 "use client"
 
 import styles from '@/styles/Documents.module.css'
-import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, GamepadIcon, ImageIcon, ImagesIcon, NoteIcon } from '@/components/SvgHandler'
-import { Button, ThemeProvider, createTheme } from '@mui/material'
+import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, GamepadIcon, ImageIcon, ImagesIcon, NoteIcon, SearchIcon } from '@/components/SvgHandler'
+import { Button, InputAdornment, TextField, ThemeProvider, createTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -43,7 +43,16 @@ export default function Documents({
   const dirToOpen = `${currentOpenDir}`
   const [currentReadableDirectory, setCurrentReadableDirectory] = useState("/Users/Neko/Sys/Documents")
   const [typewriterDelay, setTypewriterDelay] = useState(20)
+
   const [globalColor, setGlobalColor] = useState()
+  const [globalColorHover, setGlobalColorHover] = useState()
+
+  const [searchTextValue, setSearchTextValue] = useState("")
+  const [searchTextPreviewValue, setSearchTextPreviewValue] = useState("")
+  const [filesFoundFromSearch, setFilesFoundFromSearch] = useState()
+  const [previouslyOpenFolder, setPreviouslyOpenFolder] = useState("")
+
+
   const [folderContent, setFolderContent] = useState({
     bottomText: "0 Misc, 0 Images, 0 Executables",
     misc: "0",
@@ -61,6 +70,7 @@ export default function Documents({
 
   useEffect(() => {
     setGlobalColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor'))
+    setGlobalColorHover(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColorHover'))
     openFolder(dirToOpen)
   }, [dirToOpen])
 
@@ -466,6 +476,22 @@ export default function Documents({
           }
         },
       },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+            color: globalColor,
+            '&:hover': {
+              color: globalColorHover
+            }, 
+            '&.Mui-focused': {
+              color: globalColorHover
+            },
+            input: {
+              fontSize: "14px"
+            }
+          }
+        }
+      },
     }
   })
   
@@ -535,6 +561,36 @@ export default function Documents({
         <AnimatePresence>
           {/* map all files in folder */}
           {folder.map((file, mapId) => (
+            <motion.div 
+              key={mapId} 
+              className={styles.icon}
+              initial={{ opacity: 0, scale: 0.75, z: 16, y: 16 }}
+              animate={{ opacity: 1, scale: 1, z: 0, y: 0  }}
+              transition={{ duration: (mapId*0.2) + 0.4 }}
+            >
+              {/* button to interact with files/folder */}
+              <Button disableRipple key={mapId} className={styles.iconButton} id={file.id} onClick={e => openFileOrFolder(e.currentTarget, file.fileType)}>
+                <div className={styles.iconContents}>
+                  {/* set custom color for name (icon is done within' the file array) */}
+                  {file.icon}
+                  <span style={{color: file.nameColor}}>
+                    {file.name}
+                  </span>
+                </div>
+              </Button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </ThemeProvider>
+    )
+  }
+
+  function filesInSearch(searchResults){
+    return(
+      <ThemeProvider theme={theme}>
+        <AnimatePresence>
+          {/* map all files */}
+          {searchResults.map((file, mapId) => (
             <motion.div 
               key={mapId} 
               className={styles.icon}
@@ -656,6 +712,7 @@ export default function Documents({
   function openFolder(folderID){
     //set all to false, and set only one to true
     closeAllFolders()
+    setPreviouslyOpenFolder(folderID)
 
     //check if is going up or down, and handle accordingly
     //up = directory (eg. Documents)
@@ -891,20 +948,25 @@ export default function Documents({
     return newArray
   }
 
-  function updateFolderContentText(fileID){
+  function updateFolderContentText(fileID, inputType){
+    var newFileID
+    var allFiles
 
-    //convert the folder name to an id (using the idToFolderTable) 
-    var newFileID = getKeyByValue(idToFolderTable, fileID)
-    if(newFileID == undefined){ newFileID = fileID }
-    
-    //get all files in the current directory (Sys directory doesn't have an array, so we don't get the .files object of it)
-    const filesInCurrentDirectory = getCurrentDirectory(newFileID, "array")
-    var allFiles = filesInCurrentDirectory.files
-    if(!allFiles){ allFiles = filesInCurrentDirectory }
+    //handle either "Search" folder content (array of files), or regular folder content (fileID that gets converted to an array of files)
+    if(inputType != "Search"){
+      //convert the folder name to an id (using the idToFolderTable) 
+      newFileID = getKeyByValue(idToFolderTable, fileID)
+      if(newFileID == undefined){ newFileID = fileID }
+
+      //get all files in the current directory (Sys directory doesn't have an array, so we don't get the .files object of it)
+      const filesInCurrentDirectory = getCurrentDirectory(newFileID, "array")
+      allFiles = filesInCurrentDirectory.files
+      if(!allFiles){ allFiles = filesInCurrentDirectory }
+    }
+    else{ allFiles = fileID }
     
     //convert above array into an array of fileTypes
     const fileTypeArray = convertFileArray(allFiles, "FileTypes")
-    // console.log(fileTypeArray)
 
     //count fileTypes, and set variables accordingly
     const totalItems = fileTypeArray.filter(x => x != "None").length
@@ -925,6 +987,85 @@ export default function Documents({
   function getKeyByValue(object, value){
     return Object.keys(object).find(key => object[key] === value);
   }
+
+  function searchForFile(name){
+
+    //if not searching, open last open folder (or keep current folder open)
+    if(name == ""){
+      openFolder(previouslyOpenFolder)
+      setFilesFoundFromSearch(null)
+      return
+    }
+
+    //otherwise, if there is nothing to show, just show nothing
+    const result = findFilesByName(sysDir, name)
+    if(result == null){ setFilesFoundFromSearch("result-null"); return }
+
+    // const fileDirectory = getCurrentDirectory(result.id)
+    // const folderToOpen = findFolderByFileId(result.id)
+
+    //close all folders, and show what has been found
+    //TODO: change directory navbar, and add check so can't use back button
+    closeAllFolders()
+    setFilesFoundFromSearch(filesInSearch(result))
+    setCurrentReadableDirectory("Showing results for search!")
+    updateFolderContentText(result, "Search")
+  }
+
+  function findFilesByName(files, name){
+
+    //old system for finding singular files
+    // for(const item of file){
+    //   if(item.name.includes(name)){ return item }
+    //   if(item.files){
+    //     const result = findFileById(item.files, name)
+    //     if(result){ return result }
+    //   }
+    // }
+    // return null
+
+    var result = []
+    var searchFor = name.toLowerCase()
+
+    //loop through all files, and append/push to an array
+    for(const item of files){
+      if(item.name.toLowerCase().includes(searchFor)){ result.push(item) }
+      if(item.files){ result = result.concat(findFilesByName(item.files, searchFor)) }
+    }
+  
+    return result
+  }
+
+  function findFolderByFileId(fileID){
+    var idArray = fileID.split("")
+    var newIds
+    
+    //set the folder to Sys (-1) if there isn't a second array index
+    if(idArray[1]){ 
+      idArray.pop() 
+      newIds = idArray.join("")
+    }
+    else{ newIds = "-1" }
+    
+    //grab and return the folder from it's id created above
+    return idToFolderTable[newIds]
+  }
+
+  function isTextEmpty(value){
+    return (value == null || (typeof value === "string" && value.trim().length === 0))
+  }
+
+  function updateSearchText(newText){
+    setSearchTextPreviewValue(newText)
+    searchForFile(newText)
+    if(isTextEmpty(newText)){
+      setSearchTextValue("")
+      return
+    }
+
+    setSearchTextValue(newText)
+  }
+  
 
 
   //--HANDLERS & METHODS--
@@ -969,46 +1110,74 @@ export default function Documents({
 
   //TODO: function to put in a dynamic/specific directory path
   //TODO: when hovering over icons, they should be bordered with a different color
+  //TODO: could add customizable settings to search
 
   return (
-    <div className={styles.documentsBody}>
-      <div className={styles.navbar}>
-        <Button disableRipple onClick={() => backOneFolder()}>
-          <BackIcon className={styles.backButton} width={48} height={48}/>
-        </Button>
-        <div className={styles.text}><TypewriterEffect text={currentReadableDirectory} delay={typewriterDelay}/></div>
-      </div>
-      <div className={styles.grid}>
-
-        {sysFolderOpen && filesInFolder(sysFolder)}
-          {documentsFolderOpen && filesInFolder(documentsFolder)}
-            
-            {archivesFolderOpen && filesInFolder(archivesFolder)}
-              {discordStuffiesFolderOpen && filesInFolder(discordStuffiesFolder)}
-                {acceptedIdeasFolderOpen && filesInFolder(acceptedIdeasFolder)}
-                {rejectedIdeasFolderOpen && filesInFolder(rejectedIdeasFolder)}
-            
-            {gamesFolderOpen && filesInFolder(gamesFolder)}
-              {moreGamesFolderOpen && filesInFolder(moreGamesFolder)}
-              {newFolderFolderOpen && filesInFolder(newFolderFolder)}
-                {heomeworkFolderOpen && filesInFolder(heomeworkFolder)}
-            
-            {realArchiveFolderOpen && filesInFolder(realArchiveFolder)}
-              {prototype07FolderOpen && filesInFolder(prototype07Folder)}
+    <ThemeProvider theme={theme}>
+      <div className={styles.documentsBody}>
+        <div className={styles.navbar}>
+          <Button disableRipple onClick={() => backOneFolder()}>
+            <BackIcon className={styles.backButton} width={48} height={48}/>
+          </Button>
+          <span className={styles.directory}>
+            <TypewriterEffect text={currentReadableDirectory} delay={typewriterDelay}/>
+          </span>
+          <div className={styles.search}>
+            <TextField
+              variant="standard"
+              placeholder="Search"
+              className={styles.searchInput}
+              value={searchTextPreviewValue}
+              InputProps={{
+                disableUnderline: true,
+                endAdornment: 
+                  <InputAdornment id="adornment" position="end">
+                    <SearchIcon className={styles.backButton} width={24} height={24}/>
+                  </InputAdornment>
+              }}
+              onChange={e => updateSearchText(e.currentTarget.value)}
+              onKeyUp={() => updateSearchText(searchTextPreviewValue)} //passing in the previewed name (the value cannot be null)
+            />
+          </div>
+        </div>
+        {!filesFoundFromSearch && <div className={styles.grid}>
           
-          {picturesFolderOpen && filesInFolder(picturesFolder)}
-      
-      </div>
+            {sysFolderOpen && filesInFolder(sysFolder)}
+              {documentsFolderOpen && filesInFolder(documentsFolder)}
+          
+                {archivesFolderOpen && filesInFolder(archivesFolder)}
+                  {discordStuffiesFolderOpen && filesInFolder(discordStuffiesFolder)}
+                    {acceptedIdeasFolderOpen && filesInFolder(acceptedIdeasFolder)}
+                    {rejectedIdeasFolderOpen && filesInFolder(rejectedIdeasFolder)}
+          
+                {gamesFolderOpen && filesInFolder(gamesFolder)}
+                  {moreGamesFolderOpen && filesInFolder(moreGamesFolder)}
+                  {newFolderFolderOpen && filesInFolder(newFolderFolder)}
+                    {heomeworkFolderOpen && filesInFolder(heomeworkFolder)}
+          
+                {realArchiveFolderOpen && filesInFolder(realArchiveFolder)}
+                  {prototype07FolderOpen && filesInFolder(prototype07Folder)}
+              
+              {picturesFolderOpen && filesInFolder(picturesFolder)}
+          
+          </div>
+        }
+        {filesFoundFromSearch && 
+          <div className={styles.grid}>
+            {filesFoundFromSearch}
+          </div>
+        }
 
-      <div className={styles.folderContent}>
-        <span><TypewriterEffect text={folderContent.total} {...typerwriterProps}/> Total Items</span>
-        <span>
-          {folderContent.bottomText}
-          {/* <TypewriterEffect text={folderContent.misc} {...typerwriterProps}/> Misc,
-          <TypewriterEffect text={folderContent.images} {...typerwriterProps}/> Images,
-          <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables */}
-        </span>
+        <div className={styles.folderContent}>
+          <span><TypewriterEffect text={folderContent.total} {...typerwriterProps}/> Total Items</span>
+          <span>
+            {folderContent.bottomText}
+            {/* <TypewriterEffect text={folderContent.misc} {...typerwriterProps}/> Misc,
+            <TypewriterEffect text={folderContent.images} {...typerwriterProps}/> Images,
+            <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables */}
+          </span>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }

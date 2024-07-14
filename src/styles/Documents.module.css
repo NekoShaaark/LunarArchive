@@ -8,8 +8,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* overflow-y: scroll; */
-  /* overflow-x: hidden; */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .text {
@@ -105,12 +105,49 @@
   font-weight: 400;
 }
 
+.directory {
+  display: flex;
+  width: 80%;
+  color: var(--globalColor);
+  margin: 0;
+  padding-left: 10px;
+  align-self: center;
+  font-family: eightBitFortress;
+  font-size: medium;
+  font-weight: 400;
+}
+
 .backButton {
   display: flex;
   fill: var(--globalColor);
 }
 .backButton:hover {
   fill: var(--globalColorHover);
+}
+
+/* TODO: on mobile this should just be the magnifying glass, and when clicking on, it'll show the textfield */
+.search {
+  display: flex;
+  margin-left: auto;
+  padding-inline: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.searchInput {
+  display: flex;
+  width: 80%;
+  text-align: right;
+}
+.searchInput:hover {
+  .backButton {
+    fill: var(--globalColorHover);
+  }
+}
+.searchInput:focus-within {
+  .backButton {
+    fill: var(--globalColorHover);
+  }
 }
 
 
