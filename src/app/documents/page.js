@@ -38,6 +38,7 @@ export default function Documents({
         const [prototype07FolderOpen, setPrototype07FolderOpen] = useState(false)
 
     const [picturesFolderOpen, setPicturesFolderOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
 
 
   const dirToOpen = `${currentOpenDir}`
@@ -51,7 +52,9 @@ export default function Documents({
   const [searchTextPreviewValue, setSearchTextPreviewValue] = useState("")
   const [filesFoundFromSearch, setFilesFoundFromSearch] = useState()
   const [previouslyOpenFolder, setPreviouslyOpenFolder] = useState("")
-
+  const [searchOptions, setSearchOptions] = useState({
+    searchGlobally: false
+  })
 
   const [folderContent, setFolderContent] = useState({
     bottomText: "0 Misc, 0 Images, 0 Executables",
@@ -534,6 +537,26 @@ export default function Documents({
       "1": "Pictures",
   }
 
+  const nameToFolderReferenceTable = {
+    "Sys": sysFolder,
+      "Documents": documentsFolder,
+
+        "Archives": archivesFolder,
+          "Discord Stuffies": discordStuffiesFolder,
+            "accepted_Ideas": acceptedIdeasFolder,
+            "Rejected_ideas": rejectedIdeasFolder,
+
+        "Games": gamesFolder,
+          "More Games": moreGamesFolder,
+          "N3w fO1d3r": newFolderFolder,
+            "Heomework": heomeworkFolder,
+
+        "Real Archive": realArchiveFolder,
+          "protoype_07": prototype07Folder,
+
+      "Pictures": picturesFolder,
+  }
+
   const folderHandlers = {
     "Sys": setSysFolderOpen,
       "Documents": setDocumentsFolderOpen,
@@ -737,6 +760,14 @@ export default function Documents({
   function backOneFolder(){
     const currentDir = currentReadableDirectory.split("/")
     const moveDir = currentDir[currentDir.length - 2]
+    
+    //if the user tries to go back while searching, make them go back to the previously open folder
+    if(searchOpen){
+      openFolder(previouslyOpenFolder)
+      setFilesFoundFromSearch(null)
+      updateSearchText("")
+      return
+    } 
 
     //check to make sure the user doesnt go back too far
     if(moveDir == "Neko"){
@@ -994,21 +1025,25 @@ export default function Documents({
     if(name == ""){
       openFolder(previouslyOpenFolder)
       setFilesFoundFromSearch(null)
+      setSearchOpen(false)
       return
     }
 
+    //set if should search globally or locally
+    var folderToSearch = idToFolderTable[previouslyOpenFolder]
+    if(folderToSearch == undefined){ folderToSearch = previouslyOpenFolder }
+    const localFolder = nameToFolderReferenceTable[folderToSearch]
+    const searchScope = searchOptions.searchGlobally ? sysFolder : localFolder
+    
     //otherwise, if there is nothing to show, just show nothing
-    const result = findFilesByName(sysDir, name)
+    const result = findFilesByName(searchScope, name)
     if(result == null){ setFilesFoundFromSearch("result-null"); return }
 
-    // const fileDirectory = getCurrentDirectory(result.id)
-    // const folderToOpen = findFolderByFileId(result.id)
-
     //close all folders, and show what has been found
-    //TODO: change directory navbar, and add check so can't use back button
     closeAllFolders()
+    setSearchOpen(true)
     setFilesFoundFromSearch(filesInSearch(result))
-    setCurrentReadableDirectory("Showing results for search!")
+    setCurrentReadableDirectory(searchOptions.searchGlobally ? "Showing results for global search!" : "Showing results for local search!")
     updateFolderContentText(result, "Search")
   }
 
@@ -1171,10 +1206,7 @@ export default function Documents({
         <div className={styles.folderContent}>
           <span><TypewriterEffect text={folderContent.total} {...typerwriterProps}/> Total Items</span>
           <span>
-            {folderContent.bottomText}
-            {/* <TypewriterEffect text={folderContent.misc} {...typerwriterProps}/> Misc,
-            <TypewriterEffect text={folderContent.images} {...typerwriterProps}/> Images,
-            <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables */}
+            <TypewriterEffect text={folderContent.misc} {...typerwriterProps}/> Misc, <TypewriterEffect text={folderContent.images} {...typerwriterProps}/> Images, <TypewriterEffect text={folderContent.executables} {...typerwriterProps}/> Executables
           </span>
         </div>
       </div>
