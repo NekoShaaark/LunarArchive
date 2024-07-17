@@ -17,6 +17,8 @@ import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
 import Login from './login/page'
+import { DesktopIconButton, NavbarIconButton } from '@/components/handlers/DesktopHandler'
+import { WindowCreator } from '@/components/handlers/WindowsHandler'
 
 
 
@@ -226,7 +228,7 @@ export default function Home() {
 
   //--LOGIN OPENING HANDLING--//
   const handleLoginOpen = async (e) => {
-    if(!e){ console.log("woahhhhhh loginOpen undefined"); return }
+    // if(!e){ console.log("woahhhhhh loginOpen undefined"); return }
     console.log("opening/closing login")
     setLoginOpen(e)
   }
@@ -312,6 +314,12 @@ export default function Home() {
         // await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
         break
     }
+  }
+
+
+  //--GET WINDOW DATA BY ID--//
+  const getWindowCreationDataById = (id) => {
+    return windowsCreationData.find(config => config.id === id)
   }
 
 
@@ -649,11 +657,288 @@ export default function Home() {
   })
 
 
-  //--MOTION VARIANTS--//
-  const fadeIn = {
-    initial: { opacity: 0, y: 10 },
-    animate: { opacity: 1, y: 0 }
-  }
+  //--DESKTOP/NAVBAR ICONS DATA--//
+  const desktopIconData = [
+    {
+      className: "icon-documents",
+      onClick: () => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() },
+      Icon: FolderIcon,
+      label: "Documents",
+    },
+    {
+      className: "icon-pictures",
+      onClick: () => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() },
+      Icon: ImagesIcon,
+      label: "Pictures",
+    },
+    {
+      className: "icon-settings",
+      onClick: settingsHandleOpen,
+      Icon: MoonStarIcon,
+      label: "Settings",
+    },
+    {
+      className: "icon-tutorial",
+      onClick: () => { handleAlertDescription("Coming soon"); alertHandleOpen() },
+      Icon: ImageIcon,
+      label: "tutorial.png",
+    }
+  ]
+
+  const navbarIconData = [
+    {
+      windowOpen: windowsOpen.archive,
+      className: "archive",
+      onClick: archiveHandleOpen,
+      Icon: ArchiveIcon,
+      label: "Archive"
+    },
+    {
+      windowOpen: windowsOpen.logs,
+      className: "logs",
+      onClick: logsHandleOpen,
+      Icon: LogsIcon,
+      label: "Data Logs"
+    },
+    {
+      windowOpen: windowsOpen.settings,
+      className: "settings",
+      onClick: settingsHandleOpen,
+      Icon: MoonStarIcon,
+      label: "Settings"
+    },
+    {
+      windowOpen: windowsOpen.documents,
+      className: "documents",
+      onClick: documentsHandleOpen,
+      Icon: FolderIcon,
+      label: "Documents"
+    },
+    {
+      windowOpen: windowsOpen.portfolio,
+      className: "portfolio",
+      onClick: portfolioHandleOpen,
+      Icon: PortfolioIcon,
+      label: "Portfolio"
+    },
+    {
+      windowOpen: windowsOpen.imageViewer,
+      className: "imageViewer",
+      onClick: imageViewerHandleOpen,
+      Icon: ImageViewerIcon,
+      label: "Ivy"
+    },
+    {
+      windowOpen: windowsOpen.alert,
+      className: "alert",
+      onClick: alertHandleOpen,
+      Icon: AlertIcon,
+      label: "Alert"
+    },
+    {
+      windowOpen: windowsOpen.textEditor,
+      className: "textEditor",
+      onClick: textEditorHandleOpen,
+      Icon: NoteIcon,
+      label: "Notus"
+    }
+  ]
+
+
+  //--WINDOWS CREATION DATA--//
+  const windowsCreationData = [
+
+    //template
+    {
+      windowOpen: windowsOpen.NAMEHERE,
+      id: "window-NAMEHERE",
+      windowRef: null,
+      headerProps: {
+        headerName: "NAME HERE",
+        Icon: null,
+        setClose: null,
+        setMinimize: null,
+      },
+      PageComponent: null,
+      pageProps: {
+        
+      }
+    },
+
+    //archive window
+    {
+      windowOpen: windowsOpen.archive,
+      id: "window-archive",
+      windowRef: archiveWindowAnimation,
+      headerProps: {
+        headerName: "███hi██",
+        Icon: ArchiveIcon,
+        setClose: archiveHandleClose,
+        setMinimize: archiveHandleMinimize,
+      },
+      PageComponent: Archive,
+      pageProps: {
+        
+      }
+    },
+
+    //data logs window
+    {
+      windowOpen: windowsOpen.logs,
+      id: "window-logs",
+      windowRef: logsWindowAnimation,
+      headerProps: {
+        headerName: "Data Logs",
+        Icon: LogsIcon,
+        setClose: logsHandleClose,
+        setMinimize: logsHandleMinimize,
+      },
+      PageComponent: Logs,
+      pageProps: {
+        
+      }
+    },
+
+    //settings window
+    {
+      windowOpen: windowsOpen.settings,
+      id: "window-settings",
+      windowRef: settingsWindowAnimation,
+      headerProps: {
+        headerName: "Settings",
+        Icon: MoonStarIcon,
+        setClose: settingsHandleClose,
+        setMinimize: settingsHandleMinimize,
+      },
+      PageComponent: Settings,
+      pageProps: {
+        setSelectedWallpaper: handleSelectedWallpaper,
+        setSelectedTheme: handleSelectedTheme,
+        setCurrentArrayIndex: handleCurrentArrayIndex,
+        setBrightnessValue: handleBrightnessValue,
+        setNotusOpen: textEditorHandleOpen,
+        notusHandlers: notusHandlers,
+        selectedWallpaper: selectedWallpaper,
+        selectedTheme: selectedTheme,
+        currentArrayIndex: currentArrayIndex,
+        brightnessValue: brightnessValue
+      }
+    },
+
+    //documents window
+    {
+      windowOpen: windowsOpen.documents,
+      id: "window-documents",
+      windowRef: documentsWindowAnimation,
+      headerProps: {
+        headerName: "Documents",
+        Icon: FolderIcon,
+        setClose: documentsHandleClose,
+        setMinimize: documentsHandleMinimize,
+        newHeaderName: windowHeaderName
+      },
+      PageComponent: Documents,
+      pageProps: {
+        currentOpenDir: documentsDirToOpen,
+        ivyHandlers,
+        notusHandlers,
+        setHeaderName: handleWindowHeaderName,
+        setArchiveOpen: archiveHandleOpen,
+        setAlertOpen: alertHandleOpen,
+        setIvyOpen: imageViewerHandleOpen,
+        setNotusOpen: textEditorHandleOpen,
+        setErrorDescription: handleAlertDescription
+      }
+    },
+
+    //portfolio window
+    {
+      windowOpen: windowsOpen.portfolio,
+      id: "window-portfolio",
+      windowRef: portfolioWindowAnimation,
+      headerProps: {
+        headerName: "Portfolio", 
+        Icon: PortfolioIcon,
+        setClose: portfolioHandleClose,
+        setMinimize: portfolioHandleMinimize,
+        keepMaximize: true
+      },
+      PageComponent: Portfolio,
+      pageProps: {
+        setIvyOpen: imageViewerHandleOpen,
+        setIvyImage: handleIvyImage,
+        setIvyImageWidth: handleIvyImageWidth,
+        setIvyImageHeight: handleIvyImageHeight,
+        setIvyImageDescription: handleIvyImageDescription
+      }
+    },
+
+    //image viewer window 
+    {
+      windowOpen: windowsOpen.imageViewer,
+      id: "window-imageViewer",
+      windowRef: imageViewerWindowAnimation,
+      headerProps: {
+        headerName: `Ivy - ${ivyImageHeaderName}`,
+        Icon: ImageViewerIcon,
+        setClose: imageViewerHandleClose,
+        setMinimize: imageViewerHandleMinimize,
+        setMaximize: imageViewerHandleMaximize,
+        keepMaximize: true,
+        maximized: windowsMaximized.imageViewer
+      },
+      PageComponent: ImageHandler,
+      pageProps: {
+        selectedImage: currentIvyImage,
+        isOpen: windowsOpen.imageViewer,
+        isMaximized: windowsMaximized.imageViewer,
+        imageWidth: ivyImageWidth,
+        imageHeight: ivyImageHeight,
+        imageDescription: ivyImageDescription,
+        imageArrayIndex: ivyArrayIndex,
+        setHeaderName: handleIvyHeaderName,
+        imageHeader: ivyImageHeaderName
+      }
+    },
+
+    //alert window
+    {
+      windowOpen: windowsOpen.alert,
+      id: "window-alert",
+      windowRef: null,
+      headerProps: {
+        headerName: "Error",
+        Icon: AlertIcon,
+        setClose: alertHandleClose,
+        newHeaderName: windowHeaderName,
+        removeMinimize: true
+      },
+      PageComponent: AlertDialogue,
+      pageProps: {
+        setClose: alertHandleClose,
+        errorDescription: alertDescription
+      }
+    },
+
+    //text editor window
+    {
+      windowOpen: windowsOpen.textEditor,
+      id: "window-textEditor",
+      windowRef: textEditorWindowAnimation,
+      headerProps: {
+        headerName: `Notus - ${notusHeaderName}`,
+        Icon: NoteIcon,
+        setClose: textEditorHandleClose,
+        setMinimize: textEditorHandleMinimize
+      },
+      PageComponent: TextEditor,
+      pageProps: {
+        isOpen: windowsOpen.textEditor,
+        selectedText: currentNotusText,
+        selectedMdxFile: currentNotusFile 
+      }
+    },
+  ]
 
 
   //--FUNCTIONS & STATE HANDLING--//
@@ -1123,7 +1408,10 @@ export default function Home() {
 
       {loginOpen &&
         <div className="layout-content">
-          <Login setLoginOpen={handleLoginOpen}/>
+          <Login setLoginOpen={handleLoginOpen} setAlertOpen={alertHandleOpen} setErrorDescription={handleAlertDescription}/>
+
+          {/* alert dialogue window */}
+          <WindowCreator {...getWindowCreationDataById("window-alert")}/>
         </div>
       }
 
@@ -1136,511 +1424,76 @@ export default function Home() {
         <ThemeProvider theme={theme}>
 
           {/* desktop/icons layout */}
+          {/* icons handling */}
           <div className="desktop-layout">
-            <AnimatePresence>
-
-              {/* archive icon */}
-              <motion.div 
-                id="icon" 
-                key={1}
-                className="icon-documents" 
-                variants={fadeIn}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 0.4 }}
-              >
-                <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() }}>
-                  <FolderIcon width={56} height={56}/>
-                  <h1>Documents</h1>
-                </Button>
-              </motion.div>
-
-              {/* pictures icon */}
-              <motion.div 
-                id="icon" 
-                key={2}
-                className="icon-pictures"
-                variants={fadeIn}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 0.8 }}
-              >
-                <Button disableRipple onClick={() => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() }}>
-                  <ImagesIcon width={56} height={56}/>
-                  <h1>Pictures</h1>
-                </Button>
-              </motion.div>
-
-              {/* settings icon */}
-              <motion.div 
-                id="icon" 
-                key={3}
-                className="icon-settings" 
-                variants={fadeIn}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 0.6 }}
-              >
-                <Button disableRipple onClick={settingsHandleOpen}>
-                  <MoonStarIcon width={56} height={56}/>
-                  <h1>Settings</h1>
-                </Button>
-              </motion.div>
-
-              {/* tutorial icon */}
-              <motion.div 
-                id="icon" 
-                key={4}
-                className="icon-tutorial"
-                variants={fadeIn}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 1.0 }}
-              >
-                <Button disableRipple onClick={() => { handleAlertDescription("Coming soon"); alertHandleOpen() }}>
-                  <ImageIcon width={56} height={56}/>
-                  <h1>tutorial.png</h1>
-                </Button>
-              </motion.div>
-
-            </AnimatePresence>
+            {desktopIconData.map((data, index) => (
+              <DesktopIconButton
+                key={index}
+                index={index}
+                className={data.className}
+                onClick={data.onClick}
+                Icon={data.Icon}
+                label={data.label}
+              />
+            ))}
           </div>
 
+          {/* windows handling */}
+          {windowsCreationData.map((data, index) => (
+            <WindowCreator key={index} {...data}/>
+          ))}
 
-          {/* archive window */}
-          <AnimatePresence>
-            {windowsOpen.archive &&
-              <motion.div 
-                id="window-archive"
-                className="draggable"
-                ref={archiveWindowAnimation}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.35 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader 
-                    headerName="███hi██" 
-                    selectedIcon="archiveIcon" 
-                    setClose={archiveHandleClose} 
-                    setMinimize={archiveHandleMinimize}
-                  /> 
-                </div>
-
-                {/* actual page reference */}
-                <Archive/>
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* data logs window */}
-          <AnimatePresence>
-            {windowsOpen.logs &&
-              <motion.div 
-                id="window-logs" 
-                className="draggable"
-                ref={logsWindowAnimation}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader headerName="Data Logs" selectedIcon="logsIcon" setClose={logsHandleClose} setMinimize={logsHandleMinimize}/>
-                </div>
-
-                {/* actual page reference */}
-                <Logs/>
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* settings window */}
-          <AnimatePresence>
-            {windowsOpen.settings &&
-              <motion.div 
-                id="window-settings" 
-                className="draggable"
-                ref={settingsWindowAnimation}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader headerName="Settings" selectedIcon="moonStarIcon" setClose={settingsHandleClose} setMinimize={settingsHandleMinimize}/>
-                </div>
-
-                {/* actual page reference */}
-                <Settings
-                  setSelectedWallpaper={handleSelectedWallpaper}
-                  setSelectedTheme={handleSelectedTheme}
-                  setCurrentArrayIndex={handleCurrentArrayIndex}
-                  setBrightnessValue={handleBrightnessValue}
-                  setNotusOpen={textEditorHandleOpen}
-                  notusHandlers={notusHandlers}
-                  selectedWallpaper={selectedWallpaper}
-                  selectedTheme={selectedTheme}
-                  currentArrayIndex={currentArrayIndex}
-                  brightnessValue={brightnessValue}
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* documents window */}
-          <AnimatePresence>
-            {windowsOpen.documents &&
-              <motion.div 
-                id="window-documents" 
-                className="draggable"
-                ref={documentsWindowAnimation}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader headerName="Documents" selectedIcon="folderIcon" setClose={documentsHandleClose} setMinimize={documentsHandleMinimize} newHeaderName={windowHeaderName}/>
-                </div>
-
-                {/* actual page reference */}
-                <Documents 
-                  currentOpenDir={documentsDirToOpen}
-                  ivyHandlers={ivyHandlers}
-                  notusHandlers={notusHandlers}
-                  setHeaderName={handleWindowHeaderName}
-                  setArchiveOpen={archiveHandleOpen} 
-                  setAlertOpen={alertHandleOpen}
-                  setIvyOpen={imageViewerHandleOpen}
-                  setNotusOpen={textEditorHandleOpen}
-                  setErrorDescription={handleAlertDescription}
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* portfolio window */}
-          <AnimatePresence>
-            {windowsOpen.portfolio &&
-              <motion.div 
-                id="window-portfolio"
-                ref={portfolioWindowAnimation}
-                initial={{ opacity: 0, y: 20, scale: 0.75 }} //TODO: add little animation here to open the window a little more nicely
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 16, scale: 0.75 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div>
-                  <WindowHeader headerName="Portfolio" selectedIcon="portfolioIcon" setClose={portfolioHandleClose} setMinimize={portfolioHandleMinimize} keepMaximize={true}/>
-                </div>
-
-                {/* actual page reference */}
-                <Portfolio 
-                  setIvyOpen={imageViewerHandleOpen} 
-                  setIvyImage={handleIvyImage} 
-                  setIvyImageWidth={handleIvyImageWidth} 
-                  setIvyImageHeight={handleIvyImageHeight}
-                  setIvyImageDescription={handleIvyImageDescription}
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* image viewer window */}
-          <AnimatePresence>
-            {windowsOpen.imageViewer &&
-              <motion.div 
-                id="window-imageViewer" 
-                className="draggable"
-                ref={imageViewerWindowAnimation}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader 
-                    headerName={`Ivy - ${ivyImageHeaderName}`} 
-                    selectedIcon="imageViewerIcon" 
-                    setClose={imageViewerHandleClose} 
-                    setMinimize={imageViewerHandleMinimize} 
-                    setMaximize={imageViewerHandleMaximize} 
-                    keepMaximize={true}
-                    maximized={windowsMaximized.imageViewer}
-                  />
-                </div>
-
-                {/* actual page reference */}
-                <ImageHandler 
-                  selectedImage={currentIvyImage} 
-                  isOpen={windowsOpen.imageViewer} 
-                  isMaximized={windowsMaximized.imageViewer}
-                  imageWidth={ivyImageWidth} 
-                  imageHeight={ivyImageHeight} 
-                  imageDescription={ivyImageDescription}
-                  imageArrayIndex={ivyArrayIndex}
-                  setHeaderName={handleIvyHeaderName}
-                  imageHeader={ivyImageHeaderName}
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* alert dialogue window */}
-          <AnimatePresence>
-            {windowsOpen.alert &&
-              <motion.div 
-                id="window-alert"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div>
-                  <WindowHeader headerName="Error" selectedIcon="alertIcon" setClose={alertHandleClose} newHeaderName={windowHeaderName} removeMinimize={true}/>
-                </div>
-
-                {/* actual page reference */}
-                <AlertDialogue 
-                  setClose={alertHandleClose} 
-                  errorDescription={alertDescription}
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
-
-          {/* text editor window */}
-          <AnimatePresence>
-            {windowsOpen.textEditor &&
-              <motion.div 
-                id="window-textEditor" 
-                className="draggable"
-                ref={textEditorWindowAnimation}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* false window header */}
-                <div id="draggable-header">
-                  <WindowHeader headerName={`Notus - ${notusHeaderName}`} selectedIcon="noteIcon" setClose={textEditorHandleClose} setMinimize={textEditorHandleMinimize}/>
-                </div>
-
-                {/* actual page reference */}
-                <TextEditor 
-                  isOpen={windowsOpen.textEditor}
-                  selectedText={currentNotusText}
-                  selectedMdxFile={currentNotusFile} 
-                />
-              </motion.div>
-            }
-          </AnimatePresence>
         </ThemeProvider>
       </div>
       }
 
       {/* NAVBAR */}
       {!loginOpen &&
-      <div className="layout-nav">
-        <nav id="navbar" className="navigation">
+        <div className="layout-nav">
+          <nav id="navbar" className="navigation">
 
-          {/* primary */}
-          <div className ="navigation-primary">
-            <ul>
-              {/* archive navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.archive &&
-                  <motion.li 
-                    className="archive"
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.35 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={archiveHandleOpen}>
-                        <ArchiveIcon width={24} height={24}/>
-                        <span>{"Archive"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-              
-              {/* logs navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.logs &&
-                  <motion.li 
-                    className="logs"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={logsHandleOpen}>
-                        <LogsIcon width={24} height={24}/>
-                        <span>{"Data Logs"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* settings navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.settings &&
-                  <motion.li 
-                    className="settings"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={settingsHandleOpen}>
-                        <MoonStarIcon width={24} height={24}/>
-                        <span>{"Settings"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* docuemnts navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.documents &&
-                  <motion.li 
-                    className="documents"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={documentsHandleOpen}>
-                        <FolderIcon width={24} height={24}/>
-                        <span>{"Documents"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* portfolio navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.portfolio &&
-                  <motion.li 
-                    className="portfolio"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={portfolioHandleOpen}>
-                        <PortfolioIcon width={24} height={24}/>
-                        <span>{"Portfolio"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* image viewer navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.imageViewer &&
-                  <motion.li 
-                    className="imageViewer"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={imageViewerHandleOpen}>
-                        <ImageViewerIcon width={24} height={24}/>
-                        <span>{"Ivy"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* alert navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.alert &&
-                  <motion.li 
-                    className="alert"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple> {/* no "onClick" handler due to it never being used/needed */}
-                        <AlertIcon width={24} height={24}/>
-                        <span>{"Alert"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* text editor navbar icon */}
-              <AnimatePresence>
-                {windowsOpen.textEditor &&
-                  <motion.li 
-                    className="textEditor"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -6 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <ThemeProvider theme={theme}>
-                      <Button disableRipple onClick={textEditorHandleOpen}>
-                        <NoteIcon width={24} height={24}/>
-                        <span>{"Notus"}</span>
-                      </Button>
-                    </ThemeProvider>
-                  </motion.li>
-                }
-              </AnimatePresence>
-
-              {/* this exists only to add empty space to the navbar to keep it from collapsing (or popping up when a new window is opened) */}
-              <li className="null">
+            {/* primary */}
+            <div className ="navigation-primary">
+              <ul>
                 <ThemeProvider theme={theme}>
-                  <Button disableRipple>
-                    <ArchiveIcon width={24} height={24}/>
-                  </Button>
-                </ThemeProvider>
-              </li>
-            </ul>
-          </div>
 
-          {/* secondary */}
-          <div className="navigation-secondary">
-            <ul>
-              <li className="time">{currentTime}</li>
-              <li className="something">
-                {/* <div onClick={() => { textEditorHandleOpen(); handleNotusHeaderName("Secret?"); handleCurrentNotusFile("Navbar.txt") }}> */}
-                <div onClick={() => handleLoginOpen(true)}>
-                  <NoteIcon alt="???" width={24} height={24}/>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+                  {/* all navbar icons */}
+                  {navbarIconData.map((data, index) => (
+                    <NavbarIconButton
+                      key={index}
+                      windowOpen={data.windowOpen}
+                      className={data.className}
+                      onClick={data.onClick}
+                      Icon={data.Icon}
+                      label={data.label}
+                    />
+                  ))}
+
+                  {/* this exists only to add empty space to the navbar height to keep it from collapsing (or popping up/down when a new window is opened) */}
+                  <li className="null">
+                    <Button disableRipple>
+                      <ArchiveIcon width={24} height={24}/>
+                    </Button>
+                  </li>
+                </ThemeProvider>
+              </ul>
+            </div>
+
+            {/* secondary */}
+            <div className="navigation-secondary">
+              <ul>
+                <li className="time">{currentTime}</li>
+                <li className="something">
+                  {/* <div onClick={() => { textEditorHandleOpen(); handleNotusHeaderName("Secret?"); handleCurrentNotusFile("Navbar.txt") }}> */}
+                  <div onClick={() => handleLoginOpen(true)}>
+                    <NoteIcon alt="???" width={24} height={24}/>
+                  </div>
+                </li>
+              </ul>
+            </div>
+                
+          </nav>
+        </div>
       }
     </div>
   )

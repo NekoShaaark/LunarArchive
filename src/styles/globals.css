@@ -141,58 +141,53 @@ body {
 .navigation button:hover span {
     color: #fff;
 }
+.navigation button:hover path {
+    fill: #fff;
+}
 
 .navigation .archive { background-color: var(--navbarArchiveBackgroundColor); order: var(--navbarArchiveOrder); }
-.navigation .archive button:hover { fill: #fff; }
 .navigation .archive button { 
     color: var(--navbarArchiveSelectedColor); 
     fill: var(--navbarArchiveSelectedColor);
 }
 
 .navigation .logs { background-color: var(--navbarLogsBackgroundColor); order: var(--navbarLogsOrder); }
-.navigation .logs button:hover { fill: #fff; }
 .navigation .logs button { 
     color: var(--navbarLogsSelectedColor);
     fill: var(--navbarLogsSelectedColor);
 }
 
 .navigation .settings { background-color: var(--navbarSettingsBackgroundColor); order: var(--navbarSettingsOrder); }
-.navigation .settings button:hover { fill: #fff; }
 .navigation .settings button { 
     color: var(--navbarSettingsSelectedColor);
     fill: var(--navbarSettingsSelectedColor);
 }
 
 .navigation .documents { background-color: var(--navbarDocumentsBackgroundColor); order: var(--navbarDocumentsOrder); }
-.navigation .documents button:hover { fill: #fff; }
 .navigation .documents button { 
     color: var(--navbarDocumentsSelectedColor);
     fill: var(--navbarDocumentsSelectedColor);
 }
 
 .navigation .portfolio { background-color: var(--navbarPortfolioBackgroundColor); order: var(--navbarPortfolioOrder); }
-.navigation .portfolio button:hover { fill: #fff; }
 .navigation .portfolio button { 
     color: var(--navbarPortfolioSelectedColor);
     fill: var(--navbarPortfolioSelectedColor);
 }
 
 .navigation .imageViewer { background-color: var(--navbarImageViewerBackgroundColor); order: var(--navbarImageViewerOrder); }
-.navigation .imageViewer button:hover { fill: #fff; }
 .navigation .imageViewer button { 
     color: var(--navbarImageViewerSelectedColor);
     fill: var(--navbarImageViewerSelectedColor);
 }
 
 .navigation .alert { background-color: var(--navbarAlertBackgroundColor); order: var(--navbarAlertOrder); }
-.navigation .alert button:hover { fill: #fff; }
 .navigation .alert button { 
     color: var(--navbarAlertSelectedColor);
     fill: var(--navbarAlertSelectedColor);
 }
 
 .navigation .textEditor { background-color: var(--navbarTextEditorBackgroundColor); order: var(--navbarTextEditorOrder); }
-.navigation .textEditor button:hover { fill: #fff; }
 .navigation .textEditor button { 
     color: var(--navbarTextEditorSelectedColor);
     fill: var(--navbarTextEditorSelectedColor);
