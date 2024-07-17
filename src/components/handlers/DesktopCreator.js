@@ -4,6 +4,12 @@ import { Button } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 
 
+export default function DesktopHandler(){
+    return(
+        <></>
+    )
+}
+
 export function DesktopIconButton({ index, className, onClick, Icon, label }){
     const duration = 0.3 + index * 0.2
 

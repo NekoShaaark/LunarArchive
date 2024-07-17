@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import WindowHeader from "@/components/WindowHeader"
 
 
-export function WindowCreator({ 
+export default function WindowCreator({ 
     windowOpen, 
     id, 
     windowRef,

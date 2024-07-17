@@ -16,8 +16,8 @@ import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
 import Login from './login/page'
-import { DesktopIconButton, NavbarIconButton } from '@/components/handlers/DesktopHandler'
-import { WindowCreator } from '@/components/handlers/WindowsHandler'
+import { DesktopIconButton, NavbarIconButton } from '@/components/handlers/DesktopCreator'
+import WindowCreator from '@/components/handlers/WindowsCreator'
 
 
 
