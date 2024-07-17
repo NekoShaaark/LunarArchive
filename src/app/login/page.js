@@ -7,13 +7,14 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 
-export default function Login({ setLoginOpen }) {
+export default function Login({ setLoginOpen, setAlertOpen, setErrorDescription }) {
   const [nikoFace, setNikoFace] = useState("notNiko6.webp")
   const [needsBlink, setNeedsBlink] = useState(false)
-  const [selectedUser, setSelectedUser] = useState("Neko")
-  const [userProfile, setUserProfile] = useState(createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "NotNiko7.webp"))
+  const [selectedUser, setSelectedUser] = useState("Guest")
+  const [userProfile, setUserProfile] = useState(createProfileSection("", "Guest", "0.04 Hours", "06/02/2007", `Password: 1234`, "Safe", "Guest", "Self", "notNikoNeutral.webp"))
   const [passwordTextValue, setPasswordTextValue] = useState("")
   const [passwordTextPreviewValue, setPasswordTextPreviewValue] = useState()
+  const [passwordIncorrect, setPasswordIncorrect] = useState(false)
 
 
   //--THEME--//
@@ -89,6 +90,11 @@ export default function Login({ setLoginOpen }) {
 
   const handleSelectedUser = async (user) => {
     switch(user){
+      case "Guest":
+        setUserProfile(createProfileSection("", "Guest", "0.04 Hours", "06/02/2007", `Password: 1234`, "Safe", "Guest", "Self", "notNikoNeutral.webp"))
+        setSelectedUser("Guest")
+        break
+
       case "Neko":
         setUserProfile(createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "notNiko7.webp"))
         setSelectedUser("Neko")
@@ -184,10 +190,24 @@ export default function Login({ setLoginOpen }) {
 
   function handleUserLogin(user, password){
     switch(user){
+      case "Guest":
+        console.log(password)
+        if(password == "1234"){ setLoginOpen(false); break }
+        setErrorDescription("Password: 1234")
+        setAlertOpen()
+        setPasswordIncorrect(true)
+        break
+
       case "Neko":
+        console.log(password)
+        if(password == "bleh"){ setLoginOpen(false); break }
+        setErrorDescription("Incorrect Password")
+        setAlertOpen()
+        setPasswordIncorrect(true)
         break
 
       case "Alula":
+        setLoginOpen(false)
         break
     }
   }
@@ -216,8 +236,9 @@ export default function Login({ setLoginOpen }) {
             <h3 className={styles.title}>Select a User to log-in as.</h3>
 
             <div className={styles.usersList}>
+              {createUserSection("", "Guest", "06/02/07", "00:06", "2 minutes")}
               {createUserSection("Niko5.webp", "Neko", "30/12/23", "13:23", "3 hours")}
-              {createUserSection("alula7.webp", "Alula", "20/5/23", "23:02", "49 minutes")}
+              {createUserSection("alula7.webp", "Alula", "20/5/22", "23:02", "49 minutes")}
             </div>
           </div>
 
@@ -246,12 +267,11 @@ export default function Login({ setLoginOpen }) {
               onChange={e => updatePasswordText(e.currentTarget.value)}
               onKeyUp={() => updatePasswordText(passwordTextPreviewValue)} //passing in the previewed name (the value cannot be null)
             />
-            <Button onClick={() => setLoginOpen(false)}>Login</Button>
+            <Button onClick={() => handleUserLogin(selectedUser, passwordTextValue)}>Login</Button>
           </div>
 
           {/* --Profiles Section--  */}
           <div className={styles.profiles}>
-            {/* {createProfileSection("Niko5.webp", "Neko", "███████", undefined, "███hi██", "Threat", "Admin", undefined, "NotNiko7.webp")} */}
             {userProfile}
           </div>
 
