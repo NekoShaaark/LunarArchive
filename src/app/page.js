@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, NoteIcon, PortfolioIcon, MoonStarIcon } from '@/components/SvgHandler'
+import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, NoteIcon, PortfolioIcon, MoonStarIcon, MoonIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { useAnimate } from 'framer-motion'
+import { motion, useAnimate, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
 import Archive from './archive/page'
@@ -36,6 +36,7 @@ export default function Home() {
   const [portfolioWindowAnimation, portfolioAnimate] = useAnimate()
   const [imageViewerWindowAnimation, imageViewerAnimate] = useAnimate()
   const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
+  const [desktopMenuAnimation, desktopMenuAnimate] = useAnimate()
 
   //desktop settings states
   const [selectedWallpaper, setSelectedWallpaper] = useState("Starry")
@@ -45,6 +46,7 @@ export default function Home() {
   
   //window open states
   const [windowsOpen, setWindowsOpen] = useState({
+    desktopMenu: false,
     archive: false,
     logs: false,
     settings: false,
@@ -81,6 +83,7 @@ export default function Home() {
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
   const [loginOpen, setLoginOpen] = useState(false)
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false)
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -232,6 +235,29 @@ export default function Home() {
     setLoginOpen(e)
   }
 
+  //--DESKTOP MENU OPENING HANDLING--//
+  const handleDesktopMenuOpen = async (e) => {
+    // if(!e){ console.log("woahhhhhh desktopMenuOpen undefined"); return }
+    console.log("opening/closing desktopMenu")
+    if(windowsOpen.alert){ return }
+
+    //handle opening/closing of desktopMenu
+    if(e){ 
+      setCurrentFocusedWindow("desktopMenu")
+      setCurrentWindowsOpen(prevWindows => [...prevWindows, "desktopMenu"]) //add "desktopMenu" to the array
+      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "desktopMenu"])
+    }
+    else{ 
+      setChangeFocusedWindow(true)
+      setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "desktopMenu")) //remove "desktopMenu" from the array
+      setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "desktopMenu"))
+    }
+
+    //open/close desktopMenu
+    setWindowsOpen({ ...windowsOpen, desktopMenu: e })
+    setDesktopMenuOpen(e)
+  }
+
 
   //--MINIMIZE ANIMATIONS--//
   const dropWindowAnimation = async (animationItem) => {
@@ -294,6 +320,7 @@ export default function Home() {
 
       case "textEditor":
         await textEditorAnimate(textEditorWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        break
     }
   }
 
@@ -312,6 +339,20 @@ export default function Home() {
       case "imageViewer":
         // await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
         break
+    }
+  }
+
+
+  //--DESKTOP MENU ANIMATIONS--//
+  const menuAnimation = async () => {
+    if(!desktopMenuAnimation.current){ return }
+
+    if(desktopMenuOpen){
+      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240, y: 18, opacity: 0, zIndex: 90 }, { duration: 0.0, delay: 0 })
+      desktopMenuAnimate(desktopMenuAnimation.current, { x: 0, opacity: 1 }, { duration: 0.6, delay: 0.2 })
+    }
+    else{
+      desktopMenuAnimate(desktopMenuAnimation.current, { x: -120 }, { duration: 0.6, delay: 0 })
     }
   }
 
@@ -1021,6 +1062,7 @@ export default function Home() {
     rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
     rootStyle.setProperty('--navbarAlertBackgroundColor', '#000')
     rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#000')
+    rootStyle.setProperty('--desktopMenuBackgroundColor', '#000')
   
     rootStyle.setProperty('--navbarArchiveSelectedColor', globalColor)
     rootStyle.setProperty('--navbarLogsSelectedColor', globalColor)
@@ -1030,11 +1072,17 @@ export default function Home() {
     rootStyle.setProperty('--navbarImageViewerSelectedColor', globalColor)
     rootStyle.setProperty('--navbarAlertSelectedColor', globalColor)
     rootStyle.setProperty('--navbarTextEditorSelectedColor', globalColor)
+    rootStyle.setProperty('--desktopMenuSelectedColor', globalColor)
 
     rootStyle.setProperty('--everythingButAlertBlur', '0px')
 
     //set a specific icon to be active
     switch(currentSelectedIcon){
+      case "desktopMenu":
+        rootStyle.setProperty('--desktopMenuBackgroundColor', globalColor)
+        rootStyle.setProperty('--desktopMenuSelectedColor', '#000')
+        break
+
       case "archive":
         rootStyle.setProperty('--navbarArchiveBackgroundColor', globalColor)
         rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
@@ -1214,6 +1262,12 @@ export default function Home() {
   }, [])
 
 
+  //--ON SERVER INIT & WHEN DESKTOP MENU OPEN/CLOSE--//
+  useEffect(() => {
+    menuAnimation()
+  }, [desktopMenuOpen])
+
+
   //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
     
@@ -1233,6 +1287,11 @@ export default function Home() {
       setActiveWindow(currentFocusedWindow)
       // setNavbarOrder("open")
       // console.log("current focused window: " + currentFocusedWindow)
+
+      //close desktopMenu if another window gets focused
+      if(windowsOpen.desktopMenu && currentFocusedWindow != "desktopMenu"){
+        handleDesktopMenuOpen(false)
+      }
     }
   }, [windowsOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
@@ -1442,6 +1501,37 @@ export default function Home() {
             <WindowCreator key={index} {...data}/>
           ))}
 
+          {/* desktop menu */}
+          <AnimatePresence>
+            {desktopMenuOpen &&
+              <motion.div 
+                className="layout-menu"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.5 }}
+              >
+                
+                <div className="left-menu">
+                  selected: user info<br/>
+                  ---<br/>
+                  lunar eclipse<br/>
+                  nako projects<br/>
+                  user info<br/>
+                </div>
+                
+                <div 
+                  className="right-menu"
+                  ref={desktopMenuAnimation}
+                >
+                  profile picture<br/>
+                  username<br/>
+                  more info<br/>
+                </div>
+              
+              </motion.div>
+            }
+          </AnimatePresence>
         </ThemeProvider>
       </div>
       }
@@ -1450,6 +1540,13 @@ export default function Home() {
       {!loginOpen &&
         <div className="layout-nav">
           <nav id="navbar" className="navigation">
+
+            {/* menu */}
+            <div className="menu">
+              <div onClick={() => handleDesktopMenuOpen(!desktopMenuOpen)}>
+                <MoonIcon alt="menu" width={24} height={24}/>
+              </div>
+            </div>
 
             {/* primary */}
             <div className ="navigation-primary">
@@ -1469,6 +1566,7 @@ export default function Home() {
                   ))}
 
                   {/* this exists only to add empty space to the navbar height to keep it from collapsing (or popping up/down when a new window is opened) */}
+                  {/* NOTE: if adds a menu, probably won't need this */}
                   <li className="null">
                     <Button disableRipple>
                       <ArchiveIcon width={24} height={24}/>

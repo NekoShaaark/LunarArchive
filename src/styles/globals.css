@@ -16,6 +16,9 @@
     --desktopWallpaper: url("/Wallpapers/Wallpaper-Starry.webp");
     --desktopWallpaperBrightness: 0;
 
+    --desktopMenuBackgroundColor: #000;
+    --desktopMenuSelectedColor: var(--globalColor);
+
     --navbarArchiveBackgroundColor: #000;
     --navbarArchiveSelectedColor: var(--globalColor);
     --navbarArchiveOrder: 1;
@@ -200,6 +203,24 @@ body {
     width: 0;
     order: 100;
 }
+
+.navigation .menu {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+    padding-inline: 2vh;
+    padding-block: 6px;
+    border: 4px solid #9665ff;
+    background-color: var(--desktopMenuBackgroundColor);
+    fill: var(--desktopMenuSelectedColor);
+}
+.navigation .menu div {
+    display: flex;
+    cursor: pointer;
+    :hover{
+        fill: #fff;
+    }
+}
 /* #endregion ------ */
 
 /* #region ---secondary--- */
@@ -284,6 +305,42 @@ body {
     color: #0860d3; 
     text-decoration: underline; 
 }
+/* #endregion <======> */
+
+
+/* #region <===menu===> */
+/* #region <---layout-menu---> */
+.layout-menu{
+    display: flex;
+    position: fixed;
+    height: 60vh;
+    width: 50vh;
+    bottom: 8vh;
+    z-index: 100;
+}
+
+.layout-menu .left-menu {
+    display: flex;
+    width: 55vh;
+    background-color: var(--globalColor);
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.5);
+    border-right: 4px solid var(--globalColorHover);
+    border-top: 4px solid var(--globalColorHover);
+    padding: 10px;
+    z-index: 100;
+}
+
+.layout-menu .right-menu {
+    display: flex;
+    height: 40vh;
+    width: 45vh;
+    background-color: var(--globalColorHover);
+    border: 4px solid var(--globalColor);
+    border-left: 0;
+    padding: 10px;
+    z-index: 100;
+}
+/* #endregion <------> */
 /* #endregion <======> */
 
 
