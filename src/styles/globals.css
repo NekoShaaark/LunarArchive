@@ -210,7 +210,7 @@ body {
     margin-right: 8px;
     padding-inline: 2vh;
     padding-block: 6px;
-    border: 4px solid #9665ff;
+    border: 4px solid var(--globalColor);
     background-color: var(--desktopMenuBackgroundColor);
     fill: var(--desktopMenuSelectedColor);
 }
@@ -315,30 +315,58 @@ body {
     position: fixed;
     height: 60vh;
     width: 50vh;
-    bottom: 8vh;
+    bottom: 7.8vh;
+    font-family: eightBitFortress;
+    user-select: none;
+    font-size: small;
+    font-weight: 400;
     z-index: 100;
 }
 
 .layout-menu .left-menu {
     display: flex;
     width: 55vh;
+    max-width: 55vh;
+    padding: 10px;
     background-color: var(--globalColor);
     box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.5);
     border-right: 4px solid var(--globalColorHover);
     border-top: 4px solid var(--globalColorHover);
-    padding: 10px;
+    flex-direction: column;
     z-index: 100;
+    ul {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        flex-direction: column;
+        list-style: none;
+    }
+}
+.layout-menu .left-menu li {
+    display: flex;
+    border: 4px solid rgba(0, 0, 0, 0);
+    /* align-items: center; */
+    gap: 6px;
+    padding: 2px 4px;
+}
+.layout-menu .left-menu li:hover {
+    border: 4px solid var(--globalHoverBorderColor);
+    background-color: var(--globalHoverBackgroundColor);
+    fill: #fff;
+    color: #ddd;
+    cursor: pointer;
 }
 
 .layout-menu .right-menu {
     display: flex;
     height: 40vh;
     width: 45vh;
+    padding: 10px;
     background-color: var(--globalColorHover);
     border: 4px solid var(--globalColor);
     border-left: 0;
-    padding: 10px;
-    z-index: 100;
+    flex-direction: column;
+    z-index: 90;
 }
 /* #endregion <------> */
 /* #endregion <======> */

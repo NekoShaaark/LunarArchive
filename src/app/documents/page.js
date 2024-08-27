@@ -1019,6 +1019,7 @@ export default function Documents({
     return Object.keys(object).find(key => object[key] === value);
   }
 
+  //FIXME: can't open folders from search
   function searchForFile(name){
 
     //if not searching, open last open folder (or keep current folder open)

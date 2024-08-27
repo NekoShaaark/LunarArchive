@@ -296,7 +296,7 @@ export default function Settings({
             </div>
           </section>
 
-          <span className={styles.version}>OS Version 0.3.4</span>
+          <span className={styles.version}>OS Version 0.3.5</span>
 
         </div>
       </ThemeProvider>

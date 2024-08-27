@@ -16,8 +16,9 @@ import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
 import Login from './login/page'
-import { DesktopIconButton, NavbarIconButton } from '@/components/handlers/DesktopCreator'
+import { DesktopIconButton, MenuIconButton, NavbarIconButton } from '@/components/handlers/DesktopCreator'
 import WindowCreator from '@/components/handlers/WindowsCreator'
+import TypewriterEffect from '@/components/TypewriterEffect'
 
 
 
@@ -73,17 +74,34 @@ export default function Home() {
     imageViewer: false
   })
 
+  //desktop menu open states
+  const [sideMenusOpen, setSideMenusOpen] = useState({
+    lunarEclipse: false,
+    nakoProjects: false,
+    userInfo: true
+  })
+
   //other states
   const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
   const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState(["none"])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState(["none"])
+  const [currentSideMenuOpen, setCurrentSideMenuOpen] = useState("User Info")
   const [windowHeaderName, setWindowHeaderName] = useState()
   const [alertDescription, setAlertDescription] = useState()
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
   const [loginOpen, setLoginOpen] = useState(false)
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false)
+  const [desktopSideMenuContent, setDesktopSideMenuContent] = useState(
+    <span>
+      profile picture<br/>
+      username<br/>
+      more info<br/>
+    </span>
+  )
+  const [desktopSideMenuFooter, setDesktopSideMenuFooter] = useState("v0.3.5")
+
 
   //image viewer (ivy) states
   const [currentIvyImage, setCurrentIvyImage] = useState()
@@ -238,7 +256,7 @@ export default function Home() {
   //--DESKTOP MENU OPENING HANDLING--//
   const handleDesktopMenuOpen = async (e) => {
     // if(!e){ console.log("woahhhhhh desktopMenuOpen undefined"); return }
-    console.log("opening/closing desktopMenu")
+    // console.log("opening/closing desktopMenu")
     if(windowsOpen.alert){ return }
 
     //handle opening/closing of desktopMenu
@@ -256,6 +274,69 @@ export default function Home() {
     //open/close desktopMenu
     setWindowsOpen({ ...windowsOpen, desktopMenu: e })
     setDesktopMenuOpen(e)
+  }
+
+  //--DESKTOP SIDE MENU OPENING HANDLING--//
+  const handleSideMenuOpen = async (menuName) => {
+    // if(!e){ console.log("woahhhhhh sideMenuOpen undefined"); return }
+    console.log("opening/closing sideMenu")
+    if(windowsOpen.alert || sideMenusOpen[menuName]){ return }
+
+    //close all menus (and closing animation)
+    setCurrentSideMenuOpen(menuName)
+    await menuAnimation("sideMenuClose")
+    closeAllSideMenus()
+    
+    //open new menu
+    setSideMenusOpen(prevState => ({ ...prevState, [menuName]: true }))
+    switch(menuName){
+      case "Lunar Eclipse":
+        setDesktopSideMenuContent(
+          <span>
+            genshin events<br/>
+            date and time<br/>
+          </span>
+        )
+        setDesktopSideMenuFooter("v0.3.5")
+        break
+      
+      case "Nako Projects":
+        setDesktopSideMenuContent(
+          <span>
+            museum project<br/>
+            ████████<br/>
+            lunar archive<br/>
+            kom█ni█a █xperi██nt<br/>
+            evi1 n3ko l0g<br/>
+          </span>
+        )
+        setDesktopSideMenuFooter(`"I see you."`)
+        break
+
+      case "User Info":
+        setDesktopSideMenuContent(
+          <span>
+            profile picture<br/>
+            username<br/>
+            more info<br/>
+          </span>
+        )
+        setDesktopSideMenuFooter("v0.3.5")
+        break
+    }
+
+    //(and opening animation)
+    menuAnimation("sideMenuOpen")
+  }
+
+  //--DESKTOP SIDE MENU CLOSING HANDLING--//
+  const closeAllSideMenus = async (e) => {
+    const updatedState = Object.keys(sideMenusOpen).reduce((acc, key) => {
+      acc[key] = false
+      return acc
+    }, {})
+    
+    setSideMenusOpen(updatedState)
   }
 
 
@@ -344,11 +425,22 @@ export default function Home() {
 
 
   //--DESKTOP MENU ANIMATIONS--//
-  const menuAnimation = async () => {
+  const menuAnimation = async (e) => {
     if(!desktopMenuAnimation.current){ return }
 
+    if(e == "sideMenuClose"){
+      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240 }, { duration: 0.4, delay: 0 })
+      desktopMenuAnimate(desktopMenuAnimation.current, { x: -240 }, { duration: 0.0, delay: 0 })
+      return
+    }
+
+    if(e == "sideMenuOpen"){
+      desktopMenuAnimate(desktopMenuAnimation.current, { x: 0 }, { duration: 0.4, delay: 0.2 })
+      return
+    }
+
     if(desktopMenuOpen){
-      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240, y: 18, opacity: 0, zIndex: 90 }, { duration: 0.0, delay: 0 })
+      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240, y: 18, opacity: 0 }, { duration: 0.0, delay: 0 })
       desktopMenuAnimate(desktopMenuAnimation.current, { x: 0, opacity: 1 }, { duration: 0.6, delay: 0.2 })
     }
     else{
@@ -781,6 +873,24 @@ export default function Home() {
       onClick: textEditorHandleOpen,
       Icon: NoteIcon,
       label: "Notus"
+    }
+  ]
+
+  const menuIconData = [
+    {
+      onClick: () => handleSideMenuOpen("Lunar Eclipse"),
+      Icon: MoonIcon,
+      label: "Lunar Eclipse"
+    },
+    {
+      onClick: () => handleSideMenuOpen("Nako Projects"),
+      Icon: FolderIcon,
+      label: "Nako Projects"
+    },
+    {
+      onClick: () => handleSideMenuOpen("User Info"),
+      Icon: NoteIcon,
+      label: "User Info"
     }
   ]
 
@@ -1513,20 +1623,35 @@ export default function Home() {
               >
                 
                 <div className="left-menu">
-                  selected: user info<br/>
-                  ---<br/>
-                  lunar eclipse<br/>
-                  nako projects<br/>
-                  user info<br/>
+                  <ul>
+                    <span>
+                      Selected: <TypewriterEffect text={currentSideMenuOpen} delay={30}/><br/>
+                      ---
+                    </span>
+                    {menuIconData.map((data, index) => (
+                      <MenuIconButton
+                        key={index}
+                        onClick={data.onClick}
+                        Icon={data.Icon}
+                        label={data.label}
+                      />
+                    ))}
+                  </ul>
+
+                  <span style={{position:'fixed', bottom:0, left:0, padding:10, fontSize:"10px"}}>
+                    <i>Disclaimer:<br/>
+                    ~ Prototype - expect 3rrors ~</i>
+                  </span>
                 </div>
                 
                 <div 
                   className="right-menu"
                   ref={desktopMenuAnimation}
                 >
-                  profile picture<br/>
-                  username<br/>
-                  more info<br/>
+                  {desktopSideMenuContent}
+                  <span style={{position:'fixed', bottom:0, right:0, padding:10}}>
+                    {desktopSideMenuFooter}
+                  </span>
                 </div>
               
               </motion.div>

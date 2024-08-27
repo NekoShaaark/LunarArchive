@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 
 
-export default function DesktopHandler(){
+export default function DesktopCreator(){
     return(
         <></>
     )
@@ -53,3 +53,15 @@ export function NavbarIconButton({ windowOpen, className, onClick, Icon, label }
         </AnimatePresence>
     )
 } 
+
+
+export function MenuIconButton({ onClick, Icon, label }){
+    return(
+        <AnimatePresence>
+            <li onClick={onClick}>
+              <Icon width={18} height={18}/> 
+              <span>{label}</span>
+            </li>
+        </AnimatePresence>
+    )
+}
