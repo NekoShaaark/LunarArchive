@@ -71,6 +71,7 @@ export default function Documents({
   }
 
 
+  //set global colors, and open initial folder
   useEffect(() => {
     setGlobalColor(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor'))
     setGlobalColorHover(getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColorHover'))
@@ -737,6 +738,12 @@ export default function Documents({
     closeAllFolders()
     setPreviouslyOpenFolder(folderID)
 
+    //close and clear search, if open
+    setSearchOpen(false)
+    setFilesFoundFromSearch(null)
+    setSearchTextValue("")
+    setSearchTextPreviewValue("")
+
     //check if is going up or down, and handle accordingly
     //up = directory (eg. Documents)
     //down = number  (eg. 001)
@@ -1019,7 +1026,6 @@ export default function Documents({
     return Object.keys(object).find(key => object[key] === value);
   }
 
-  //FIXME: can't open folders from search
   function searchForFile(name){
 
     //if not searching, open last open folder (or keep current folder open)
@@ -1163,7 +1169,7 @@ export default function Documents({
               variant="standard"
               placeholder="Search"
               className={styles.searchInput}
-              value={searchTextPreviewValue}
+              value={searchTextValue}
               InputProps={{
                 disableUnderline: true,
                 endAdornment: 
