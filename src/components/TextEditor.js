@@ -7,7 +7,6 @@ import styles from "@/styles/TextEditor.module.css"
 
 export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
     const [textUsing, setTextUsing] = useState()
-    const [ImportedMdxFile, setImportedMdxFile] = useState(() => () => <p>Loading file contents...</p>)
     var selectedTextText = `${selectedText}`
     var selectedFile = `${selectedMdxFile}`
 
@@ -15,23 +14,10 @@ export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
         setTextUsing(selectedTextText)
     }, [selectedTextText])
 
-    //NOTE: this can be a bit slow, but i can't find another way to dynamically load files
-    useEffect(() => {
-        const importMdxFile = async () => {
-            try{
-                const SelectedMdxFile = await import(`@/components/mdxFiles/${selectedFile}.mdx`)
-                setImportedMdxFile(() => dynamic(() => Promise.resolve(SelectedMdxFile), {
-                    loading: () => <p>Loading file contents...</p>
-                }))
-            } 
-            catch(error){
-                console.error("Mdx file not found: ", error)
-                setImportedMdxFile(() => () => <p>Did a little oopsie~ Maybe the Mdx file name is incorrect?</p>)
-            }
-        }
-
-        importMdxFile()
-    }, [selectedMdxFile])
+    //dynamically load the mdx file(s)
+    const SelectedMdxFile = dynamic(() => import(`@/components/mdxFiles/${selectedFile}.mdx`), {
+        loading: () => <p>Loading file contents...</p>
+    })
 
     //set default if text is undefined (check is specifically checking the string for "undefined" due to setting in selectedTextText var)
     if(textUsing == "undefined"){ setTextUsing("Lorem ipsum dolor sit amet consectetur adipisicing elit.") }
@@ -46,7 +32,7 @@ export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
             }
 
             <div className={styles.text}>
-                <ImportedMdxFile className={styles.text}/>
+                <SelectedMdxFile/>
             </div>
         </div>
     )
