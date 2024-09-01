@@ -26,8 +26,9 @@ export default function Documents({
       
       const [archivesFolderOpen, setArchivesFolderOpen] = useState(false)
         const [discordStuffiesFolderOpen, setDiscordStuffiesFolderOpen] = useState(false)
-          const [acceptedIdeasFolderOpen, setAcceptedIdeasFolderOpen] = useState(false)
-          const [rejectedIdeasFolderOpen, setRejectedIdeasFolderOpen] = useState(false)
+        const [acceptedIdeasFolderOpen, setAcceptedIdeasFolderOpen] = useState(false)
+        const [rejectedIdeasFolderOpen, setRejectedIdeasFolderOpen] = useState(false)
+      const [aR3FolderOpen, setaR3FolderOpen] = useState(false)
       
       const [gamesFolderOpen, setGamesFolderOpen] = useState(false)
         const [moreGamesFolderOpen, setMoreGamesFolderOpen] = useState(false)
@@ -138,6 +139,20 @@ export default function Documents({
             },
             {
               id: "001",
+              name: "aR3",
+              fileType: "Folder",
+              icon: <FolderIcon fill={globalColor} width={48} height={48}/>,
+              files: [
+                {
+                  id: "0010",
+                  name: "NewFile.txt",
+                  fileType: "Text",
+                  icon: <NoteIcon fill={globalColor} width={48} height={48}/>
+                }
+              ]
+            },
+            {
+              id: "002",
               name: "Something.txt",
               fileType: "Text",
               icon: <NoteIcon fill={globalColor} width={48} height={48}/>
@@ -507,6 +522,7 @@ export default function Documents({
         const discordStuffiesFolder = archivesFolder[0].files
           const acceptedIdeasFolder = discordStuffiesFolder[0].files
           const rejectedIdeasFolder = discordStuffiesFolder[1].files
+        const aR3Folder = archivesFolder[1].files
         
       const gamesFolder = documentsFolder[1].files
         const moreGamesFolder = gamesFolder[1].files
@@ -526,6 +542,7 @@ export default function Documents({
           "000": "Discord Stuffies",
             "0000": "accepted_Ideas",
             "0001": "Rejected_ideas",
+          "001": "aR3",
 
         "01": "Games",
           "011": "More Games",
@@ -546,6 +563,7 @@ export default function Documents({
           "Discord Stuffies": discordStuffiesFolder,
             "accepted_Ideas": acceptedIdeasFolder,
             "Rejected_ideas": rejectedIdeasFolder,
+          "aR3": aR3Folder,
 
         "Games": gamesFolder,
           "More Games": moreGamesFolder,
@@ -566,6 +584,7 @@ export default function Documents({
           "Discord Stuffies": setDiscordStuffiesFolderOpen,
             "accepted_Ideas": setAcceptedIdeasFolderOpen,
             "Rejected_ideas": setRejectedIdeasFolderOpen,
+          "aR3": setaR3FolderOpen,
 
         "Games": setGamesFolderOpen,
           "More Games": setMoreGamesFolderOpen,
@@ -713,9 +732,13 @@ export default function Documents({
 
         //text files
         if(fileType == "Text"){
-          handleNotusText(headerName, undefined, file.textContent)
-          // handleNotusText("Test", "Yippeeeee this is a testing file wooohoooo testing we love testing", undefined)
+          var fileName = file.textContent
+          
+          //cut ".txt" off if has
+          if((file.textContent).slice(-4) == ".txt"){ fileName = (file.textContent).slice(0, -4) }
 
+          handleNotusText(headerName, undefined, fileName)
+          // handleNotusText("Test", "Yippeeeee this is a testing file wooohoooo testing we love testing", undefined)
           handleNotusOpen()
         }
         break
@@ -1191,6 +1214,7 @@ export default function Documents({
                   {discordStuffiesFolderOpen && filesInFolder(discordStuffiesFolder)}
                     {acceptedIdeasFolderOpen && filesInFolder(acceptedIdeasFolder)}
                     {rejectedIdeasFolderOpen && filesInFolder(rejectedIdeasFolder)}
+                  {aR3FolderOpen && filesInFolder(aR3Folder)}
           
                 {gamesFolderOpen && filesInFolder(gamesFolder)}
                   {moreGamesFolderOpen && filesInFolder(moreGamesFolder)}
