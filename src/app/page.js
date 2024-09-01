@@ -277,10 +277,10 @@ export default function Home() {
   }
 
   //--DESKTOP SIDE MENU OPENING HANDLING--//
-  const handleSideMenuOpen = async (menuName) => {
+  const handleSideMenuOpen = async (menuOpen, menuName) => {
     // if(!e){ console.log("woahhhhhh sideMenuOpen undefined"); return }
     console.log("opening/closing sideMenu")
-    if(windowsOpen.alert || sideMenusOpen[menuName]){ return }
+    if(windowsOpen.alert || sideMenusOpen[menuOpen]){ return }
 
     //close all menus (and closing animation)
     setCurrentSideMenuOpen(menuName)
@@ -288,9 +288,9 @@ export default function Home() {
     closeAllSideMenus()
     
     //open new menu
-    setSideMenusOpen(prevState => ({ ...prevState, [menuName]: true }))
-    switch(menuName){
-      case "Lunar Eclipse":
+    setSideMenusOpen(prevState => ({ ...prevState, [menuOpen]: true }))
+    switch(menuOpen){
+      case "lunarEclipse":
         setDesktopSideMenuContent(
           <span>
             genshin events<br/>
@@ -300,7 +300,7 @@ export default function Home() {
         setDesktopSideMenuFooter("v0.3.5")
         break
       
-      case "Nako Projects":
+      case "nakoProjects":
         setDesktopSideMenuContent(
           <span>
             museum project<br/>
@@ -313,7 +313,7 @@ export default function Home() {
         setDesktopSideMenuFooter(`"I see you."`)
         break
 
-      case "User Info":
+      case "userInfo":
         setDesktopSideMenuContent(
           <span>
             profile picture<br/>
@@ -878,17 +878,17 @@ export default function Home() {
 
   const menuIconData = [
     {
-      onClick: () => handleSideMenuOpen("Lunar Eclipse"),
+      onClick: () => handleSideMenuOpen("lunarEclipse", "Lunar Eclipse"),
       Icon: MoonIcon,
       label: "Lunar Eclipse"
     },
     {
-      onClick: () => handleSideMenuOpen("Nako Projects"),
+      onClick: () => handleSideMenuOpen("nakoProjects", `"I'm watching you."`),
       Icon: FolderIcon,
       label: "Nako Projects"
     },
     {
-      onClick: () => handleSideMenuOpen("User Info"),
+      onClick: () => handleSideMenuOpen("userInfo", "User Info"),
       Icon: NoteIcon,
       label: "User Info"
     }

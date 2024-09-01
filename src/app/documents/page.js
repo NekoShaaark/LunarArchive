@@ -732,10 +732,11 @@ export default function Documents({
 
         //text files
         if(fileType == "Text"){
-          var fileName = file.textContent
+          var fileName = file.textContent //NOTE: can make all "files" reference a different mdx file name
           
           //cut ".txt" off if has
           if((file.textContent).slice(-4) == ".txt"){ fileName = (file.textContent).slice(0, -4) }
+          if((file.textContent).slice(-4) == ".exe"){ fileName = (file.textContent).slice(0, -4) }
 
           handleNotusText(headerName, undefined, fileName)
           // handleNotusText("Test", "Yippeeeee this is a testing file wooohoooo testing we love testing", undefined)

@@ -20,7 +20,9 @@ export default function TextEditor({ isOpen, selectedText, selectedMdxFile }) {
         const importMdxFile = async () => {
             try{
                 const SelectedMdxFile = await import(`@/components/mdxFiles/${selectedFile}.mdx`)
-                setImportedMdxFile(() => dynamic(() => Promise.resolve(SelectedMdxFile)))
+                setImportedMdxFile(() => dynamic(() => Promise.resolve(SelectedMdxFile), {
+                    loading: () => <p>Loading file contents...</p>
+                }))
             } 
             catch(error){
                 console.error("Mdx file not found: ", error)
