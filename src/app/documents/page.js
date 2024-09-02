@@ -3,7 +3,7 @@
 import styles from '@/styles/Documents.module.css'
 import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, GamepadIcon, ImageIcon, ImagesIcon, NoteIcon, SearchIcon } from '@/components/SvgHandler'
 import { Button, InputAdornment, TextField, ThemeProvider, createTheme } from '@mui/material'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import TypewriterEffect from '@/components/TypewriterEffect'
@@ -597,6 +597,27 @@ export default function Documents({
       "Pictures": setPicturesFolderOpen,
   }
 
+  const folders = [
+    { folder: sysFolder, isOpen: sysFolderOpen },
+      { folder: documentsFolder, isOpen: documentsFolderOpen },
+
+        { folder: archivesFolder, isOpen: archivesFolderOpen },
+          { folder: discordStuffiesFolder, isOpen: discordStuffiesFolderOpen },
+            { folder: acceptedIdeasFolder, isOpen: acceptedIdeasFolderOpen },
+            { folder: rejectedIdeasFolder, isOpen: rejectedIdeasFolderOpen },
+          { folder: aR3Folder, isOpen: aR3FolderOpen },
+
+        { folder: gamesFolder, isOpen: gamesFolderOpen },
+          { folder: moreGamesFolder, isOpen: moreGamesFolderOpen },
+          { folder: newFolderFolder, isOpen: newFolderFolderOpen },
+            { folder: heomeworkFolder, isOpen: heomeworkFolderOpen },
+
+        { folder: realArchiveFolder, isOpen: realArchiveFolderOpen },
+          { folder: prototype07Folder, isOpen: prototype07FolderOpen },
+
+      { folder: picturesFolder, isOpen: picturesFolderOpen },
+  ]
+
 
   function filesInFolder(folder){
     return(
@@ -1174,6 +1195,11 @@ export default function Documents({
     notusHandlers.setNotusFile(txtFile)
   }
 
+  function renderFolderContent(isOpen, folder){
+    if(isOpen){ return filesInFolder(folder) }
+    return null
+  }
+
   //TODO: function to put in a dynamic/specific directory path
   //TODO: when hovering over icons, they should be bordered with a different color
   //TODO: could add customizable settings to search
@@ -1181,13 +1207,21 @@ export default function Documents({
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.documentsBody}>
+
+        {/* top navbar */}
         <div className={styles.navbar}>
+          
+          {/* back button */}
           <Button disableRipple onClick={() => backOneFolder()}>
             <BackIcon className={styles.backButton} width={48} height={48}/>
           </Button>
+
+          {/* directory field */}
           <span className={styles.directory}>
             <TypewriterEffect text={currentReadableDirectory} delay={typewriterDelay}/>
           </span>
+
+          {/* search bar/field */}
           <div className={styles.search}>
             <TextField
               variant="standard"
@@ -1206,35 +1240,31 @@ export default function Documents({
             />
           </div>
         </div>
-        {!filesFoundFromSearch && <div className={styles.grid}>
-          
-            {sysFolderOpen && filesInFolder(sysFolder)}
-              {documentsFolderOpen && filesInFolder(documentsFolder)}
-          
-                {archivesFolderOpen && filesInFolder(archivesFolder)}
-                  {discordStuffiesFolderOpen && filesInFolder(discordStuffiesFolder)}
-                    {acceptedIdeasFolderOpen && filesInFolder(acceptedIdeasFolder)}
-                    {rejectedIdeasFolderOpen && filesInFolder(rejectedIdeasFolder)}
-                  {aR3FolderOpen && filesInFolder(aR3Folder)}
-          
-                {gamesFolderOpen && filesInFolder(gamesFolder)}
-                  {moreGamesFolderOpen && filesInFolder(moreGamesFolder)}
-                  {newFolderFolderOpen && filesInFolder(newFolderFolder)}
-                    {heomeworkFolderOpen && filesInFolder(heomeworkFolder)}
-          
-                {realArchiveFolderOpen && filesInFolder(realArchiveFolder)}
-                  {prototype07FolderOpen && filesInFolder(prototype07Folder)}
-              
-              {picturesFolderOpen && filesInFolder(picturesFolder)}
-          
-          </div>
-        }
-        {filesFoundFromSearch && 
-          <div className={styles.grid}>
-            {filesFoundFromSearch}
-          </div>
-        }
 
+        {/* files/folders rendering */}
+        <div className={styles.grid}>
+          
+          {/* normal files/folder(s) rendering */}
+          {!filesFoundFromSearch && 
+            <>
+              {/* show files in folder when folder(s) are open */}
+              {folders.map(({isOpen, folder}, index) => 
+                <React.Fragment key={index}>
+                  {renderFolderContent(isOpen, folder)}
+                </React.Fragment>
+              )}
+            </>
+          }
+
+          {/* searched files/folder(s) rendering */}
+          {filesFoundFromSearch && 
+            <>
+              {filesFoundFromSearch}
+            </>
+          }
+        </div>
+        
+        {/* bottom right folder content */}
         <div className={styles.folderContent}>
           <span><TypewriterEffect text={folderContent.total} {...typerwriterProps}/> Total Items</span>
           <span>
