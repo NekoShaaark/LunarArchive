@@ -1,16 +1,26 @@
 # Lunar Archive Project
-![Screenshot from Website](https://i.imgur.com/a0VoydU.png)
+![Screenshot from Website](https://i.imgur.com/c6GUPGr.png)
 
 ## Reason of Existance
-I made this because I was bored in my free time, and I've always wanted to make my own little "Virtual Machine."
-The plan is to make the entire system into a little game that you can just open whenever, explore, and unveil the mysteries hidden beneath the surface of The Machine.
+**"What brought you here?** <br/>
+I heard that the previous Owner wanted to create their own custom Operating System. I don't know where they are now, maybe they discovered something they weren't supposed to. <br/>
+They said this Project wasn't finished, and that it was supposed to turn into a little game, how foolish."
 
-But if that isn't your thing, then by all means, just explore to your heart's content; I've made a lot of different systems that work with each-other into a fairly recognizable windows-like operating system, *We Are Sure You Will Feel Right At Home*. <br/>
+"Please enjoy your stay. The Systems here are old and may be slightly bUGgY, but they should be similar to what you are already used to, User, ***We Are Sure You Will Feel Right At Home***."
 
 ## Inspiration
-I am a huge fan of the game _"OneShot."_ This project is heavily based on its  _"World Machine Edition."_ As such, references to the game may be made.
+Disclaimer: Project is heavily based on _Oneshot: World Machine Edition._ <br/>
+References or placeholders related or associated with _Oneshot_ may be found.
 > [!IMPORTANT]
-> If you have not played OneShot, it is recommended to play to avoid minor story spoilers.
-> <br/>**Proceed at your own discretion.**
+> Recommendation: Play _Oneshot_ to avoid spoilers. <br/>
+> **"wARninG: Proceed at personal [User] discretion."**
 
-The systems displayed are heavily based on _OneShot World Machine Edition_'s in-game systems and windows with my own personal twist.
+
+## In-project Systems
+- ~Archive - **[REDACTED]**~
+- Documents - **File Explorer**
+- Ivy - **Image Viewer**
+- Notus - **Note Viewer**
+- Settings - **Per-User Settings**
+- Login - **Change to a Different User [WIP]**
+- Desktop Menu - **Learn more about Applications [WIP]**
