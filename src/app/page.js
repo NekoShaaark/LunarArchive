@@ -7,18 +7,20 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { motion, useAnimate, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
-import Archive from './archive/page'
-import Logs from './logs/page'
-import Settings from './settings/page'
-import Documents from './documents/page'
-import Portfolio from './portfolio/page'
+import Archive from '@/app/archive/page'
+import Logs from '@/app/logs/page'
+import Settings from '@/app/settings/page'
+import Documents from '@/app/documents/page'
+import Portfolio from '@/app/portfolio/page'
 import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
-import Login from './login/page'
+import Login from '@/app/login/page'
 import { DesktopIconButton, MenuIconButton, NavbarIconButton } from '@/components/handlers/DesktopCreator'
 import WindowCreator from '@/components/handlers/WindowsCreator'
 import TypewriterEffect from '@/components/TypewriterEffect'
+
+import { WindowsHandler } from '@/components/os-windows/WindowsHandler'
 
 
 
@@ -46,28 +48,31 @@ export default function Home() {
   const [brightnessValue, setBrightnessValue] = useState(100)
   
   //window open states
-  const [windowsOpen, setWindowsOpen] = useState({
-    desktopMenu: false,
-    archive: false,
-    logs: false,
-    settings: false,
-    documents: false,
-    portfolio: false,
-    imageViewer: false,
-    alert: false,
-    textEditor: false
-  })
+  const windowsHandler = WindowsHandler()
+  const windowsOpen = windowsHandler.windowsOpen
+  const windowsOpenHandler = {
+    desktopMenu: windowsHandler.onHandleDesktopMenu,
+    archive: windowsHandler.onHandleArchiveWindowOpen,
+    logs: windowsHandler.onHandleLogsWindowOpen,
+    settings: windowsHandler.onHandleSettingsWindowOpen,
+    documents: windowsHandler.onHandleDocumentsWindow,
+    portfolio: windowsHandler.onHandlePortfolioWindowOpen,
+    imageViewer: windowsHandler.onHandleImageViewerWindowOpen,
+    alert: windowsHandler.onHandleAlertWindowOpen,
+    textEditor: windowsHandler.onHandleTextEditorWindowOpen
+  }
 
   //window minimized states
-  const [windowsMinimized, setWindowsMinimized] = useState({
-    archive: false,
-    logs: false,
-    settings: false,
-    documents: false,
-    portfolio: false,
-    imageViewer: false,
-    textEditor: false
-  })
+  const windowsMinimized = windowsHandler.windowsMinimized
+  const windowsMinimizedHandler = {
+    archive: windowsHandler.onHandleArchiveWindowMinimize,
+    logs: windowsHandler.onHandleLogsWindowMinimize,
+    settings: windowsHandler.onHandleSettingsWindowMinimize,
+    documents: windowsHandler.onHandleDocumentsWindowMinimize,
+    portfolio: windowsHandler.onHandlePortfolioWindowMinimize,
+    imageViewer: windowsHandler.onHandleImageViewerWindowMinimize,
+    textEditor: windowsHandler.onHandleTextEditorWindowMinimize
+  }
 
   //window maximized states
   const [windowsMaximized, setWindowsMaximized] = useState({
@@ -272,7 +277,7 @@ export default function Home() {
     }
 
     //open/close desktopMenu
-    setWindowsOpen({ ...windowsOpen, desktopMenu: e })
+    windowsOpenHandler.desktopMenu(e)
     setDesktopMenuOpen(e)
   }
 
@@ -466,12 +471,12 @@ export default function Home() {
     // }
 
     setCurrentFocusedWindow("archive")
-    setWindowsOpen({ ...windowsOpen, archive: true })
+    windowsOpenHandler.archive(true)
     
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.archive){
       pullUpWindowAnimation("archive")
-      setWindowsMinimized({ ...windowsMinimized, archive: false })
+      windowsMinimizedHandler.archive(false)
     }
     
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -486,7 +491,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, archive: false })
+    windowsOpenHandler.archive(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
@@ -495,7 +500,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, archive: true })
+    windowsMinimizedHandler.archive(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
@@ -510,12 +515,12 @@ export default function Home() {
     }
 
     setCurrentFocusedWindow("logs") 
-    setWindowsOpen({ ...windowsOpen, logs: true })
+    windowsOpenHandler.logs(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.logs){
       pullUpWindowAnimation("logs")
-      setWindowsMinimized({ ...windowsMinimized, logs: false })
+      windowsMinimizedHandler.logs(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -530,7 +535,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, logs: false }) 
+    windowsOpenHandler.logs(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
@@ -539,7 +544,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, logs: true })
+    windowsMinimizedHandler.logs(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
@@ -549,12 +554,12 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setCurrentFocusedWindow("settings") 
-    setWindowsOpen({ ...windowsOpen, settings: true })
+    windowsOpenHandler.settings(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.settings){
       pullUpWindowAnimation("settings")
-      setWindowsMinimized({ ...windowsMinimized, settings: false })
+      windowsMinimizedHandler.settings(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -569,7 +574,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, settings: false })
+    windowsOpenHandler.settings(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
@@ -578,7 +583,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, settings: true })
+    windowsMinimizedHandler.settings(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
@@ -588,12 +593,12 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setCurrentFocusedWindow("documents") 
-    setWindowsOpen({ ...windowsOpen, documents: true })
+    windowsOpenHandler.documents(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.documents){
       pullUpWindowAnimation("documents")
-      setWindowsMinimized({ ...windowsMinimized, documents: false })
+      windowsMinimizedHandler.documents(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -608,7 +613,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
     
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, documents: false })
+    windowsOpenHandler.documents(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
@@ -617,7 +622,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, documents: true })
+    windowsMinimizedHandler.documents(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
@@ -627,12 +632,12 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setCurrentFocusedWindow("portfolio") 
-    setWindowsOpen({ ...windowsOpen, portfolio: true })
+    windowsOpenHandler.portfolio(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.portfolio){
       pullUpWindowAnimation("portfolio")
-      setWindowsMinimized({ ...windowsMinimized, portfolio: false })
+      windowsMinimizedHandler.portfolio(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -647,7 +652,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, portfolio: false })
+    windowsOpenHandler.portfolio(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
@@ -656,7 +661,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, portfolio: true })
+    windowsMinimizedHandler.portfolio(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
@@ -666,12 +671,12 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setCurrentFocusedWindow("imageViewer") 
-    setWindowsOpen({ ...windowsOpen, imageViewer: true })
+    windowsOpenHandler.imageViewer(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.imageViewer){
       pullUpWindowAnimation("imageViewer")
-      setWindowsMinimized({ ...windowsMinimized, imageViewer: false })
+      windowsMinimizedHandler.imageViewer(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -686,7 +691,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, imageViewer: false })
+    windowsOpenHandler.imageViewer(false)
     setWindowsMaximized({ ...windowsMaximized, imageViewer: false })
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
@@ -697,7 +702,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, imageViewer: true })
+    windowsMinimizedHandler.imageViewer(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
@@ -712,7 +717,7 @@ export default function Home() {
 
   const alertHandleOpen = () => { 
     setCurrentFocusedWindow("alert") 
-    setWindowsOpen({ ...windowsOpen, alert: true })
+    windowsOpenHandler.alert(true)
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
     if(!windowsOpen.alert){
@@ -723,7 +728,7 @@ export default function Home() {
   }
   const alertHandleClose = () => { 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, alert: false }) 
+    windowsOpenHandler.alert(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "alert")) //remove "alert" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
   }
@@ -733,12 +738,12 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setCurrentFocusedWindow("textEditor") 
-    setWindowsOpen({ ...windowsOpen, textEditor: true })
+    windowsOpenHandler.textEditor(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
     if(windowsMinimized.textEditor){
       pullUpWindowAnimation("textEditor")
-      setWindowsMinimized({ ...windowsMinimized, textEditor: false })
+      windowsMinimizedHandler.textEditor(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -753,7 +758,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsOpen({ ...windowsOpen, textEditor: false })
+    windowsOpenHandler.textEditor(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
@@ -762,7 +767,7 @@ export default function Home() {
     if(windowsOpen.alert){ return }
 
     setChangeFocusedWindow(true) 
-    setWindowsMinimized({ ...windowsMinimized, textEditor: true })
+    windowsMinimizedHandler.textEditor(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
@@ -1612,6 +1617,7 @@ export default function Home() {
           ))}
 
           {/* desktop menu */}
+          {/* TODO: extract this to its own Component */}
           <AnimatePresence>
             {desktopMenuOpen &&
               <motion.div 
@@ -1622,6 +1628,7 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
               >
                 
+                {/* left menu */}
                 <div className="left-menu">
                   <ul>
                     <span>
@@ -1630,7 +1637,7 @@ export default function Home() {
                     </span>
                     {menuIconData.map((data, index) => (
                       <MenuIconButton
-                        key={index}
+                        index={index}
                         onClick={data.onClick}
                         Icon={data.Icon}
                         label={data.label}
@@ -1638,12 +1645,14 @@ export default function Home() {
                     ))}
                   </ul>
 
+                  {/* bottom disclaimer */}
                   <span style={{position:'fixed', bottom:0, left:0, padding:10, fontSize:"10px"}}>
                     <i>Disclaimer:<br/>
                     ~ Prototype - expect 3rrors ~</i>
                   </span>
                 </div>
                 
+                {/* right menu */}
                 <div 
                   className="right-menu"
                   ref={desktopMenuAnimation}
