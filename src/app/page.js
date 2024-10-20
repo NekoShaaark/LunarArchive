@@ -1637,6 +1637,7 @@ export default function Home() {
                     </span>
                     {menuIconData.map((data, index) => (
                       <MenuIconButton
+                        key={index}
                         index={index}
                         onClick={data.onClick}
                         Icon={data.Icon}
