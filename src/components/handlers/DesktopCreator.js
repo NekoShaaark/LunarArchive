@@ -55,13 +55,20 @@ export function NavbarIconButton({ windowOpen, className, onClick, Icon, label }
 } 
 
 
-export function MenuIconButton({ onClick, Icon, label }){
+export function MenuIconButton({ index, onClick, Icon, label }){
     return(
         <AnimatePresence>
-            <li onClick={onClick}>
+            <motion.li 
+                key={index}
+                onClick={onClick}
+                initial={{ opacity: 0, scale: 0.75, z: 8, x: -32 }}
+                animate={{ opacity: 1, scale: 1, z: 0, x: 0  }}
+                transition={{ duration: (index*0.1) + 0.4 }}
+                whileHover={{ x: 6 }}
+            >
               <Icon width={18} height={18}/> 
               <span>{label}</span>
-            </li>
+            </motion.li>
         </AnimatePresence>
     )
 }
