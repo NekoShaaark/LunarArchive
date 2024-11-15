@@ -16,11 +16,13 @@ import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
 import Login from '@/app/login/page'
-import { DesktopIconButton, MenuIconButton, NavbarIconButton } from '@/components/handlers/DesktopCreator'
-import WindowCreator from '@/components/handlers/WindowsCreator'
+import { DesktopIconButton, MenuIconButton, NavbarIconButton } from '@/components/creators/DesktopCreator'
+import WindowCreator from '@/components/creators/WindowsCreator'
 import TypewriterEffect from '@/components/TypewriterEffect'
 
-import { WindowsHandler } from '@/components/os-windows/WindowsHandler'
+import { WindowsHandler } from '@/components/handlers/WindowsHandler'
+import { DesktopMenuHandler } from '@/components/handlers/DesktopMenuHandler'
+import DesktopMenu from '@/components/windows/DesktopMenu'
 
 
 
@@ -39,73 +41,27 @@ export default function Home() {
   const [portfolioWindowAnimation, portfolioAnimate] = useAnimate()
   const [imageViewerWindowAnimation, imageViewerAnimate] = useAnimate()
   const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
-  const [desktopMenuAnimation, desktopMenuAnimate] = useAnimate()
 
   //desktop settings states
   const [selectedWallpaper, setSelectedWallpaper] = useState("Starry")
   const [selectedTheme, setSelectedTheme] = useState("Purple")
   const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
   const [brightnessValue, setBrightnessValue] = useState(100)
-  
-  //window open states
+
+  //focused window states
   const windowsHandler = WindowsHandler()
-  const windowsOpen = windowsHandler.windowsOpen
-  const windowsOpenHandler = {
-    desktopMenu: windowsHandler.onHandleDesktopMenu,
-    archive: windowsHandler.onHandleArchiveWindowOpen,
-    logs: windowsHandler.onHandleLogsWindowOpen,
-    settings: windowsHandler.onHandleSettingsWindowOpen,
-    documents: windowsHandler.onHandleDocumentsWindow,
-    portfolio: windowsHandler.onHandlePortfolioWindowOpen,
-    imageViewer: windowsHandler.onHandleImageViewerWindowOpen,
-    alert: windowsHandler.onHandleAlertWindowOpen,
-    textEditor: windowsHandler.onHandleTextEditorWindowOpen
-  }
-
-  //window minimized states
-  const windowsMinimized = windowsHandler.windowsMinimized
-  const windowsMinimizedHandler = {
-    archive: windowsHandler.onHandleArchiveWindowMinimize,
-    logs: windowsHandler.onHandleLogsWindowMinimize,
-    settings: windowsHandler.onHandleSettingsWindowMinimize,
-    documents: windowsHandler.onHandleDocumentsWindowMinimize,
-    portfolio: windowsHandler.onHandlePortfolioWindowMinimize,
-    imageViewer: windowsHandler.onHandleImageViewerWindowMinimize,
-    textEditor: windowsHandler.onHandleTextEditorWindowMinimize
-  }
-
-  //window maximized states
-  const [windowsMaximized, setWindowsMaximized] = useState({
-    imageViewer: false
-  })
-
-  //desktop menu open states
-  const [sideMenusOpen, setSideMenusOpen] = useState({
-    lunarEclipse: false,
-    nakoProjects: false,
-    userInfo: true
-  })
+  const currentFocusedWindow = windowsHandler.windowFocused
+  const changeFocusedWindow = windowsHandler.changeFocusedWindow
+  const windowFocusedData = windowsHandler.windowFocusedData
 
   //other states
-  const [currentFocusedWindow, setCurrentFocusedWindow] = useState("none")
-  const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
   const [currentWindowsOpen, setCurrentWindowsOpen] = useState(["none"])
   const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState(["none"])
-  const [currentSideMenuOpen, setCurrentSideMenuOpen] = useState("User Info")
   const [windowHeaderName, setWindowHeaderName] = useState()
   const [alertDescription, setAlertDescription] = useState()
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
   const [denyAccess, setDenyAccess] = useState(true)
   const [loginOpen, setLoginOpen] = useState(false)
-  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false)
-  const [desktopSideMenuContent, setDesktopSideMenuContent] = useState(
-    <span>
-      profile picture<br/>
-      username<br/>
-      more info<br/>
-    </span>
-  )
-  const [desktopSideMenuFooter, setDesktopSideMenuFooter] = useState("v0.3.5")
 
 
   //image viewer (ivy) states
@@ -262,90 +218,27 @@ export default function Home() {
   const handleDesktopMenuOpen = async (e) => {
     // if(!e){ console.log("woahhhhhh desktopMenuOpen undefined"); return }
     // console.log("opening/closing desktopMenu")
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
     //handle opening/closing of desktopMenu
     if(e){ 
-      setCurrentFocusedWindow("desktopMenu")
+      windowsHandler.handleFocusedWindow("desktopMenu")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "desktopMenu"]) //add "desktopMenu" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "desktopMenu"])
     }
     else{ 
-      setChangeFocusedWindow(true)
+      windowsHandler.handleChangeFocusedWindow(true)
       setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "desktopMenu")) //remove "desktopMenu" from the array
       setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "desktopMenu"))
     }
 
     //open/close desktopMenu
-    windowsOpenHandler.desktopMenu(e)
-    setDesktopMenuOpen(e)
-  }
-
-  //--DESKTOP SIDE MENU OPENING HANDLING--//
-  const handleSideMenuOpen = async (menuOpen, menuName) => {
-    // if(!e){ console.log("woahhhhhh sideMenuOpen undefined"); return }
-    console.log("opening/closing sideMenu")
-    if(windowsOpen.alert || sideMenusOpen[menuOpen]){ return }
-
-    //close all menus (and closing animation)
-    setCurrentSideMenuOpen(menuName)
-    await menuAnimation("sideMenuClose")
-    closeAllSideMenus()
-    
-    //open new menu
-    setSideMenusOpen(prevState => ({ ...prevState, [menuOpen]: true }))
-    switch(menuOpen){
-      case "lunarEclipse":
-        setDesktopSideMenuContent(
-          <span>
-            genshin events<br/>
-            date and time<br/>
-          </span>
-        )
-        setDesktopSideMenuFooter("v0.3.5")
-        break
-      
-      case "nakoProjects":
-        setDesktopSideMenuContent(
-          <span>
-            museum project<br/>
-            ████████<br/>
-            lunar archive<br/>
-            kom█ni█a █xperi██nt<br/>
-            evi1 n3ko l0g<br/>
-          </span>
-        )
-        setDesktopSideMenuFooter(`"I see you."`)
-        break
-
-      case "userInfo":
-        setDesktopSideMenuContent(
-          <span>
-            profile picture<br/>
-            username<br/>
-            more info<br/>
-          </span>
-        )
-        setDesktopSideMenuFooter("v0.3.5")
-        break
-    }
-
-    //(and opening animation)
-    menuAnimation("sideMenuOpen")
-  }
-
-  //--DESKTOP SIDE MENU CLOSING HANDLING--//
-  const closeAllSideMenus = async (e) => {
-    const updatedState = Object.keys(sideMenusOpen).reduce((acc, key) => {
-      acc[key] = false
-      return acc
-    }, {})
-    
-    setSideMenusOpen(updatedState)
+    windowsHandler.desktopMenu.handleOpen(e)
   }
 
 
   //--MINIMIZE ANIMATIONS--//
+  //TODO: might be able to simplify these
   const dropWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "archive":
@@ -416,40 +309,16 @@ export default function Home() {
   const enlargeWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "imageViewer":
-        // await imageViewerAnimate(imageViewerWindowAnimation.current, { x: 100 }, { duration: 2.6, delay: 0 })
+        // await imageViewerAnimate(imageViewerWindowAnimation.current, { height: "100%" }, { duration: 1.0, delay: 0 })
+        // await imageViewerAnimate(imageViewerWindowAnimation.current, { width: "100%" }, { duration: 1.0, delay: 0 })
         break
     }
   }
   const shrinkWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "imageViewer":
-        // await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
+        // await imageViewerAnimate(imageViewerWindowAnimation.current, { height: "fit-content", width: "fit-content" }, { duration: 0.6, delay: 0.12 })
         break
-    }
-  }
-
-
-  //--DESKTOP MENU ANIMATIONS--//
-  const menuAnimation = async (e) => {
-    if(!desktopMenuAnimation.current){ return }
-
-    if(e == "sideMenuClose"){
-      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240 }, { duration: 0.4, delay: 0 })
-      desktopMenuAnimate(desktopMenuAnimation.current, { x: -240 }, { duration: 0.0, delay: 0 })
-      return
-    }
-
-    if(e == "sideMenuOpen"){
-      desktopMenuAnimate(desktopMenuAnimation.current, { x: 0 }, { duration: 0.4, delay: 0.2 })
-      return
-    }
-
-    if(desktopMenuOpen){
-      await desktopMenuAnimate(desktopMenuAnimation.current, { x: -240, y: 18, opacity: 0 }, { duration: 0.0, delay: 0 })
-      desktopMenuAnimate(desktopMenuAnimation.current, { x: 0, opacity: 1 }, { duration: 0.6, delay: 0.2 })
-    }
-    else{
-      desktopMenuAnimate(desktopMenuAnimation.current, { x: -120 }, { duration: 0.6, delay: 0 })
     }
   }
 
@@ -463,24 +332,24 @@ export default function Home() {
   //--WINDOW OPEN/CLOSE/MINIMIZE/MAXIMIZE HANDLERS--//
   const archiveHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
     // if(denyAccess){
     //   alertHandleOpen()
     //   return
     // }
 
-    setCurrentFocusedWindow("archive")
-    windowsOpenHandler.archive(true)
+    windowsHandler.handleFocusedWindow("archive")
+    windowsHandler.archive.handleOpen(true)
     
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.archive){
+    if(windowsHandler.windowsMinimized.archive){
       pullUpWindowAnimation("archive")
-      windowsMinimizedHandler.archive(false)
+      windowsHandler.archive.handleMinimize(false)
     }
     
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.archive){
+    if(!windowsHandler.windowsOpen.archive){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "archive"]) //add "archive" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "archive"])
@@ -488,43 +357,43 @@ export default function Home() {
   }
   const archiveHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.archive(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.archive.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
   const archiveHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.archive(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.archive.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
 
   const logsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
     if(denyAccess){
       alertHandleOpen()
       return
     }
 
-    setCurrentFocusedWindow("logs") 
-    windowsOpenHandler.logs(true)
+    windowsHandler.handleFocusedWindow("logs") 
+    windowsHandler.logs.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.logs){
+    if(windowsHandler.windowsMinimized.logs){
       pullUpWindowAnimation("logs")
-      windowsMinimizedHandler.logs(false)
+      windowsHandler.logs.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.logs){
+    if(!windowsHandler.windowsOpen.logs){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "logs"]) //add "logs" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "logs"])
@@ -532,38 +401,38 @@ export default function Home() {
   }
   const logsHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.logs(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.logs.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   const logsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.logs(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.logs.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   
   const settingsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setCurrentFocusedWindow("settings") 
-    windowsOpenHandler.settings(true)
+    windowsHandler.handleFocusedWindow("settings") 
+    windowsHandler.settings.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.settings){
+    if(windowsHandler.windowsMinimized.settings){
       pullUpWindowAnimation("settings")
-      windowsMinimizedHandler.settings(false)
+      windowsHandler.settings.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.settings){
+    if(!windowsHandler.windowsOpen.settings){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "settings"]) //add "settings" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "settings"])
@@ -571,38 +440,38 @@ export default function Home() {
   }
   const settingsHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.settings(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.settings.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
   const settingsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.settings(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.settings.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
 
   const documentsHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setCurrentFocusedWindow("documents") 
-    windowsOpenHandler.documents(true)
+    windowsHandler.handleFocusedWindow("documents") 
+    windowsHandler.documents.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.documents){
+    if(windowsHandler.windowsMinimized.documents){
       pullUpWindowAnimation("documents")
-      windowsMinimizedHandler.documents(false)
+      windowsHandler.documents.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.documents){
+    if(!windowsHandler.windowsOpen.documents){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "documents"]) //add "documents" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "documents"])
@@ -610,38 +479,38 @@ export default function Home() {
   }
   const documentsHandleClose = () => {
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
     
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.documents(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.documents.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
   const documentsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.documents(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.documents.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
 
   const portfolioHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setCurrentFocusedWindow("portfolio") 
-    windowsOpenHandler.portfolio(true)
+    windowsHandler.handleFocusedWindow("portfolio") 
+    windowsHandler.portfolio.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.portfolio){
+    if(windowsHandler.windowsMinimized.portfolio){
       pullUpWindowAnimation("portfolio")
-      windowsMinimizedHandler.portfolio(false)
+      windowsHandler.portfolio.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.portfolio){
+    if(!windowsHandler.windowsOpen.portfolio){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "portfolio"]) //add "portfolio" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "portfolio"])
@@ -649,38 +518,38 @@ export default function Home() {
   }
   const portfolioHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.portfolio(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.portfolio.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
   const portfolioHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.portfolio(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.portfolio.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
 
   const imageViewerHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setCurrentFocusedWindow("imageViewer") 
-    windowsOpenHandler.imageViewer(true)
+    windowsHandler.handleFocusedWindow("imageViewer") 
+    windowsHandler.imageViewer.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.imageViewer){
+    if(windowsHandler.windowsMinimized.imageViewer){
       pullUpWindowAnimation("imageViewer")
-      windowsMinimizedHandler.imageViewer(false)
+      windowsHandler.imageViewer.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.imageViewer){
+    if(!windowsHandler.windowsOpen.imageViewer){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "imageViewer"]) //add "imageViewer" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "imageViewer"])
@@ -688,66 +557,66 @@ export default function Home() {
   }
   const imageViewerHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.imageViewer(false)
-    setWindowsMaximized({ ...windowsMaximized, imageViewer: false })
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.imageViewer.handleOpen(false)
+    windowsHandler.imageViewer.handleMaximize(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
     document.onkeyup = null  //detach onkeyup event listener
   }
   const imageViewerHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.imageViewer(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.imageViewer.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
   const imageViewerHandleMaximize = () => {
     //if alert dialogue is open, allow nothing to be maximized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    if(!windowsMaximized.imageViewer){ setWindowsMaximized({ ...windowsMaximized, imageViewer: true }) }
-    else{ setWindowsMaximized({ ...windowsMaximized, imageViewer: false }) }
-    setChangeFocusedWindow(true)
+    if(!windowsHandler.windowsMaximized.imageViewer){ windowsHandler.imageViewer.handleMaximize(true) }
+    else{ windowsHandler.imageViewer.handleMaximize(false) }
+    windowsHandler.handleChangeFocusedWindow(true)
   }
 
   const alertHandleOpen = () => { 
-    setCurrentFocusedWindow("alert") 
-    windowsOpenHandler.alert(true)
+    windowsHandler.handleFocusedWindow("alert") 
+    windowsHandler.alert.handleOpen(true)
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.alert){
+    if(!windowsHandler.windowsOpen.alert){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "alert"]) //add "alert" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "alert"])
     }
   }
   const alertHandleClose = () => { 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.alert(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.alert.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "alert")) //remove "alert" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
   }
 
   const textEditorHandleOpen = () => { 
     //if alert dialogue is open, allow nothing to be opened
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setCurrentFocusedWindow("textEditor") 
-    windowsOpenHandler.textEditor(true)
+    windowsHandler.handleFocusedWindow("textEditor") 
+    windowsHandler.textEditor.handleOpen(true)
 
     //check if window is minimized, if so, play animation to drag window back above navbar
-    if(windowsMinimized.textEditor){
+    if(windowsHandler.windowsMinimized.textEditor){
       pullUpWindowAnimation("textEditor")
-      windowsMinimizedHandler.textEditor(false)
+      windowsHandler.textEditor.handleMinimize(false)
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsOpen.textEditor){
+    if(!windowsHandler.windowsOpen.textEditor){
       setNavbarOrder("open")
       setCurrentWindowsOpen(prevWindows => [...prevWindows, "textEditor"]) //add "textEditor" to the array
       setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "textEditor"])
@@ -755,19 +624,19 @@ export default function Home() {
   }
   const textEditorHandleClose = () => { 
     //if alert dialogue is open, allow nothing to be closed
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsOpenHandler.textEditor(false)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.textEditor.handleOpen(false)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
   const textEditorHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
-    if(windowsOpen.alert){ return }
+    if(windowsHandler.windowsOpen.alert){ return }
 
-    setChangeFocusedWindow(true) 
-    windowsMinimizedHandler.textEditor(true)
+    windowsHandler.handleChangeFocusedWindow(true) 
+    windowsHandler.textEditor.handleMinimize(true)
     setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
     setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
@@ -796,24 +665,32 @@ export default function Home() {
 
   //--DESKTOP/NAVBAR ICONS DATA--//
   const desktopIconData = [
+
+    //documents desktop icon
     {
       className: "icon-documents",
       onClick: () => { handleDocumentsDirToOpen("Documents"); documentsHandleOpen() },
       Icon: FolderIcon,
       label: "Documents",
     },
+
+    //pictures desktop icon
     {
       className: "icon-pictures",
       onClick: () => { handleDocumentsDirToOpen("Pictures"); documentsHandleOpen() },
       Icon: ImagesIcon,
       label: "Pictures",
     },
+
+    //settings desktop icon
     {
       className: "icon-settings",
       onClick: settingsHandleOpen,
       Icon: MoonStarIcon,
       label: "Settings",
     },
+
+    //tutorial desktop icon
     {
       className: "icon-tutorial",
       onClick: () => { handleAlertDescription("Coming soon"); alertHandleOpen() },
@@ -823,79 +700,93 @@ export default function Home() {
   ]
 
   const navbarIconData = [
+
+    //archive navbar icon
     {
-      windowOpen: windowsOpen.archive,
+      windowOpen: windowsHandler.windowsOpen.archive,
+      windowMinimized: windowsHandler.windowsMinimized.archive,
+      windowFocused: windowFocusedData.archive,
       className: "archive",
       onClick: archiveHandleOpen,
       Icon: ArchiveIcon,
       label: "Archive"
     },
+
+    //logs navbar icon
     {
-      windowOpen: windowsOpen.logs,
+      windowOpen: windowsHandler.windowsOpen.logs,
+      windowMinimized: windowsHandler.windowsMinimized.logs,
+      windowFocused: windowFocusedData.logs,
       className: "logs",
       onClick: logsHandleOpen,
       Icon: LogsIcon,
       label: "Data Logs"
     },
+
+    //settings navbar icon
     {
-      windowOpen: windowsOpen.settings,
+      windowOpen: windowsHandler.windowsOpen.settings,
+      windowMinimized: windowsHandler.windowsMinimized.settings,
+      windowFocused: windowFocusedData.settings,
       className: "settings",
       onClick: settingsHandleOpen,
       Icon: MoonStarIcon,
       label: "Settings"
     },
+
+    //documents navbar icon
     {
-      windowOpen: windowsOpen.documents,
+      windowOpen: windowsHandler.windowsOpen.documents,
+      windowMinimized: windowsHandler.windowsMinimized.documents,
+      windowFocused: windowFocusedData.documents,
       className: "documents",
       onClick: documentsHandleOpen,
       Icon: FolderIcon,
       label: "Documents"
     },
+
+    //portfolio navbar icon
     {
-      windowOpen: windowsOpen.portfolio,
+      windowOpen: windowsHandler.windowsOpen.portfolio,
+      windowMinimized: windowsHandler.windowsMinimized.portfolio,
+      windowFocused: windowFocusedData.portfolio,
       className: "portfolio",
       onClick: portfolioHandleOpen,
       Icon: PortfolioIcon,
       label: "Portfolio"
     },
+
+    //image viewer navbar icon
     {
-      windowOpen: windowsOpen.imageViewer,
+      windowOpen: windowsHandler.windowsOpen.imageViewer,
+      windowMinimized: windowsHandler.windowsMinimized.imageViewer,
+      windowFocused: windowFocusedData.imageViewer,
       className: "imageViewer",
       onClick: imageViewerHandleOpen,
       Icon: ImageViewerIcon,
       label: "Ivy"
     },
+
+    //alert navbar icon
     {
-      windowOpen: windowsOpen.alert,
+      windowOpen: windowsHandler.windowsOpen.alert,
+      windowMinimized: windowsHandler.windowsMinimized.alert,
+      windowFocused: windowFocusedData.alert,
       className: "alert",
       onClick: alertHandleOpen,
       Icon: AlertIcon,
       label: "Alert"
     },
+
+    //text editor navbar icon
     {
-      windowOpen: windowsOpen.textEditor,
+      windowOpen: windowsHandler.windowsOpen.textEditor,
+      windowMinimized: windowsHandler.windowsMinimized.textEditor,
+      windowFocused: windowFocusedData.textEditor,
       className: "textEditor",
       onClick: textEditorHandleOpen,
       Icon: NoteIcon,
       label: "Notus"
-    }
-  ]
-
-  const menuIconData = [
-    {
-      onClick: () => handleSideMenuOpen("lunarEclipse", "Lunar Eclipse"),
-      Icon: MoonIcon,
-      label: "Lunar Eclipse"
-    },
-    {
-      onClick: () => handleSideMenuOpen("nakoProjects", `"I'm watching you."`),
-      Icon: FolderIcon,
-      label: "Nako Projects"
-    },
-    {
-      onClick: () => handleSideMenuOpen("userInfo", "User Info"),
-      Icon: NoteIcon,
-      label: "User Info"
     }
   ]
 
@@ -905,7 +796,7 @@ export default function Home() {
 
     //template
     {
-      windowOpen: windowsOpen.NAMEHERE,
+      windowOpen: windowsHandler.windowsOpen.NAMEHERE,
       id: "window-NAMEHERE",
       windowRef: null,
       headerProps: {
@@ -922,7 +813,7 @@ export default function Home() {
 
     //archive window
     {
-      windowOpen: windowsOpen.archive,
+      windowOpen: windowsHandler.windowsOpen.archive,
       id: "window-archive",
       windowRef: archiveWindowAnimation,
       headerProps: {
@@ -933,13 +824,13 @@ export default function Home() {
       },
       PageComponent: Archive,
       pageProps: {
-        
+        //no page props
       }
     },
 
     //data logs window
     {
-      windowOpen: windowsOpen.logs,
+      windowOpen: windowsHandler.windowsOpen.logs,
       id: "window-logs",
       windowRef: logsWindowAnimation,
       headerProps: {
@@ -956,7 +847,7 @@ export default function Home() {
 
     //settings window
     {
-      windowOpen: windowsOpen.settings,
+      windowOpen: windowsHandler.windowsOpen.settings,
       id: "window-settings",
       windowRef: settingsWindowAnimation,
       headerProps: {
@@ -982,7 +873,7 @@ export default function Home() {
 
     //documents window
     {
-      windowOpen: windowsOpen.documents,
+      windowOpen: windowsHandler.windowsOpen.documents,
       id: "window-documents",
       windowRef: documentsWindowAnimation,
       headerProps: {
@@ -1008,7 +899,7 @@ export default function Home() {
 
     //portfolio window
     {
-      windowOpen: windowsOpen.portfolio,
+      windowOpen: windowsHandler.windowsOpen.portfolio,
       id: "window-portfolio",
       windowRef: portfolioWindowAnimation,
       headerProps: {
@@ -1030,7 +921,7 @@ export default function Home() {
 
     //image viewer window 
     {
-      windowOpen: windowsOpen.imageViewer,
+      windowOpen: windowsHandler.windowsOpen.imageViewer,
       id: "window-imageViewer",
       windowRef: imageViewerWindowAnimation,
       headerProps: {
@@ -1040,13 +931,13 @@ export default function Home() {
         setMinimize: imageViewerHandleMinimize,
         setMaximize: imageViewerHandleMaximize,
         keepMaximize: true,
-        maximized: windowsMaximized.imageViewer
+        maximized: windowsHandler.windowsMaximized.imageViewer
       },
       PageComponent: ImageHandler,
       pageProps: {
         selectedImage: currentIvyImage,
-        isOpen: windowsOpen.imageViewer,
-        isMaximized: windowsMaximized.imageViewer,
+        isOpen: windowsHandler.windowsOpen.imageViewer,
+        isMaximized: windowsHandler.windowsMaximized.imageViewer,
         imageWidth: ivyImageWidth,
         imageHeight: ivyImageHeight,
         imageDescription: ivyImageDescription,
@@ -1058,7 +949,7 @@ export default function Home() {
 
     //alert window
     {
-      windowOpen: windowsOpen.alert,
+      windowOpen: windowsHandler.windowsOpen.alert,
       id: "window-alert",
       windowRef: null,
       headerProps: {
@@ -1077,7 +968,7 @@ export default function Home() {
 
     //text editor window
     {
-      windowOpen: windowsOpen.textEditor,
+      windowOpen: windowsHandler.windowsOpen.textEditor,
       id: "window-textEditor",
       windowRef: textEditorWindowAnimation,
       headerProps: {
@@ -1088,7 +979,7 @@ export default function Home() {
       },
       PageComponent: TextEditor,
       pageProps: {
-        isOpen: windowsOpen.textEditor,
+        isOpen: windowsHandler.windowsOpen.textEditor,
         selectedText: currentNotusText,
         selectedMdxFile: currentNotusFile 
       }
@@ -1117,7 +1008,7 @@ export default function Home() {
 
     //create array of all windows
     // var archiveWindow = document.getElementById("window-archive")
-    const allWindowsArray = Object.keys(windowsOpen)
+    const allWindowsArray = Object.keys(windowsHandler.windowsOpen)
     const windows = allWindowsArray.reduce((array, id) => {
       array[id] = document.getElementById(`window-${id}`)
       return array
@@ -1142,7 +1033,7 @@ export default function Home() {
       })
       
       setNavbarColors("none")
-      setCurrentFocusedWindow("none")
+      windowsHandler.handleFocusedWindow("none")
       return
     }
 
@@ -1154,7 +1045,7 @@ export default function Home() {
 
     //set navbarColors and focusedWindow
     setNavbarColors(currentActiveWindow)
-    setCurrentFocusedWindow(currentActiveWindow)
+    windowsHandler.handleFocusedWindow(currentActiveWindow)
     setNavbarOrder("open")
   }
 
@@ -1377,12 +1268,6 @@ export default function Home() {
   }, [])
 
 
-  //--ON SERVER INIT & WHEN DESKTOP MENU OPEN/CLOSE--//
-  useEffect(() => {
-    menuAnimation()
-  }, [desktopMenuOpen])
-
-
   //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
     
@@ -1391,7 +1276,7 @@ export default function Home() {
       if(currentWindowsOpen.length === 0){ setActiveWindow("none"); console.log("none here") }
       if(currentWindowsOpen.length === 1){ setActiveWindow(currentWindowsOpen[0]); console.log("only one left") }
       if(currentWindowsOpen.length >= 2){ setActiveWindow(currentWindowsOpen[currentWindowsOpen.length - 1]); console.log("two or more left") }
-      setChangeFocusedWindow(false)
+      windowsHandler.handleChangeFocusedWindow(false)
       // console.log("changed to: " + currentFocusedWindow)
       // console.log(currentWindowsOpen)
       return
@@ -1404,41 +1289,41 @@ export default function Home() {
       // console.log("current focused window: " + currentFocusedWindow)
 
       //close desktopMenu if another window gets focused
-      if(windowsOpen.desktopMenu && currentFocusedWindow != "desktopMenu"){
+      if(windowsHandler.windowsOpen.desktopMenu && currentFocusedWindow != "desktopMenu"){
         handleDesktopMenuOpen(false)
       }
     }
-  }, [windowsOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
+  }, [windowsHandler.windowsOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
 
 
   //--ON SERVER INIT & WHEN WINDOWS MINIMIZE--//
   useEffect(() => {
 
     //convert all windows into an array to be filtered through below
-    const windows = Object.keys(windowsMinimized)
+    const windows = Object.keys(windowsHandler.windowsMinimized)
 
     //play animation to drop window below navbar
     windows.forEach(window => {
-      if(windowsMinimized[window]){ 
+      if(windowsHandler.windowsMinimized[window]){ 
         dropWindowAnimation(window) 
       }
     })
-  }, [windowsMinimized])
+  }, [windowsHandler.windowsMinimized])
 
   
   //--ON SERVER INIT & WHEN WINDOWS MAXIMIZE--//
   useEffect(() => {
 
     //play animation to maximize window
-    if(windowsMaximized.imageViewer){
+    if(windowsHandler.windowsMaximized.imageViewer){
       enlargeWindowAnimation("imageViewer")
       document.getElementById("window-imageViewer").setAttribute("style", "width:100%; height:100%; top:0; left:0; border-width:0")
     }
-    else if(!windowsMaximized.imageViewer && windowsOpen.imageViewer){
+    else if(!windowsHandler.windowsMaximized.imageViewer && windowsHandler.windowsOpen.imageViewer){
       shrinkWindowAnimation("imageViewer")
       document.getElementById("window-imageViewer").setAttribute("style", "width:fit-content; height:fit-content; top:140px; left:360px; border-width:4px")
     }
-  }, [windowsMaximized])
+  }, [windowsHandler.windowsMaximized])
 
 
   //--ON SERVER INIT & WHEN DRAGGING WINDOWS--//
@@ -1463,7 +1348,7 @@ export default function Home() {
         e.preventDefault()
 
         //if alert dialogue is open, allow nothing to be dragged
-        if(windowsOpen.alert){
+        if(windowsHandler.windowsOpen.alert){
           // console.log("hor hor hor")
           return
         }
@@ -1617,55 +1502,8 @@ export default function Home() {
           ))}
 
           {/* desktop menu */}
-          {/* TODO: extract this to its own Component */}
           <AnimatePresence>
-            {desktopMenuOpen &&
-              <motion.div 
-                className="layout-menu"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.5 }}
-              >
-                
-                {/* left menu */}
-                <div className="left-menu">
-                  <ul>
-                    <span>
-                      Selected: <TypewriterEffect text={currentSideMenuOpen} delay={30}/><br/>
-                      ---
-                    </span>
-                    {menuIconData.map((data, index) => (
-                      <MenuIconButton
-                        key={index}
-                        index={index}
-                        onClick={data.onClick}
-                        Icon={data.Icon}
-                        label={data.label}
-                      />
-                    ))}
-                  </ul>
-
-                  {/* bottom disclaimer */}
-                  <span style={{position:'fixed', bottom:0, left:0, padding:10, fontSize:"10px"}}>
-                    <i>Disclaimer:<br/>
-                    ~ Prototype - expect 3rrors ~</i>
-                  </span>
-                </div>
-                
-                {/* right menu */}
-                <div 
-                  className="right-menu"
-                  ref={desktopMenuAnimation}
-                >
-                  {desktopSideMenuContent}
-                  <span style={{position:'fixed', bottom:0, right:0, padding:10}}>
-                    {desktopSideMenuFooter}
-                  </span>
-                </div>
-              
-              </motion.div>
-            }
+            {windowsHandler.windowsOpen.desktopMenu && <DesktopMenu/>}
           </AnimatePresence>
         </ThemeProvider>
       </div>
@@ -1678,7 +1516,7 @@ export default function Home() {
 
             {/* menu */}
             <div className="menu">
-              <div onClick={() => handleDesktopMenuOpen(!desktopMenuOpen)}>
+              <div onClick={() => handleDesktopMenuOpen(!windowsHandler.windowsOpen.desktopMenu)}>
                 <MoonIcon alt="menu" width={24} height={24}/>
               </div>
             </div>
@@ -1693,6 +1531,8 @@ export default function Home() {
                     <NavbarIconButton
                       key={index}
                       windowOpen={data.windowOpen}
+                      windowMinimized={data.windowMinimized}
+                      windowFocused={data.windowFocused}
                       className={data.className}
                       onClick={data.onClick}
                       Icon={data.Icon}

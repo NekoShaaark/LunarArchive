@@ -33,18 +33,26 @@ export function DesktopIconButton({ index, className, onClick, Icon, label }){
 }
 
 
-export function NavbarIconButton({ windowOpen, className, onClick, Icon, label }){
+export function NavbarIconButton({ windowOpen, windowMinimized, windowFocused, className, onClick, Icon, label }){
+    var openY = 0
+    var focusedColor
+    if(windowFocused){ openY = -4 }
+    if(windowMinimized){ 
+        focusedColor = "#6a3ad1"
+    }
+
     return(
         <AnimatePresence>
             {windowOpen &&
                 <motion.li 
                     className={className}
                     initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    animate={{ opacity: 1, x: 0, y: openY }}
                     exit={{ opacity: 0, x: -6 }}
                     transition={{ duration: 0.5 }}
+                    // whileHover={{ y: 4 }}
                 >
-                    <Button disableRipple onClick={onClick}>
+                    <Button style={{ color:focusedColor, fill:focusedColor }} disableRipple onClick={onClick}>
                         <Icon width={24} height={24}/>
                         <span>{label}</span>
                     </Button>
