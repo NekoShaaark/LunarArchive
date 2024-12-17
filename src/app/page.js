@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, NoteIcon, PortfolioIcon, MoonStarIcon, MoonIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { motion, useAnimate, AnimatePresence } from 'framer-motion'
+import { useAnimate, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
 import Archive from '@/app/archive/page'
@@ -16,12 +16,10 @@ import ImageHandler from '@/components/ImageHandler'
 import AlertDialogue from '@/components/AlertDialogue'
 import TextEditor from '@/components/TextEditor'
 import Login from '@/app/login/page'
-import { DesktopIconButton, MenuIconButton, NavbarIconButton } from '@/components/creators/DesktopCreator'
+import { DesktopIconButton, NavbarIconButton } from '@/components/creators/DesktopCreator'
 import WindowCreator from '@/components/creators/WindowsCreator'
-import TypewriterEffect from '@/components/TypewriterEffect'
 
 import { WindowsHandler } from '@/components/handlers/WindowsHandler'
-import { DesktopMenuHandler } from '@/components/handlers/DesktopMenuHandler'
 import DesktopMenu from '@/components/windows/DesktopMenu'
 
 
@@ -43,7 +41,7 @@ export default function Home() {
   const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
 
   //desktop settings states
-  const [selectedWallpaper, setSelectedWallpaper] = useState("Starry")
+  const [selectedWallpaper, setSelectedWallpaper] = useState("WorldMachine")
   const [selectedTheme, setSelectedTheme] = useState("Purple")
   const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
   const [brightnessValue, setBrightnessValue] = useState(100)
@@ -863,6 +861,8 @@ export default function Home() {
         setCurrentArrayIndex: handleCurrentArrayIndex,
         setBrightnessValue: handleBrightnessValue,
         setNotusOpen: textEditorHandleOpen,
+        setAlertOpen: alertHandleOpen,
+        setErrorDescription: handleAlertDescription,
         notusHandlers: notusHandlers,
         selectedWallpaper: selectedWallpaper,
         selectedTheme: selectedTheme,
@@ -1233,16 +1233,16 @@ export default function Home() {
       if(localStorage.getItem("selectedWallpaper") == null){
         console.log("what the heck man i'm setting initial local storage here")
 
-        rootStyle.setProperty("--desktopWallpaper", "/Wallpapers/Wallpaper-Starry.webp")
+        rootStyle.setProperty("--desktopWallpaper", "/Wallpapers/Wallpaper-WorldMachine.webp")
         rootStyle.setProperty("--globalColor", "#9665ff")
         rootStyle.setProperty("--globalColorHover", "#6a3ad1")
         rootStyle.setProperty("--globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")
         rootStyle.setProperty("--globalHoverBackgroundColor", "rgba(44, 24, 87, 0.5)")
         rootStyle.setProperty("--desktopWallpaperBrightness", "100")
         
-        localStorage.setItem("selectedWallpaper", "Starry")
+        localStorage.setItem("selectedWallpaper", "WorldMachine")
         localStorage.setItem("selectedTheme", "Purple")
-        localStorage.setItem("desktopWallpaper", `url("/Wallpapers/Wallpaper-Starry.webp")`)
+        localStorage.setItem("desktopWallpaper", `url("/Wallpapers/Wallpaper-WorldMachine.webp")`)
         localStorage.setItem("globalColor", "#9665ff")
         localStorage.setItem("globalColorHover", "#6a3ad1")
         localStorage.setItem("globalHoverBorderColor", "rgba(106, 64, 197, 0.5)")

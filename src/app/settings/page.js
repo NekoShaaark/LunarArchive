@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { Button, Slider, ThemeProvider, createTheme } from '@mui/material'
-import { LeftIcon, RightIcon } from '@/components/SvgHandler'
+import { LeftIcon, MenuIcon, RightIcon } from '@/components/SvgHandler'
 import styles from '@/styles/Settings.module.css'
 import { useRouter } from 'next/navigation'
 
 
 export default function Settings({ 
-  setSelectedWallpaper, 
-  setSelectedTheme, 
-  setCurrentArrayIndex, 
+  setSelectedWallpaper,
+  setSelectedTheme,
+  setCurrentArrayIndex,
   setBrightnessValue,
-  setNotusOpen, 
+  setNotusOpen,
+  setAlertOpen,
+  setErrorDescription,
   notusHandlers,
   selectedWallpaper, 
   selectedTheme, 
@@ -27,6 +29,8 @@ export default function Settings({
   const [themeGlobalBackgroundColor, setThemeGlobalBackgroundColor] = useState("#c31c1c")
   const [themeGlobalHoverBackgroundColor, setThemeGlobalHoverBackgroundColor] = useState("#d13a3a")
   const [mysterySetting, setMysterySetting] = useState("Hi")
+  const [osVersion, setOsVersion] = useState("0.3.6")
+  const [leftMenuOpen, setLeftMenuOpen] = useState(false)
 
   //--THEME--//
   const settingsTheme = createTheme({
@@ -147,8 +151,13 @@ export default function Settings({
   }
 
   const openCredits = () => {
-    handleNotusText("Credits", undefined, "Credits.txt")
+    handleNotusText("Credits", undefined, "Credits")
     setNotusOpen()
+  }
+
+  const openComingSoon = () => {
+    setErrorDescription("Coming Soon! >w<")
+    setAlertOpen()
   }
 
 
@@ -203,8 +212,46 @@ export default function Settings({
   return (
     <div className={styles.settingsBody}>
       <ThemeProvider theme={settingsTheme}>
-        <div className={styles.grid}>
 
+        {/* left menu icon */}
+        { !leftMenuOpen &&
+          <div className={styles.leftMenuIcon}>
+            <MenuIcon width={48} height={48} onClick={() => setLeftMenuOpen(!leftMenuOpen)}/>
+          </div>
+        }
+
+        {/* left grid/menu */}
+        { leftMenuOpen &&
+          <div className={styles.leftGrid}>
+
+            <section className={styles.section}>
+              <div className={styles.leftMenuIcon}>
+                <MenuIcon width={48} height={48} onClick={() => setLeftMenuOpen(!leftMenuOpen)}/>
+              </div>
+            </section>
+
+            <section className={styles.section}>
+              <h1 className={styles.name}>Coming</h1>
+            </section>
+
+            <section className={styles.section}>
+              <h1 className={styles.name}>Soon!</h1>
+            </section>
+
+            <section className={styles.section}>
+              <h1 className={styles.name}>{null}</h1>
+            </section>
+
+            <section className={styles.section}>
+              <h1 className={styles.name}>:p</h1>
+            </section>
+          </div>
+        }
+
+        {/* right grid */}
+        <div className={styles.rightGrid}>
+
+          {/* wallpaper */}
           <section className={styles.section}>
             <h1 className={styles.name}>Wallpaper</h1>
             <div className={styles.button}>
@@ -222,6 +269,7 @@ export default function Settings({
             </div>
           </section>
 
+          {/* brightness [deprecated] */}
           <section className={styles.section}>
             <h1 className={styles.name}>Brightness [WIP]: {brightnessValue}%</h1>
             <div className={styles.button}>
@@ -250,6 +298,7 @@ export default function Settings({
             </div>
           </section>
 
+          {/* theme */}
           <section className={styles.section}>
             <h1 className={styles.name}>Theme</h1>
             <div className={styles.button}>
@@ -267,6 +316,7 @@ export default function Settings({
             </div>
           </section>
 
+          {/* ??? */}
           <section className={styles.section}>
             <h1 className={styles.name}>???</h1>
             <div className={styles.button}>
@@ -284,19 +334,29 @@ export default function Settings({
             </div>
           </section>
 
+          {/* view wallpaper */}
           <section className={styles.section}>
             <div className={styles.isolatedButton} onClick={openWallpaper}>
               View Wallpaper
             </div>
           </section>
 
+          {/* credits */}
           <section className={styles.section}>
             <div className={styles.isolatedButton} onClick={openCredits}>
               Credits
             </div>
           </section>
 
-          <span className={styles.version}>OS Version 0.3.5</span>
+          {/* statistics */}
+          <section className={styles.section}>
+            <div className={styles.isolatedButton} onClick={openComingSoon}>
+              Statistics
+            </div>
+          </section>
+
+          {/* os version */}
+          <span className={styles.version}>OS Version {osVersion}</span>
 
         </div>
       </ThemeProvider>

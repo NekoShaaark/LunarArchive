@@ -7,16 +7,56 @@
   background-blend-mode: overlay, overlay, overlay, normal;
   background-size: auto;
   background-repeat: no-repeat;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.grid {
+.leftMenuIcon {
+  display: flex;
+  position: absolute;
+  align-self: flex-start;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  cursor: pointer;
+  fill: var(--globalColor);
+}
+.leftMenuIcon :hover {
+  fill: #fff;
+}
+
+.leftGrid {
   display: grid;
   height: inherit;
-  width: inherit;
+  width: 35%;
+  height: 90%;
   grid-auto-rows: 1fr;
+  grid-template-columns: repeat(1, auto-fit);
+  grid-template-rows: repeat(auto-fit, minmax(20px, 40px));
+  grid-template-areas: 
+    "Icon1"
+    "Icon2"
+    "Icon3"
+    "Icon4"
+    "Icon5";
+  gap: 6px 0px;
+  align-items: center;
+  align-self: flex-start;
+  margin-block: 8px;
+  border-right: 4px solid var(--globalColorHover);
+  border-block: 4px solid var(--globalColorHover);
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.5);
+}
+.leftGrid h1 {
+  padding: 0;
+}
+
+.rightGrid {
+  display: grid;
+  height: fit-content;
+  width: inherit;
+  /* grid-auto-rows: 1fr; */
   grid-template-columns: repeat(2, auto-fit);
   grid-template-rows: repeat(3, auto-fit);
   grid-template-areas: 
