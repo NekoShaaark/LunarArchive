@@ -3,7 +3,9 @@ import { useState, useEffect } from "react"
 
 
 export function WindowsHandler() {
+    const [windowsOpenStack, setWindowsOpenStack] = useState([])
     const [windowsOpenData, setWindowsOpenData] = useState({
+        none: true,
         desktopMenu: false,
         archive: false,
         logs: false,
@@ -33,6 +35,7 @@ export function WindowsHandler() {
     const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
     const [windowFocusedData, setWindowFocusedData] = useState({
         none: true,
+        desktopMenu: false,
         archive: false,
         logs: false,
         settings: false,
@@ -44,9 +47,13 @@ export function WindowsHandler() {
     })
     
 
+    //reset focused windows data on server init & on windowFocused change
     useEffect(() => {
         resetFocusedWindowsData()
         setWindowFocusedData(prevState => ({ ...prevState, [windowFocused]: true }))
+        
+        //remove item from windows open stack array and readd to end (handles which windows are open in which order)
+        reorderWindowStack(windowsOpenStack, windowFocused)
     }, [windowFocused])
 
 
@@ -58,6 +65,16 @@ export function WindowsHandler() {
         
         setWindowFocusedData(updatedState)
     }
+
+    const reorderWindowStack = async (array, window) => { 
+        const index = array.indexOf(window)
+        if(index !== -1){ array.splice(index, 1) }
+        array.push(window)
+
+        let filteredArray = array.filter(item => windowsOpenData[item])
+        setWindowsOpenStack(filteredArray)
+    }
+      
   
 
     //windows open handling
@@ -90,6 +107,7 @@ export function WindowsHandler() {
 
     //windows handling properties export object
     const handlingProps = {
+        windowsStack: windowsOpenStack,
         windowsOpen: windowsOpenData,
         windowsMinimized: windowsMinimizedData,
         windowsMaximized: windowsMaximizedData,

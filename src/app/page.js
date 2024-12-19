@@ -21,6 +21,7 @@ import WindowCreator from '@/components/creators/WindowsCreator'
 
 import { WindowsHandler } from '@/components/handlers/WindowsHandler'
 import DesktopMenu from '@/components/windows/DesktopMenu'
+import { NavbarHandler } from '@/components/handlers/NavbarHandler'
 
 
 
@@ -46,15 +47,18 @@ export default function Home() {
   const [currentArrayIndex, setCurrentArrayIndex] = useState(0)
   const [brightnessValue, setBrightnessValue] = useState(100)
 
-  //focused window states
+  //window states
   const windowsHandler = WindowsHandler()
+  const windowsStack = windowsHandler.windowsStack
   const currentFocusedWindow = windowsHandler.windowFocused
   const changeFocusedWindow = windowsHandler.changeFocusedWindow
   const windowFocusedData = windowsHandler.windowFocusedData
 
+  //navbar states
+  const navbarHandler = NavbarHandler()
+  const navbarIconsArray = navbarHandler.navbarIconsArray
+
   //other states
-  const [currentWindowsOpen, setCurrentWindowsOpen] = useState(["none"])
-  const [currentNavbarIconsOpen, setCurrentNavbarIconsOpen] = useState(["none"])
   const [windowHeaderName, setWindowHeaderName] = useState()
   const [alertDescription, setAlertDescription] = useState()
   const [documentsDirToOpen, setDocumentsDirToOpen] = useState("Documents")
@@ -219,19 +223,11 @@ export default function Home() {
     if(windowsHandler.windowsOpen.alert){ return }
 
     //handle opening/closing of desktopMenu
-    if(e){ 
-      windowsHandler.handleFocusedWindow("desktopMenu")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "desktopMenu"]) //add "desktopMenu" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "desktopMenu"])
-    }
-    else{ 
-      windowsHandler.handleChangeFocusedWindow(true)
-      setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "desktopMenu")) //remove "desktopMenu" from the array
-      setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "desktopMenu"))
-    }
+    e ? windowsHandler.handleFocusedWindow("desktopMenu") : windowsHandler.handleChangeFocusedWindow(true)
 
     //open/close desktopMenu
     windowsHandler.desktopMenu.handleOpen(e)
+    navbarHandler.desktopMenu.handleOpen(e)
   }
 
 
@@ -332,11 +328,6 @@ export default function Home() {
     //if alert dialogue is open, allow nothing to be opened
     if(windowsHandler.windowsOpen.alert){ return }
 
-    // if(denyAccess){
-    //   alertHandleOpen()
-    //   return
-    // }
-
     windowsHandler.handleFocusedWindow("archive")
     windowsHandler.archive.handleOpen(true)
     
@@ -346,11 +337,10 @@ export default function Home() {
       windowsHandler.archive.handleMinimize(false)
     }
     
-    //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.archive){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "archive"]) //add "archive" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "archive"])
+    //check if is already on navbar, and add to navbar if not already there
+    if(!navbarHandler.navbarIconsOpen.archive){
+      setNavbarOrder()
+      navbarHandler.archive.handleOpen(true)
     }
   }
   const archiveHandleClose = () => { 
@@ -359,8 +349,7 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.archive.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
+    navbarHandler.archive.handleOpen(false)
   }
   const archiveHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -368,8 +357,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.archive.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "archive")) //remove "archive" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "archive"))
   }
 
   const logsHandleOpen = () => { 
@@ -391,10 +378,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.logs){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "logs"]) //add "logs" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "logs"])
+    if(!navbarHandler.navbarIconsOpen.logs){
+      setNavbarOrder()
+      navbarHandler.archive.handleOpen(true)
     }
   }
   const logsHandleClose = () => { 
@@ -403,8 +389,7 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.logs.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
+    navbarHandler.logs.handleOpen(false)
   }
   const logsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -412,8 +397,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.logs.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "logs")) //remove "logs" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "logs"))
   }
   
   const settingsHandleOpen = () => { 
@@ -430,10 +413,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.settings){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "settings"]) //add "settings" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "settings"])
+    if(!navbarHandler.navbarIconsOpen.settings){
+      setNavbarOrder()
+      navbarHandler.settings.handleOpen(true)
     }
   }
   const settingsHandleClose = () => { 
@@ -442,8 +424,7 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.settings.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
+    navbarHandler.settings.handleOpen(false)
   }
   const settingsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -451,8 +432,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.settings.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "settings")) //remove "settings" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "settings"))
   }
 
   const documentsHandleOpen = () => { 
@@ -469,10 +448,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.documents){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "documents"]) //add "documents" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "documents"])
+    if(!navbarHandler.navbarIconsOpen.documents){
+      setNavbarOrder()
+      navbarHandler.documents.handleOpen(true)
     }
   }
   const documentsHandleClose = () => {
@@ -481,8 +459,7 @@ export default function Home() {
     
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.documents.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
+    navbarHandler.documents.handleOpen(false)
   }
   const documentsHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -490,8 +467,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.documents.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "documents")) //remove "documents" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "documents"))
   }
 
   const portfolioHandleOpen = () => { 
@@ -508,10 +483,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.portfolio){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "portfolio"]) //add "portfolio" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "portfolio"])
+    if(!navbarHandler.navbarIconsOpen.portfolio){
+      setNavbarOrder()
+      navbarHandler.portfolio.handleOpen(true)
     }
   }
   const portfolioHandleClose = () => { 
@@ -520,8 +494,7 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.portfolio.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
+    navbarHandler.portfolio.handleOpen(false)
   }
   const portfolioHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -529,8 +502,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.portfolio.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "portfolio")) //remove "portfolio" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "portfolio"))
   }
 
   const imageViewerHandleOpen = () => { 
@@ -547,10 +518,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.imageViewer){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "imageViewer"]) //add "imageViewer" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "imageViewer"])
+    if(!navbarHandler.navbarIconsOpen.imageViewer){
+      setNavbarOrder()
+      navbarHandler.imageViewer.handleOpen(true)
     }
   }
   const imageViewerHandleClose = () => { 
@@ -560,8 +530,7 @@ export default function Home() {
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.imageViewer.handleOpen(false)
     windowsHandler.imageViewer.handleMaximize(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
+    navbarHandler.imageViewer.handleOpen(false)
     document.onkeyup = null  //detach onkeyup event listener
   }
   const imageViewerHandleMinimize = () => {
@@ -570,8 +539,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.imageViewer.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "imageViewer")) //remove "imageViewer" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "imageViewer"))
   }
   const imageViewerHandleMaximize = () => {
     //if alert dialogue is open, allow nothing to be maximized
@@ -587,17 +554,15 @@ export default function Home() {
     windowsHandler.alert.handleOpen(true)
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.alert){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "alert"]) //add "alert" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "alert"])
+    if(!navbarHandler.navbarIconsOpen.alert){
+      setNavbarOrder()
+      navbarHandler.alert.handleOpen(true)
     }
   }
   const alertHandleClose = () => { 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.alert.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "alert")) //remove "alert" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "alert"))
+    navbarHandler.alert.handleOpen(false)
   }
 
   const textEditorHandleOpen = () => { 
@@ -614,10 +579,9 @@ export default function Home() {
     }
 
     //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
-    if(!windowsHandler.windowsOpen.textEditor){
-      setNavbarOrder("open")
-      setCurrentWindowsOpen(prevWindows => [...prevWindows, "textEditor"]) //add "textEditor" to the array
-      setCurrentNavbarIconsOpen(prevWindows => [...prevWindows, "textEditor"])
+    if(!navbarHandler.navbarIconsOpen.textEditor){
+      setNavbarOrder()
+      navbarHandler.textEditor.handleOpen(true)
     }
   }
   const textEditorHandleClose = () => { 
@@ -626,8 +590,7 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.textEditor.handleOpen(false)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
+    navbarHandler.textEditor.handleOpen(false)
   }
   const textEditorHandleMinimize = () => {
     //if alert dialogue is open, allow nothing to be minimized
@@ -635,8 +598,6 @@ export default function Home() {
 
     windowsHandler.handleChangeFocusedWindow(true) 
     windowsHandler.textEditor.handleMinimize(true)
-    setCurrentWindowsOpen(currentWindowsOpen.filter(a => a !== "textEditor")) //remove "textEditor" from the array
-    setCurrentNavbarIconsOpen(currentNavbarIconsOpen.filter(a => a !== "textEditor"))
   }
 
 
@@ -997,12 +958,6 @@ export default function Home() {
   }
   setInterval(updateTime, 1000)
 
-  //reorganize the window array to represent actual window hierarchy
-  function moveElementInArray(arrayToMove, elementToMove){
-    let indexToMove = arrayToMove.indexOf(elementToMove)
-    arrayToMove.push(arrayToMove.splice(indexToMove, 1)[0])
-  }
-
   //set currently active window
   function setActiveWindow(currentActiveWindow){
 
@@ -1010,18 +965,18 @@ export default function Home() {
     // var archiveWindow = document.getElementById("window-archive")
     const allWindowsArray = Object.keys(windowsHandler.windowsOpen)
     const windows = allWindowsArray.reduce((array, id) => {
-      array[id] = document.getElementById(`window-${id}`)
+      array[id] = document.getElementById(`window-${id}`)  //REVIEW: this might be a problem later on
       return array
     }, {})
+    // console.log(windows)
 
     //reorganize the window array to represent actual window hierarchy
     if(!currentActiveWindow){ return }
-    moveElementInArray(currentWindowsOpen, currentActiveWindow)
     
     //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
     //add 20 to alert (is an important window/dialogue, so it goes above everything)
     const windowsIndexes = allWindowsArray.reduce((acc, id) => {
-      const index = currentWindowsOpen.indexOf(id)
+      const index = windowsStack.indexOf(id)
       acc[id] = index + (id == "alert" ? 20 : 10)
       return acc
     }, {})
@@ -1044,159 +999,126 @@ export default function Home() {
     })
 
     //set navbarColors and focusedWindow
-    setNavbarColors(currentActiveWindow)
     windowsHandler.handleFocusedWindow(currentActiveWindow)
-    setNavbarOrder("open")
+    setNavbarColors(currentActiveWindow)
+    setNavbarOrder()
   }
 
-  //set navbar colors
+  //set navbar colors/styles (when selected/focused)
   function setNavbarColors(currentSelectedIcon){
 
     //get root style of icons, and get globalColor ":root" style
     //NOTE: rootStyle is the local rootStyle (non-computed), while globalColor (computed) references the actual global variables 
     var rootStyle = document.documentElement.style
     var globalColor = getComputedStyle(document.querySelector(':root')).getPropertyValue('--globalColor')
-    // console.log("globalColor: " + globalColor)
-    console.log(currentSelectedIcon)
+    // console.log("focused: " + currentSelectedIcon)
 
-    //set all to false, and set only one to true
-    rootStyle.setProperty('--navbarArchiveBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarLogsBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarSettingsBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarDocumentsBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarPortfolioBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarImageViewerBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarAlertBackgroundColor', '#000')
-    rootStyle.setProperty('--navbarTextEditorBackgroundColor', '#000')
-    rootStyle.setProperty('--desktopMenuBackgroundColor', '#000')
-  
-    rootStyle.setProperty('--navbarArchiveSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarLogsSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarSettingsSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarDocumentsSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarPortfolioSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarImageViewerSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarAlertSelectedColor', globalColor)
-    rootStyle.setProperty('--navbarTextEditorSelectedColor', globalColor)
-    rootStyle.setProperty('--desktopMenuSelectedColor', globalColor)
+    //navbar background properties
+    const navbarBackgroundColors = [
+      'desktopMenuBackgroundColor',
+      'navbarArchiveBackgroundColor',
+      'navbarLogsBackgroundColor',
+      'navbarSettingsBackgroundColor',
+      'navbarDocumentsBackgroundColor',
+      'navbarPortfolioBackgroundColor',
+      'navbarImageViewerBackgroundColor',
+      'navbarAlertBackgroundColor',
+      'navbarTextEditorBackgroundColor'
+    ]
+    
+    //navbar selected properties
+    const navbarSelectedColors = [
+      'desktopMenuSelectedColor',
+      'navbarArchiveSelectedColor',
+      'navbarLogsSelectedColor',
+      'navbarSettingsSelectedColor',
+      'navbarDocumentsSelectedColor',
+      'navbarPortfolioSelectedColor',
+      'navbarImageViewerSelectedColor',
+      'navbarAlertSelectedColor',
+      'navbarTextEditorSelectedColor'
+    ]
 
+    //set all to false
+    navbarBackgroundColors.forEach(property => { rootStyle.setProperty(`--${property}`, '#000') })
+    navbarSelectedColors.forEach(property => { rootStyle.setProperty(`--${property}`, globalColor) })
     rootStyle.setProperty('--everythingButAlertBlur', '0px')
 
-    //set a specific icon to be active
-    switch(currentSelectedIcon){
-      case "desktopMenu":
-        rootStyle.setProperty('--desktopMenuBackgroundColor', globalColor)
-        rootStyle.setProperty('--desktopMenuSelectedColor', '#000')
-        break
-
-      case "archive":
-        rootStyle.setProperty('--navbarArchiveBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarArchiveSelectedColor', '#000')
-        break
-
-      case "logs":
-        rootStyle.setProperty('--navbarLogsBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarLogsSelectedColor', '#000')
-        break
-      
-      case "settings":
-        rootStyle.setProperty('--navbarSettingsBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarSettingsSelectedColor', '#000')
-        break
-
-      case "documents":
-        rootStyle.setProperty('--navbarDocumentsBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarDocumentsSelectedColor', '#000')
-        break
-
-      case "portfolio":
-        rootStyle.setProperty('--navbarPortfolioBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarPortfolioSelectedColor', '#000')
-        break
-
-      case "imageViewer":
-        rootStyle.setProperty('--navbarImageViewerBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarImageViewerSelectedColor', '#000')
-        break
-
-      case "alert":
-        rootStyle.setProperty('--navbarAlertBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarAlertSelectedColor', '#000')
-        rootStyle.setProperty('--everythingButAlertBlur', '1px')
-        break
-
-      case "textEditor":
-        rootStyle.setProperty('--navbarTextEditorBackgroundColor', globalColor)
-        rootStyle.setProperty('--navbarTextEditorSelectedColor', '#000')
-        break
+    
+    //navbar icon properties 
+    const iconStyles = {
+      desktopMenu: {
+        backgroundColor: '--desktopMenuBackgroundColor',
+        selectedColor: '--desktopMenuSelectedColor',
+      },
+      archive: {
+        backgroundColor: '--navbarArchiveBackgroundColor',
+        selectedColor: '--navbarArchiveSelectedColor',
+      },
+      logs: {
+        backgroundColor: '--navbarLogsBackgroundColor',
+        selectedColor: '--navbarLogsSelectedColor',
+      },
+      settings: {
+        backgroundColor: '--navbarSettingsBackgroundColor',
+        selectedColor: '--navbarSettingsSelectedColor',
+      },
+      documents: {
+        backgroundColor: '--navbarDocumentsBackgroundColor',
+        selectedColor: '--navbarDocumentsSelectedColor',
+      },
+      portfolio: {
+        backgroundColor: '--navbarPortfolioBackgroundColor',
+        selectedColor: '--navbarPortfolioSelectedColor',
+      },
+      imageViewer: {
+        backgroundColor: '--navbarImageViewerBackgroundColor',
+        selectedColor: '--navbarImageViewerSelectedColor',
+      },
+      alert: {
+        backgroundColor: '--navbarAlertBackgroundColor',
+        selectedColor: '--navbarAlertSelectedColor',
+        extraStyles: { '--everythingButAlertBlur': '1px' },
+      },
+      textEditor: {
+        backgroundColor: '--navbarTextEditorBackgroundColor',
+        selectedColor: '--navbarTextEditorSelectedColor',
+      },
     }
+    
+    //set a specific icon to be active
+    let icon = iconStyles[currentSelectedIcon]
+    if(icon){
+      rootStyle.setProperty(icon.backgroundColor, globalColor)
+      rootStyle.setProperty(icon.selectedColor, '#000')
+      
+      //apply any additional styles (for cases like "alert")
+      if(icon.extraStyles){
+        Object.entries(icon.extraStyles).forEach(([key, value]) => {
+          rootStyle.setProperty(key, value)
+        })
+      }
+    }    
   }
 
-  //REVIEW: for some reason sometimes the order doesn't line up? (not sure why or what causes this)
-  function setNavbarOrder(openOrClose){
-    var rootStyle = document.documentElement.style
-
-    // console.log(currentNavbarIconsOpen)
-
-    //open new navbar icon
-    if(openOrClose == "open" && currentWindowsOpen.length > 3){ 
-      // console.log(currentNavbarIconsOpen)
-      console.log("three icons open already")
-      return
+  function setNavbarOrder(){
+    const iconOpened = navbarIconsArray[navbarIconsArray.length - 1]
+    const indexOfIcon = navbarIconsArray.indexOf(iconOpened)
+    const iconOrderData = {
+      archive: '--navbarArchiveOrder',
+      logs: '--navbarLogsOrder',
+      settings: '--navbarSettingsOrder',
+      documents: '--navbarDocumentsOrder',
+      portfolio: '--navbarPortfolioOrder',
+      imageViewer: '--navbarImageViewerOrder',
+      alert: '--navbarAlertOrder',
+      textEditor: '--navbarTextEditorOrder'
     }
 
-    //might need to set this up so it only runs three times
-    if(openOrClose == "open"){
-      // var windowOpened = currentWindowsOpen[currentWindowsOpen.length - 1]
-      // var indexOfWindow = currentWindowsOpen.indexOf(windowOpened)
-
-      var iconOpened = currentNavbarIconsOpen[currentNavbarIconsOpen.length - 1]
-      var indexOfIcon = currentNavbarIconsOpen.indexOf(iconOpened)
-      // console.log(currentNavbarIconsOpen)
-      // console.log(iconOpened)
-
-      switch(iconOpened){
-        case "archive":
-          rootStyle.setProperty('--navbarArchiveOrder', indexOfIcon)
-          // console.log("wow archive")
-          break
-
-        case "logs":
-          rootStyle.setProperty('--navbarLogsOrder', indexOfIcon)
-          // console.log("wow logs")
-          break
-
-        case "settings":
-          rootStyle.setProperty('--navbarSettingsOrder', indexOfIcon)
-          // console.log("wow settings")
-          break
-
-        case "documents":
-          rootStyle.setProperty('--navbarDocumentsOrder', indexOfIcon)
-          // console.log("wow documents")
-          break
-
-        case "portfolio":
-          rootStyle.setProperty('--navbarPortfolioOrder', indexOfIcon)
-          // console.log("wow portfolio")
-          break
-
-        case "imageViewer":
-          rootStyle.setProperty('--navbarImageViewerOrder', indexOfIcon)
-          // console.log("wow imageViewer")
-          break
-
-        case "alert":
-          rootStyle.setProperty('--navbarAlertOrder', indexOfIcon)
-          // console.log("wow alert")
-          break
-
-        case "textEditor":
-          rootStyle.setProperty('--navbarTextEditorOrder', indexOfIcon)
-          // console.log("wow textEditor")
-          break
-      }
-    }
+    //sets order of icon on navbar
+    const rootStyle = document.documentElement.style
+    const cssVariable = iconOrderData[iconOpened]
+    if(cssVariable){ rootStyle.setProperty(cssVariable, indexOfIcon) }
   }
 
 
@@ -1273,27 +1195,24 @@ export default function Home() {
     
     //if windows close, make the window that is still open the active window
     if(changeFocusedWindow){
-      if(currentWindowsOpen.length === 0){ setActiveWindow("none"); console.log("none here") }
-      if(currentWindowsOpen.length === 1){ setActiveWindow(currentWindowsOpen[0]); console.log("only one left") }
-      if(currentWindowsOpen.length >= 2){ setActiveWindow(currentWindowsOpen[currentWindowsOpen.length - 1]); console.log("two or more left") }
+      let amountOfWindows = windowsStack.length - 2
+      if(amountOfWindows === 0){ setActiveWindow("none"); console.log("none here") }
+      if(amountOfWindows === 1){ setActiveWindow(windowsStack[0]); console.log("only one left") }
+      if(amountOfWindows >= 2){ setActiveWindow(windowsStack[windowsStack.length - 1]); console.log("two or more left") }
       windowsHandler.handleChangeFocusedWindow(false)
-      // console.log("changed to: " + currentFocusedWindow)
-      // console.log(currentWindowsOpen)
       return
     }
     
     //if the window is not set to change, set the current focused window as active
     if(!changeFocusedWindow){
       setActiveWindow(currentFocusedWindow)
-      // setNavbarOrder("open")
-      // console.log("current focused window: " + currentFocusedWindow)
 
       //close desktopMenu if another window gets focused
       if(windowsHandler.windowsOpen.desktopMenu && currentFocusedWindow != "desktopMenu"){
         handleDesktopMenuOpen(false)
       }
     }
-  }, [windowsHandler.windowsOpen, currentFocusedWindow, currentWindowsOpen, changeFocusedWindow, dropWindowAnimation])
+  }, [windowsHandler.windowsOpen, currentFocusedWindow, windowsStack, changeFocusedWindow, dropWindowAnimation])
 
 
   //--ON SERVER INIT & WHEN WINDOWS MINIMIZE--//
@@ -1348,51 +1267,41 @@ export default function Home() {
         e.preventDefault()
 
         //if alert dialogue is open, allow nothing to be dragged
-        if(windowsHandler.windowsOpen.alert){
-          // console.log("hor hor hor")
-          return
-        }
+        if(windowsHandler.windowsOpen.alert){ return }
 
         //upon dragging/clicking-on, set that window that is being dragged to be the active window
+        //REVIEW: this can be optimized
         switch(e.target.parentElement.parentElement.id){
           case "window-archive":
             setActiveWindow("archive")
-            moveElementInArray(currentWindowsOpen, "archive")
             break
 
           case "window-logs":
             setActiveWindow("logs")
-            moveElementInArray(currentWindowsOpen, "logs")
             break
 
           case "window-settings":
             setActiveWindow("settings")
-            moveElementInArray(currentWindowsOpen, "settings")
             break
 
           case "window-documents":
             setActiveWindow("documents")
-            moveElementInArray(currentWindowsOpen, "documents")
             break
 
           case "window-portfolio":
             setActiveWindow("portfolio")
-            moveElementInArray(currentWindowsOpen, "portfolio")
             break
 
           case "window-imageViewer":
             setActiveWindow("imageViewer")
-            moveElementInArray(currentWindowsOpen, "imageViewer")
             break
           
           case "window-alert":
             setActiveWindow("alert")
-            moveElementInArray(currentWindowsOpen, "alert")
             break
 
           case "window-textEditor":
             setActiveWindow("textEditor")
-            moveElementInArray(currentWindowsOpen, "textEditor")
             break
         }
         // console.log(e.target.parentElement.parentElement)
@@ -1457,8 +1366,6 @@ export default function Home() {
   
   //STUB: maybe add functionality for a "maximize" button (redirects the user to the window's webpage, and remembers what is currently open)
   //REVIEW: if css variable setting is dynamic: might be able make navbar icon order dynamic
-  //REVIEW: when minimizing windows, they sometimes have the chance of displaying the incorrect navbar color
-  //REVIEW: when unminimizing windows, they sometimes have the chance of being incorrectly rearranged (moved to the beginning) in the navbar order [array] 
   //TODO: add a sorta "os-booting sqeuence" as a splashscreen
 
   return (
