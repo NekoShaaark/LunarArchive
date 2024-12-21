@@ -223,11 +223,23 @@ export default function Home() {
     if(windowsHandler.windowsOpen.alert){ return }
 
     //handle opening/closing of desktopMenu
-    e ? windowsHandler.handleFocusedWindow("desktopMenu") : windowsHandler.handleChangeFocusedWindow(true)
+    if(e){
+      windowsHandler.handleFocusedWindow("desktopMenu")
+      windowsHandler.desktopMenu.handleOpen(true)
+      if(!navbarHandler.navbarIconsOpen.archive){
+        setNavbarOrder()
+        navbarHandler.desktopMenu.handleOpen(true)
+      }
+    } 
+    else{
+      windowsHandler.handleChangeFocusedWindow(true)
+      windowsHandler.desktopMenu.handleOpen(false)
+      navbarHandler.desktopMenu.handleOpen(false)
+    }
 
     //open/close desktopMenu
-    windowsHandler.desktopMenu.handleOpen(e)
-    navbarHandler.desktopMenu.handleOpen(e)
+    // windowsHandler.desktopMenu.handleOpen(e)
+    // navbarHandler.desktopMenu.handleOpen(e)
   }
 
 
@@ -1197,9 +1209,16 @@ export default function Home() {
     if(changeFocusedWindow){
       let amountOfWindows = windowsStack.length - 2
       if(amountOfWindows === 0){ setActiveWindow("none"); console.log("none here") }
-      if(amountOfWindows === 1){ setActiveWindow(windowsStack[0]); console.log("only one left") }
-      if(amountOfWindows >= 2){ setActiveWindow(windowsStack[windowsStack.length - 1]); console.log("two or more left") }
+      if(amountOfWindows === 1){ setActiveWindow(windowsStack[1]); console.log("only one left") }
+      if(amountOfWindows >= 2){ setActiveWindow(windowsStack[windowsStack.length - 2]); console.log("two or more left") }
       windowsHandler.handleChangeFocusedWindow(false)
+      console.log(windowsStack)
+      console.log(currentFocusedWindow)
+
+      //close desktopMenu is not open, but also change focused window to something else if something else is open
+      if(currentFocusedWindow != "desktopMenu" && currentFocusedWindow != "none"){
+        handleDesktopMenuOpen(false)
+      }
       return
     }
     
