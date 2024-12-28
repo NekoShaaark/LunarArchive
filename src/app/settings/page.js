@@ -269,33 +269,14 @@ export default function Settings({
             </div>
           </section>
 
-          {/* brightness [deprecated] */}
+          {/* hotlink */}
           <section className={styles.section}>
-            <h1 className={styles.name}>Brightness [WIP]: {brightnessValue}%</h1>
-            <div className={styles.button}>
-
-              <Button className={styles.icon} disableRipple onClick={() => updateBrightness("num", -1)}>
-                <LeftIcon width="3vh" height="3vh"/>
-              </Button>
-
-              <Slider
-                defaultValue={100}
-                value={parseFloat(brightnessValue)}
-                sx={{margin: "14px", padding: 0, width: "100%"}}
-                onChange={e => updateBrightness("slider", e.target.value)}
-                color="themeGlobal"
-                valueLabelDisplay="off"
-                shiftStep={1}
-                step={1}
-                min={0}
-                max={100}
-              />
-
-              <Button className={styles.icon} disableRipple onClick={() => updateBrightness("num", 1)}>
-                <RightIcon width="3vh" height="3vh"/>
-              </Button>
-
-            </div>
+            <h1 className={styles.name}>Hotlink</h1>
+            <textarea 
+              readOnly 
+              value={`<a href="https://lunararchive.neocities.org/"><img src="https://lunararchive.neocities.org/88x31.gif"/></a>`} 
+              className={styles.hotlink}
+            />
           </section>
 
           {/* theme */}
@@ -353,6 +334,11 @@ export default function Settings({
             <div className={styles.isolatedButton} onClick={openComingSoon}>
               Statistics
             </div>
+          </section>
+
+          {/* hotlink preview */}
+          <section className={styles.section} style={{alignItems:"flex-end"}}>
+            <a href="https://lunararchive.neocities.org/"><img src="88x31.gif"/></a>
           </section>
 
           {/* os version */}
