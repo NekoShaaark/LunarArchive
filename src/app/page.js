@@ -236,10 +236,6 @@ export default function Home() {
       windowsHandler.desktopMenu.handleOpen(false)
       navbarHandler.desktopMenu.handleOpen(false)
     }
-
-    //open/close desktopMenu
-    // windowsHandler.desktopMenu.handleOpen(e)
-    // navbarHandler.desktopMenu.handleOpen(e)
   }
 
 
@@ -1204,33 +1200,34 @@ export default function Home() {
 
   //--ON SERVER INIT & WHEN WINDOWS OPEN/FOCUS/CLOSE--//
   useEffect(() => {
-    
-    //if windows close, make the window that is still open the active window
-    if(changeFocusedWindow){
-      let amountOfWindows = windowsStack.length - 2
-      if(amountOfWindows === 0){ setActiveWindow("none"); console.log("none here") }
-      if(amountOfWindows === 1){ setActiveWindow(windowsStack[1]); console.log("only one left") }
-      if(amountOfWindows >= 2){ setActiveWindow(windowsStack[windowsStack.length - 2]); console.log("two or more left") }
-      windowsHandler.handleChangeFocusedWindow(false)
-      console.log(windowsStack)
-      console.log(currentFocusedWindow)
+    const hasWindowsOpen = windowsStack.length > 1 //more than just "none"
+    const openWindowIndex = windowsStack.length - 1 //currently open window
+    const latestOpenWindowIndex = windowsStack.length - 2 //window before currently active window
+    const latestOpenWindow = windowsStack[openWindowIndex]
+    const nextOpenWindow = windowsStack[latestOpenWindowIndex]
 
-      //close desktopMenu is not open, but also change focused window to something else if something else is open
-      if(currentFocusedWindow != "desktopMenu" && currentFocusedWindow != "none"){
-        handleDesktopMenuOpen(false)
-      }
+    //close desktopMenu if another window is focused, and shift focus to the new window 
+    if(windowsHandler.windowsOpen.desktopMenu && currentFocusedWindow !== "desktopMenu"){
+      handleDesktopMenuOpen(false)
+      setActiveWindow(currentFocusedWindow)
+      windowsHandler.handleChangeFocusedWindow(false)
       return
     }
-    
-    //if the window is not set to change, set the current focused window as active
-    if(!changeFocusedWindow){
-      setActiveWindow(currentFocusedWindow)
 
-      //close desktopMenu if another window gets focused
-      if(windowsHandler.windowsOpen.desktopMenu && currentFocusedWindow != "desktopMenu"){
-        handleDesktopMenuOpen(false)
-      }
+    //window focus handling
+    if(changeFocusedWindow) {
+      //if no windows open, focus "none"
+      if(!hasWindowsOpen){ setActiveWindow("none") }
+
+      //if focused window was closed, set focus to the next available window (or don't change if )
+      else if(!windowsHandler.windowsOpen[latestOpenWindow]){ setActiveWindow(nextOpenWindow) }
+
+      windowsHandler.handleChangeFocusedWindow(false)
+      return
     }
+
+    //set active window to current focused if focus doesn't need to change
+    setActiveWindow(currentFocusedWindow)
   }, [windowsHandler.windowsOpen, currentFocusedWindow, windowsStack, changeFocusedWindow, dropWindowAnimation])
 
 

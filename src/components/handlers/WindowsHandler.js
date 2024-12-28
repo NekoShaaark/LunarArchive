@@ -54,7 +54,7 @@ export function WindowsHandler() {
         
         //remove item from windows open stack array and readd to end (handles which windows are open in which order)
         reorderWindowStack(windowsOpenStack, windowFocused)
-    }, [windowFocused])
+    }, [windowsOpenData, windowFocused])
 
 
     const resetFocusedWindowsData = async () => {
