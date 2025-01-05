@@ -1,8 +1,11 @@
 "use client"
+import { useAnimate } from "framer-motion"
 import { useState, useEffect } from "react"
 
 
 export function WindowsHandler() {
+
+    //open windows states
     const [windowsOpenStack, setWindowsOpenStack] = useState([])
     const [windowsOpenData, setWindowsOpenData] = useState({
         none: true,
@@ -17,6 +20,7 @@ export function WindowsHandler() {
         textEditor: false
     })
 
+    //minimized windows states
     const [windowsMinimizedData, setWindowsMinimizedData] = useState({
         archive: false,
         logs: false,
@@ -27,10 +31,12 @@ export function WindowsHandler() {
         textEditor: false
     })
 
+    //maximized windows states
     const [windowsMaximizedData, setWindowsMaximizedData] = useState({
         imageViewer: false
     })
 
+    //focused windows states 
     const [windowFocused, setWindowFocused] = useState("none")
     const [changeFocusedWindow, setChangeFocusedWindow] = useState(false)
     const [windowFocusedData, setWindowFocusedData] = useState({
@@ -45,6 +51,15 @@ export function WindowsHandler() {
         alert: false,
         textEditor: false
     })
+
+    //windows animation states
+    const [archiveWindowAnimation, archiveAnimate] = useAnimate()
+    const [logsWindowAnimation, logsAnimate] = useAnimate()
+    const [settingsWindowAnimation, settingsAnimate] = useAnimate()
+    const [documentsWindowAnimation, documentsAnimate] = useAnimate()
+    const [portfolioWindowAnimation, portfolioAnimate] = useAnimate()
+    const [imageViewerWindowAnimation, imageViewerAnimate] = useAnimate()
+    const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
     
 
     //reset focused windows data on server init & on windowFocused change
@@ -124,37 +139,51 @@ export function WindowsHandler() {
         archive: {
             handleOpen: handleArchiveWindowOpen,
             handleMinimize: handleArchiveWindowMinimize,
+            windowAnimation: archiveWindowAnimation,
+            windowAnimate: archiveAnimate
         },
 
         logs: {
             handleOpen: handleLogsWindowOpen,
-            handleMinimize: handleLogsWindowMinimize
+            handleMinimize: handleLogsWindowMinimize,
+            windowAnimation: logsWindowAnimation,
+            windowAnimate: logsAnimate
         },
 
         settings: {
             handleOpen: handleSettingsWindowOpen,
-            handleMinimize: handleSettingsWindowMinimize
+            handleMinimize: handleSettingsWindowMinimize,
+            windowAnimation: settingsWindowAnimation,
+            windowAnimate: settingsAnimate
         },
 
         documents: {
             handleOpen: handleDocumentsWindowOpen,
-            handleMinimize: handleDocumentsWindowMinimize
+            handleMinimize: handleDocumentsWindowMinimize,
+            windowAnimation: documentsWindowAnimation,
+            windowAnimate: documentsAnimate
         },
 
         portfolio: {
             handleOpen: handlePortfolioWindowOpen,
-            handleMinimize: handlePortfolioWindowMinimize
+            handleMinimize: handlePortfolioWindowMinimize,
+            windowAnimation: portfolioWindowAnimation,
+            windowAnimate: portfolioAnimate
         },
 
         imageViewer: {
             handleOpen: handleImageViewerWindowOpen,
             handleMinimize: handleImageViewerWindowMinimize,
-            handleMaximize: handleImageViewerWindowMaximize
+            handleMaximize: handleImageViewerWindowMaximize,
+            windowAnimation: imageViewerWindowAnimation,
+            windowAnimate: imageViewerAnimate
         },
 
         textEditor: {
             handleOpen: handleTextEditorWindowOpen,
-            handleMinimize: handleTextEditorWindowMinimize
+            handleMinimize: handleTextEditorWindowMinimize,
+            windowAnimation: textEditorWindowAnimation,
+            windowAnimate: textEditorAnimate
         }
     }
   

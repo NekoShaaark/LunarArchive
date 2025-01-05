@@ -32,15 +32,6 @@ export default function Home() {
   //date and time variables, handling and state
   const [currentTime, setCurrentTime] = useState("Getting Time Data...")
 
-  //window animation states
-  const [archiveWindowAnimation, archiveAnimate] = useAnimate()
-  const [logsWindowAnimation, logsAnimate] = useAnimate()
-  const [settingsWindowAnimation, settingsAnimate] = useAnimate()
-  const [documentsWindowAnimation, documentsAnimate] = useAnimate()
-  const [portfolioWindowAnimation, portfolioAnimate] = useAnimate()
-  const [imageViewerWindowAnimation, imageViewerAnimate] = useAnimate()
-  const [textEditorWindowAnimation, textEditorAnimate] = useAnimate()
-
   //desktop settings states
   const [selectedWallpaper, setSelectedWallpaper] = useState("WorldMachine")
   const [selectedTheme, setSelectedTheme] = useState("Purple")
@@ -244,31 +235,31 @@ export default function Home() {
   const dropWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "archive":
-        await archiveAnimate(archiveWindowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.archive.windowAnimate(windowsHandler.archive.windowAnimation.current, { y: "250%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "logs":
-        await logsAnimate(logsWindowAnimation.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.logs.windowAnimate(windowsHandler.logs.windowAnimation.current, { y: "150%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "settings":
-        await settingsAnimate(settingsWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.settings.windowAnimate(windowsHandler.settings.windowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "documents":
-        await documentsAnimate(documentsWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.documents.windowAnimate(windowsHandler.documents.windowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "portfolio":
-        await portfolioAnimate(portfolioWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.portfolio.windowAnimate(windowsHandler.portfolio.windowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "imageViewer":
-        await imageViewerAnimate(imageViewerWindowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.imageViewer.windowAnimate(windowsHandler.imageViewer.windowAnimation.current, { y: "350%" }, { duration: 0.6, delay: 0.12 })
         break
 
       case "textEditor":
-        await textEditorAnimate(textEditorWindowAnimation.current, { y: "650%" }, { duration: 0.6, delay: 0.12 })
+        await windowsHandler.textEditor.windowAnimate(windowsHandler.textEditor.windowAnimation.current, { y: "650%" }, { duration: 0.6, delay: 0.12 })
         break
     }
   }
@@ -276,31 +267,31 @@ export default function Home() {
   const pullUpWindowAnimation = async (animationItem) => {
     switch(animationItem){
       case "archive":
-        await archiveAnimate(archiveWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.archive.windowAnimate(windowsHandler.archive.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "logs":
-        await logsAnimate(logsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.logs.windowAnimate(windowsHandler.logs.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "settings":
-        await settingsAnimate(settingsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.settings.windowAnimate(windowsHandler.settings.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "documents":
-        await documentsAnimate(documentsWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.documents.windowAnimate(windowsHandler.documents.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "portfolio":
-        await portfolioAnimate(portfolioWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.portfolio.windowAnimate(windowsHandler.portfolio.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "imageViewer":
-        await imageViewerAnimate(imageViewerWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.imageViewer.windowAnimate(windowsHandler.imageViewer.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
 
       case "textEditor":
-        await textEditorAnimate(textEditorWindowAnimation.current, { y: 0 }, { duration: 0.4 })
+        await windowsHandler.textEditor.windowAnimate(windowsHandler.textEditor.windowAnimation.current, { y: 0 }, { duration: 0.4 })
         break
     }
   }
@@ -762,27 +753,27 @@ export default function Home() {
   const windowsCreationData = [
 
     //template
-    {
-      windowOpen: windowsHandler.windowsOpen.NAMEHERE,
-      id: "window-NAMEHERE",
-      windowRef: null,
-      headerProps: {
-        headerName: "NAME HERE",
-        Icon: null,
-        setClose: null,
-        setMinimize: null,
-      },
-      PageComponent: null,
-      pageProps: {
+    // {
+    //   windowOpen: windowsHandler.windowsOpen.NAMEHERE,
+    //   id: "window-NAMEHERE",
+    //   windowRef: windowsHandler.NAMEHERE.windowAnimation,
+    //   headerProps: {
+    //     headerName: "NAME HERE",
+    //     Icon: null,
+    //     setClose: null,
+    //     setMinimize: null,
+    //   },
+    //   PageComponent: null,
+    //   pageProps: {
         
-      }
-    },
+    //   }
+    // },
 
     //archive window
     {
       windowOpen: windowsHandler.windowsOpen.archive,
       id: "window-archive",
-      windowRef: archiveWindowAnimation,
+      windowRef: windowsHandler.archive.windowAnimation,
       headerProps: {
         headerName: "███hi██",
         Icon: ArchiveIcon,
@@ -799,7 +790,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.logs,
       id: "window-logs",
-      windowRef: logsWindowAnimation,
+      windowRef: windowsHandler.logs.windowAnimation,
       headerProps: {
         headerName: "Data Logs",
         Icon: LogsIcon,
@@ -816,7 +807,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.settings,
       id: "window-settings",
-      windowRef: settingsWindowAnimation,
+      windowRef: windowsHandler.settings.windowAnimation,
       headerProps: {
         headerName: "Settings",
         Icon: MoonStarIcon,
@@ -844,7 +835,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.documents,
       id: "window-documents",
-      windowRef: documentsWindowAnimation,
+      windowRef: windowsHandler.documents.windowAnimation,
       headerProps: {
         headerName: "Documents",
         Icon: FolderIcon,
@@ -870,7 +861,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.portfolio,
       id: "window-portfolio",
-      windowRef: portfolioWindowAnimation,
+      windowRef: windowsHandler.portfolio.windowAnimation,
       headerProps: {
         headerName: "Portfolio", 
         Icon: PortfolioIcon,
@@ -892,7 +883,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.imageViewer,
       id: "window-imageViewer",
-      windowRef: imageViewerWindowAnimation,
+      windowRef: windowsHandler.imageViewer.windowAnimation,
       headerProps: {
         headerName: `Ivy - ${ivyImageHeaderName}`,
         Icon: ImageViewerIcon,
@@ -939,7 +930,7 @@ export default function Home() {
     {
       windowOpen: windowsHandler.windowsOpen.textEditor,
       id: "window-textEditor",
-      windowRef: textEditorWindowAnimation,
+      windowRef: windowsHandler.textEditor.windowAnimation,
       headerProps: {
         headerName: `Notus - ${notusHeaderName}`,
         Icon: NoteIcon,
@@ -1219,8 +1210,11 @@ export default function Home() {
       //if no windows open, focus "none"
       if(!hasWindowsOpen){ setActiveWindow("none") }
 
-      //if focused window was closed, set focus to the next available window (or don't change if )
-      else if(!windowsHandler.windowsOpen[latestOpenWindow]){ setActiveWindow(nextOpenWindow) }
+      //if focused window was closed (or minimized), set focus to the next available window
+      else if(!windowsHandler.windowsOpen[latestOpenWindow] || windowsHandler.windowsMinimized[latestOpenWindow]){ 
+        if(windowsHandler.windowsMinimized[nextOpenWindow]){ setActiveWindow("none"); return } //set active window to "none" if there is no active window after minimizing
+        setActiveWindow(nextOpenWindow)
+      }
 
       windowsHandler.handleChangeFocusedWindow(false)
       return
@@ -1240,7 +1234,8 @@ export default function Home() {
     //play animation to drop window below navbar
     windows.forEach(window => {
       if(windowsHandler.windowsMinimized[window]){ 
-        dropWindowAnimation(window) 
+        windowsHandler.handleChangeFocusedWindow(true)
+        dropWindowAnimation(window)
       }
     })
   }, [windowsHandler.windowsMinimized])
@@ -1398,8 +1393,7 @@ export default function Home() {
 
       {!loginOpen &&
         <div className="layout-content"> 
-        {/* background image/video */}
-        {/* <video className="backgroundVideo" src="videoLoop.webm" autoPlay loop muted preload="auto"/> */}
+        {/* background image */}
         <Image className="backgroundVideo" src={`Wallpapers/Wallpaper-${selectedWallpaper}.webp`} priority alt="wallpaper" width={100} height={100}/>
 
         <ThemeProvider theme={theme}>
