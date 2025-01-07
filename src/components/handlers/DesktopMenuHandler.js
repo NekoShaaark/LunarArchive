@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { WindowsHandler } from "@/components/handlers/WindowsHandler"
 import { useAnimate } from 'framer-motion'
 
@@ -8,7 +8,7 @@ export function DesktopMenuHandler() {
   const windowsHandler = WindowsHandler()
   const [sideMenuAnimation, sideMenuAnimate] = useAnimate()
   const [currentSideMenuOpen, setCurrentSideMenuOpen] = useState("User Info")
-  const [desktopSideMenuFooter, setDesktopSideMenuFooter] = useState("v0.3.6")  //TODO: this needs to update automatically
+  const [desktopSideMenuFooter, setDesktopSideMenuFooter] = useState("v0.3.7")  //TODO: this needs to update automatically
 
   const [sideMenusOpenData, setSideMenusOpenData] = useState({
     lunarEclipse: false,
@@ -36,7 +36,6 @@ export function DesktopMenuHandler() {
 
   const menuAnimation = async (e) => {
     if(!sideMenuAnimation.current){ return }
-    console.log("animation maybe played")
   
     if(e == "sideMenuClose"){
       await sideMenuAnimate(sideMenuAnimation.current, { x: -240 }, { duration: 0.4, delay: 0 })
@@ -59,8 +58,6 @@ export function DesktopMenuHandler() {
 
   //side menu open handling
   const handleSideMenuOpen = async (menuOpen, menuName) => {
-    // if(!e){ console.log("woahhhhhh sideMenuOpen undefined"); return }
-    console.log("opening/closing sideMenu")
     if(windowsHandler.windowsOpen.alert || sideMenusOpenData[menuOpen]){ return }
     
     //close all menus (and closing animation)

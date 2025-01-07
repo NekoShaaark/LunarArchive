@@ -1,5 +1,4 @@
 "use client"
-
 import { motion } from "framer-motion"
 import { DesktopMenuHandler } from "@/components/handlers/DesktopMenuHandler"
 import { FolderIcon, MoonIcon, NoteIcon } from "@/components/SvgHandler"

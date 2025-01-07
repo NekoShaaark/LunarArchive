@@ -29,7 +29,7 @@ export default function Settings({
   const [themeGlobalBackgroundColor, setThemeGlobalBackgroundColor] = useState("#c31c1c")
   const [themeGlobalHoverBackgroundColor, setThemeGlobalHoverBackgroundColor] = useState("#d13a3a")
   const [mysterySetting, setMysterySetting] = useState("Hi")
-  const [osVersion, setOsVersion] = useState("0.3.6")
+  const [osVersion, setOsVersion] = useState("0.3.7")
   const [leftMenuOpen, setLeftMenuOpen] = useState(false)
 
   //--THEME--//

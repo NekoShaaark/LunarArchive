@@ -685,7 +685,7 @@ export default function Documents({
 
     switch(fileOrFolder(file.id)){
       case "file":
-        console.log("file")
+        // console.log("file")
         // console.log(fileType)
         var headerName = file.textContent.slice(0, -4)
         changeErrorDescription() //sets error description to default
@@ -766,10 +766,10 @@ export default function Documents({
         break
 
       case "folder":
-        console.log("folder")
+        // console.log("folder")
 
         if(file.textContent == "Real Archive"){
-          console.log("woah")
+          // console.log("woah")
           // return
         }
 
