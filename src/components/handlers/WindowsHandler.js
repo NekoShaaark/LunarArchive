@@ -2,22 +2,22 @@
 import { useAnimate } from "framer-motion"
 import { useState, useEffect } from "react"
 import { NavbarHandler } from "@/components/handlers/NavbarHandler"
-import Archive from "@/app/archive/page"
 import { AlertIcon, ArchiveIcon, FolderIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from "@/components/SvgHandler"
+import Archive from "@/app/archive/page"
 import Logs from "@/app/logs/page"
 import Settings from "@/app/settings/page"
+import Documents from "@/app/documents/page"
+import Portfolio from "@/app/portfolio/page"
+import ImageHandler from "@/components/ImageHandler"
 import AlertDialogue from "@/components/AlertDialogue"
 import TextEditor from "@/components/TextEditor"
-import ImageHandler from "../ImageHandler"
-import Portfolio from "@/app/portfolio/page"
-import Documents from "@/app/documents/page"
 
 
 export function WindowsHandler() {
     const navbarHandler = NavbarHandler()
 
     //open windows states
-    const [windowsOpenStack, setWindowsOpenStack] = useState([])
+    const [windowsOpenStack, setWindowsOpenStack] = useState(["none"])
     const [windowsOpenData, setWindowsOpenData] = useState({
         none: true,
         desktopMenu: false,
@@ -197,20 +197,19 @@ export function WindowsHandler() {
     })
 
 
-    //reset focused windows data on server init & on windowFocused change
+    //reset focused window data to be none, then apply only one new window to be focused
     useEffect(() => {
-        resetFocusedWindowsData()
-        setWindowFocusedData(prevState => ({ ...prevState, [windowFocused]: true }))
-        
-        //remove item from windows open stack array and readd to end (handles which windows are open in which order)
-        reorderWindowStack(windowsOpenStack, windowFocused)
-    }, [windowsOpenData, windowFocused])
+        readjustFocusedWindowsData()
+    }, [windowFocused])
+    
+    //remove item from windows open stack array, and readd to end (handles which windows are open in which order)
+    useEffect(() => {
+        if(windowFocused !== "none"){ reorderWindowStack(windowFocused) }
+    }, [windowFocusedData])
 
 
     //handle windows focus on server init & on windows open/focus/close
     useEffect(() => {
-        // console.log("windows handler", windowsOpenData)
-
         const hasWindowsOpen = windowsOpenStack.length > 1 //more than just "none"
         const openWindowIndex = windowsOpenStack.length - 1 //currently open window
         const latestOpenWindowIndex = windowsOpenStack.length - 2 //window before currently active window
@@ -219,7 +218,7 @@ export function WindowsHandler() {
 
         //close desktopMenu if another window is focused, and shift focus to the new window 
         if(windowsOpenData.desktopMenu && windowFocused !== "desktopMenu"){
-            handleDesktopMenuOpen(false)
+            desktopMenuHandleClose()
             setActiveWindow(windowFocused)
             handleChangeFocusedWindow(false)
             return
@@ -230,17 +229,18 @@ export function WindowsHandler() {
             //if no windows open, focus "none"
             if(!hasWindowsOpen){ setActiveWindow("none") }
 
-        //if focused window was closed (or minimized), set focus to the next available window
-        else if(!windowsOpenData[latestOpenWindow] || windowsMinimizedData[latestOpenWindow]){ 
-            if(windowsMinimizedData[nextOpenWindow]){ setActiveWindow("none"); return } //set active window to "none" if there is no active window after minimizing
-            setActiveWindow(nextOpenWindow)
-        }
-
+            //if focused window was closed (or minimized), set focus to the next available window
+            else if(!windowsOpenData[latestOpenWindow] || windowsMinimizedData[latestOpenWindow]){ 
+                if(windowsMinimizedData[nextOpenWindow]){ setActiveWindow("none"); return } //set active window to "none" if there is no active window after minimizing
+                setActiveWindow(nextOpenWindow)
+            }
+            
             handleChangeFocusedWindow(false)
             return
         }
 
         //set active window to current focused if focus doesn't need to change
+        if(windowFocused == "none"){ return }
         setActiveWindow(windowFocused)
     }, [windowsOpenData, windowFocused, windowsOpenStack, changeFocusedWindow])
 
@@ -297,37 +297,42 @@ export function WindowsHandler() {
     }, [])
 
 
-    const resetFocusedWindowsData = async () => {
+    //reset windowFocusedData then update it based on the new/current focused window
+    const readjustFocusedWindowsData = async () => {
         const updatedState = Object.keys(windowFocusedData).reduce((acc, key) => {
             acc[key] = false
             return acc
         }, {})
-        
-        setWindowFocusedData(updatedState)
+
+        await handleChangeWindowFocusedData(updatedState)
     }
 
-    const reorderWindowStack = async (array, window) => { 
-        const index = array.indexOf(window)
-        if(index !== -1){ array.splice(index, 1) }
-        array.push(window)
+    //reorder windowStack so that the new active window is in the first position in the array
+    const reorderWindowStack = async (window) => { 
+        setWindowsOpenStack(prevStack => {
+            const newArray = [...prevStack]
+            const index = newArray.indexOf(window)
+            if(index !== -1){ newArray.splice(index, 1) }
 
-        let filteredArray = array.filter(item => windowsOpenData[item])
-        setWindowsOpenStack(filteredArray)
+            newArray.push(window)
+            const filteredArray = newArray.filter(item => windowsOpenData[item] !== false)
+
+            return filteredArray
+        })
     }
 
-    //set currently active window
-    function setActiveWindow(currentActiveWindow){
+    
+    //set currently active window (zIndex handling)
+    //zIndices are handled based on the WindowsOpenStack (so it has to be that stack messing up somewhere) 
+    const setActiveWindow = async (currentActiveWindow) => {
+        if(!currentActiveWindow){ return }
 
         //create array of all windows
         const allWindowsArray = Object.keys(windowsOpenData)
         const windows = allWindowsArray.reduce((array, id) => {
-            array[id] = document.getElementById(`window-${id}`)  //REVIEW: this might be a problem later on
+            array[id] = document.getElementById(`window-${id}`)
             return array
         }, {})
-        // console.log(windows)
-
-        //reorganize the window array to represent actual window hierarchy
-        if(!currentActiveWindow){ return }
     
         //zIndex ordering (doesn't exist will be 9, while bottom will be 10)
         //add 20 to alert (is an important window/dialogue, so it goes above everything)
@@ -343,8 +348,8 @@ export function WindowsHandler() {
                 if(window){ window.style.zIndex = 9 }
             })
 
+            await handleWindowFocused("none")
             navbarHandler.setNavbarColors("none")
-            handleFocusedWindow("none")
             return
         }
 
@@ -353,13 +358,12 @@ export function WindowsHandler() {
         allWindowsArray.forEach(id => {
             if(windows[id]){ windows[id].style.zIndex = windowsIndexes[id] }
         })
-
+        
         //set navbarColors and focusedWindow
-        handleFocusedWindow(currentActiveWindow)
+        await handleWindowFocused(currentActiveWindow)
         navbarHandler.setNavbarColors(currentActiveWindow)
         navbarHandler.setNavbarOrder()
     }
-
 
     //windows open handling
     const handleDesktopMenuOpen = async (e) => { setWindowsOpenData({ ...windowsOpenData, desktopMenu: e }) }
@@ -385,8 +389,9 @@ export function WindowsHandler() {
     const handleImageViewerWindowMaximize = async (e) => { setWindowsMaximizedData({ ...windowsMaximizedData, imageViewer: e }) }
 
     //windows focused handling
-    const handleFocusedWindow = async (e) => { setWindowFocused(e) }
+    const handleWindowFocused = async (e) => { setWindowFocused(e) }
     const handleChangeFocusedWindow = async (e) => { setChangeFocusedWindow(e) }
+    const handleChangeWindowFocusedData = async (updatedState) => { setWindowFocusedData({ ...updatedState, [windowFocused]: true }) }
 
     //image viewer handling
     const handleIvyImage = async (e) => { if(!e){ return } setCurrentIvyImage(e) }
@@ -501,7 +506,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
     
-        handleFocusedWindow("archive")
+        handleWindowFocused("archive")
         handleArchiveWindowOpen(true)
         
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -541,7 +546,7 @@ export function WindowsHandler() {
             return
         }
     
-        handleFocusedWindow("logs") 
+        handleWindowFocused("logs") 
         handleLogsWindowOpen(true)
     
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -576,7 +581,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
     
-        handleFocusedWindow("settings") 
+        handleWindowFocused("settings") 
         handleSettingsWindowOpen(true)
     
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -611,7 +616,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
     
-        handleFocusedWindow("documents") 
+        handleWindowFocused("documents") 
         handleDocumentsWindowOpen(true)
     
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -646,7 +651,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
     
-        handleFocusedWindow("portfolio") 
+        handleWindowFocused("portfolio") 
         handlePortfolioWindowOpen(true)
     
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -681,7 +686,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
     
-        handleFocusedWindow("imageViewer") 
+        handleWindowFocused("imageViewer") 
         handleImageViewerWindowOpen(true)
     
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -723,7 +728,7 @@ export function WindowsHandler() {
     }
 
     const alertHandleOpen = () => { 
-        handleFocusedWindow("alert") 
+        handleWindowFocused("alert") 
         handleAlertWindowOpen(true)
     
         //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
@@ -742,7 +747,7 @@ export function WindowsHandler() {
         //if alert dialogue is open, allow nothing to be opened
         if(windowsOpenData.alert){ return }
 
-        handleFocusedWindow("textEditor") 
+        handleWindowFocused("textEditor") 
         handleTextEditorWindowOpen(true)
 
         //check if window is minimized, if so, play animation to drag window back above navbar
@@ -771,6 +776,28 @@ export function WindowsHandler() {
 
         handleChangeFocusedWindow(true) 
         handleTextEditorWindowMinimize(true)
+    }
+
+    const desktopMenuHandleOpen = () => {
+        //if alert dialogue is open, allow nothing to be opened
+        if(windowsOpenData.alert){ return }
+
+        handleWindowFocused("desktopMenu")
+        handleDesktopMenuOpen(true)
+        
+        //check if entry doesn't exist, if so, add it (otherwise it will continuously add for every handleOpen() call) 
+        if(!navbarHandler.navbarIconsOpen.desktopMenu){
+            navbarHandler.desktopMenu.handleOpen(true)
+        }
+    }
+    const desktopMenuHandleClose = () => {
+        handleChangeFocusedWindow(true)
+        handleDesktopMenuOpen(false)
+        navbarHandler.desktopMenu.handleOpen(false)
+    }
+    const desktopMenuHandleAuto = () => {
+        if(!windowsOpenData.desktopMenu){ desktopMenuHandleOpen(); return }
+        desktopMenuHandleClose()
     }
 
 
@@ -985,8 +1012,7 @@ export function WindowsHandler() {
         ivyHandlers: ivyHandlers,
         notusHandlers: notusHandlers,
         
-        setActiveWindow: setActiveWindow,
-        handleFocusedWindow: handleFocusedWindow,
+        handleFocusedWindow: handleWindowFocused,
         handleChangeFocusedWindow: handleChangeFocusedWindow,
         pullUpWindowAnimation: pullUpWindowAnimation,
         dropWindowAnimation: dropWindowAnimation,
@@ -997,9 +1023,12 @@ export function WindowsHandler() {
         handleDocumentsDirToOpen: handleDocumentsDirToOpen,
         handleAlertDescription: handleAlertDescription,
         handleWindowHeaderName: handleWindowHeaderName,
-        
-        desktopMenu: { handleOpen: handleDesktopMenuOpen },
-        alert: { handleOpen: handleAlertWindowOpen },
+
+        desktopMenu: { 
+            openWindow: desktopMenuHandleOpen,
+            closeWindow: desktopMenuHandleClose,
+            autoHandleWindow: desktopMenuHandleAuto
+        },
 
         archive: {
             windowData: archiveWindowData,

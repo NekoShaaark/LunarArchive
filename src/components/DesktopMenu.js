@@ -1,12 +1,14 @@
 "use client"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { DesktopMenuHandler } from "@/components/handlers/DesktopMenuHandler"
 import { FolderIcon, MoonIcon, NoteIcon } from "@/components/SvgHandler"
 import { MenuIconButton } from "@/components/creators/DesktopCreator"
 import TypewriterEffect from "@/components/TypewriterEffect"
 
 
-export default function DesktopMenu() {
+export default function DesktopMenu({
+    menuOpen
+}) {
     const desktopMenuHandler = DesktopMenuHandler()
 
     //STUB: maybe this can extracted into its own file
@@ -30,16 +32,18 @@ export default function DesktopMenu() {
 
     //actual page
     return (
-        <motion.div 
-            className="layout-menu"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.5 }}
-        >
-        
-            {/* left menu */}
-            <div className="left-menu">
+        <AnimatePresence>
+            {menuOpen && 
+                <motion.div 
+                    className="layout-menu"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 16 }}
+                    transition={{ duration: 0.5 }}
+                >
+                
+                    {/* left menu */}
+                    <div className="left-menu">
                 <ul>
                     <span>
                         Selected: <TypewriterEffect text={desktopMenuHandler.currentSideMenuOpen} delay={30}/><br/>
@@ -61,23 +65,25 @@ export default function DesktopMenu() {
                     <i>Disclaimer:<br/>
                     ~ Prototype - expect 3rrors ~</i>
                 </span>
-            </div>
-        
-            {/* right menu */}
-            <motion.div 
-                className="right-menu"
-                ref={desktopMenuHandler.sideMenuAnimation}
-                initial={{ opacity: 0, x: -240, y: 18 }}
-                animate={{ opacity: 1, x: 0, y: 18 }}
-                exit={{ opacity: 0, x: -100, transition: { duration: 0.6, delay: 0 } }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-            >
-                {desktopMenuHandler.sideMenuContent}
-                <span style={{position:'fixed', bottom:0, right:0, padding:10}}>
-                    {desktopMenuHandler.sideMenuFooter}
-                </span>
-            </motion.div>
+                    </div>
+                        
+                    {/* right menu */}
+                    <motion.div 
+                        className="right-menu"
+                        ref={desktopMenuHandler.sideMenuAnimation}
+                        initial={{ opacity: 0, x: -240, y: 18 }}
+                        animate={{ opacity: 1, x: 0, y: 18 }}
+                        exit={{ opacity: 0, x: -100, transition: { duration: 0.6, delay: 0 } }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                    >
+                        {desktopMenuHandler.sideMenuContent}
+                        <span style={{position:'fixed', bottom:0, right:0, padding:10}}>
+                            {desktopMenuHandler.sideMenuFooter}
+                        </span>
+                    </motion.div>
                     
-        </motion.div>
+                </motion.div>
+            }
+        </AnimatePresence>
     )
 }

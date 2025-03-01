@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { AlertIcon, ArchiveIcon, FolderIcon, ImageIcon, ImageViewerIcon, ImagesIcon, LogsIcon, NoteIcon, PortfolioIcon, MoonStarIcon, MoonIcon } from '@/components/SvgHandler'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
 import Login from '@/app/login/page'
@@ -25,6 +24,11 @@ export default function Home() {
   //other states
   const [denyAccess, setDenyAccess] = useState(true)
   const [loginOpen, setLoginOpen] = useState(false)
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false)
+
+  useEffect(() => {
+    setDesktopMenuOpen(windowsHandler.windowsOpen.desktopMenu)
+  }, [windowsHandler.windowsOpen.desktopMenu])
 
 
   //--LOGIN OPENING HANDLING--//
@@ -32,26 +36,6 @@ export default function Home() {
     // if(!e){ console.log("woahhhhhh loginOpen undefined"); return }
     console.log("opening/closing login")
     setLoginOpen(e)
-  }
-
-  //--DESKTOP MENU OPENING HANDLING--//
-  const handleDesktopMenuOpen = async (e) => {
-    if(windowsHandler.windowsOpen.alert){ return }
-
-    //handle opening/closing of desktopMenu
-    if(e){
-      windowsHandler.handleFocusedWindow("desktopMenu")
-      windowsHandler.desktopMenu.handleOpen(true)
-      if(!navbarHandler.navbarIconsOpen.archive){
-        navbarHandler.setNavbarOrder()
-        navbarHandler.desktopMenu.handleOpen(true)
-      }
-    } 
-    else{
-      windowsHandler.handleChangeFocusedWindow(true)
-      windowsHandler.desktopMenu.handleOpen(false)
-      navbarHandler.desktopMenu.handleOpen(false)
-    }
   }
 
   //--GET WINDOW DATA BY ID--//
@@ -305,9 +289,7 @@ export default function Home() {
             ))}
 
             {/* desktop menu */}
-            <AnimatePresence>
-              {windowsHandler.windowsOpen.desktopMenu && <DesktopMenu/>}
-            </AnimatePresence>
+            <DesktopMenu menuOpen={desktopMenuOpen}/>
           </ThemeProvider>
         </div>
       }
@@ -319,7 +301,7 @@ export default function Home() {
 
             {/* menu */}
             <div className="menu">
-              <div onClick={() => handleDesktopMenuOpen(!windowsHandler.windowsOpen.desktopMenu)}>
+              <div onClick={() => windowsHandler.desktopMenu.autoHandleWindow()}>
                 <MoonIcon alt="menu" width={24} height={24}/>
               </div>
             </div>

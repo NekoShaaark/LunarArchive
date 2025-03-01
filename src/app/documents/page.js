@@ -628,8 +628,8 @@ export default function Documents({
             <motion.div 
               key={mapId} 
               className={styles.icon}
-              initial={{ opacity: 0, scale: 0.75, z: 16, y: 16 }}
-              animate={{ opacity: 1, scale: 1, z: 0, y: 0  }}
+              initial={{ opacity: 0, z: 16, y: 16 }}
+              animate={{ opacity: 1, z: 0, y: 0  }}
               transition={{ duration: (mapId*0.2) + 0.4 }}
             >
               {/* button to interact with files/folder */}
