@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
+import { useAnimate } from "motion/react"
 import { WindowsHandler } from "@/components/handlers/WindowsHandler"
-import { useAnimate } from 'framer-motion'
 
 
 export function DesktopMenuHandler() { 

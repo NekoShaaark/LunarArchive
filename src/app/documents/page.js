@@ -5,7 +5,7 @@ import { AlertIcon, ArchiveIcon, BackIcon, BugIcon, ChessIcon, FolderIcon, Gamep
 import { Button, InputAdornment, TextField, ThemeProvider, createTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import TypewriterEffect from '@/components/TypewriterEffect'
 
 

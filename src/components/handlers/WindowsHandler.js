@@ -1,6 +1,6 @@
 "use client"
-import { useAnimate } from "framer-motion"
 import { useState, useEffect } from "react"
+import { useAnimate } from "motion/react"
 import { NavbarHandler } from "@/components/handlers/NavbarHandler"
 import { AlertIcon, ArchiveIcon, FolderIcon, ImageViewerIcon, LogsIcon, MoonStarIcon, NoteIcon, PortfolioIcon } from "@/components/SvgHandler"
 import Archive from "@/app/archive/page"

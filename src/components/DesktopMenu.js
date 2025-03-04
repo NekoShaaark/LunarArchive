@@ -1,5 +1,5 @@
 "use client"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { DesktopMenuHandler } from "@/components/handlers/DesktopMenuHandler"
 import { FolderIcon, MoonIcon, NoteIcon } from "@/components/SvgHandler"
 import { MenuIconButton } from "@/components/creators/DesktopCreator"
