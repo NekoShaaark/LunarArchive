@@ -7,6 +7,7 @@ import WindowHeader from "@/components/WindowHeader"
 export default function WindowCreator({ 
     windowOpen, 
     id, 
+    className, 
     windowRef,
     headerProps,
     PageComponent, 
@@ -17,7 +18,7 @@ export default function WindowCreator({
             {windowOpen &&
                 <motion.div
                     id={id}
-                    className="draggable"
+                    className={`${className} draggable`}
                     ref={windowRef}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

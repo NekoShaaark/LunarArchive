@@ -821,7 +821,8 @@ export function WindowsHandler() {
     const archiveWindowData =
     {
         windowOpen: windowsOpenData.archive,
-        id: "window-archive",
+        id: "window",
+        className: "window-archive",
         windowRef: archiveWindowAnimation,
         headerProps: {
             headerName: "███hi██",
@@ -838,7 +839,8 @@ export function WindowsHandler() {
     const logsWindowData =
     {
         windowOpen: windowsOpenData.logs,
-        id: "window-logs",
+        id: "window",
+        className: "window-logs",
         windowRef: logsWindowAnimation,
         headerProps: {
             headerName: "Data Logs",
@@ -855,7 +857,8 @@ export function WindowsHandler() {
     const settingsWindowData =
     {
         windowOpen: windowsOpenData.settings,
-        id: "window-settings",
+        id: "window",
+        className: "window-settings",
         windowRef: settingsWindowAnimation,
         headerProps: {
             headerName: "Settings",
@@ -881,7 +884,8 @@ export function WindowsHandler() {
     const documentsWindowData =
     {
         windowOpen: windowsOpenData.documents,
-        id: "window-documents",
+        id: "window",
+        className: "window-documents",
         windowRef: documentsWindowAnimation,
         headerProps: {
             headerName: "Documents",
@@ -907,7 +911,8 @@ export function WindowsHandler() {
     const portfolioWindowData =
     {
         windowOpen: windowsOpenData.portfolio,
-        id: "window-portfolio",
+        id: "window",
+        className: "window-portfolio",
         windowRef: portfolioWindowAnimation,
         headerProps: {
             headerName: "Portfolio", 
@@ -929,7 +934,8 @@ export function WindowsHandler() {
     const imageViewerWindowData =
     {
         windowOpen: windowsOpenData.imageViewer,
-        id: "window-imageViewer",
+        id: "window",
+        className: "window-imageViewer",
         windowRef: imageViewerWindowAnimation,
         headerProps: {
             headerName: `Ivy - ${ivyImageHeaderName}`,
@@ -957,7 +963,8 @@ export function WindowsHandler() {
     const alertWindowData = 
     {
         windowOpen: windowsOpenData.alert,
-        id: "window-alert",
+        id: "window",
+        className: "window-alert",
         windowRef: null,
         headerProps: {
           headerName: "Error",
@@ -976,7 +983,8 @@ export function WindowsHandler() {
     const textEditorWindowData =
     {
         windowOpen: windowsOpenData.textEditor,
-        id: "window-textEditor",
+        id: "window",
+        className: "window-textEditor",
         windowRef: textEditorWindowAnimation,
         headerProps: {
             headerName: `Notus - ${notusHeaderName}`,
